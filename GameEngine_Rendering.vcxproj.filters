@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Private">
+      <UniqueIdentifier>{47f11200-ad48-462f-a0d8-6977495dd306}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public">
+      <UniqueIdentifier>{81de5414-48ed-4a08-b8f2-cd438bada967}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
