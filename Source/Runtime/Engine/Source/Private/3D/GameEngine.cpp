@@ -16,79 +16,98 @@ const std::size_t GameEngine::BaseTexture = std::hash<std::string>()("T_Base");
 const std::size_t GameEngine::CharacterTexture = std::hash<std::string>()("T_Character");
 
 // Bones
-const std::string GameEngine::RootBone("RootBone");
-const std::string GameEngine::HipsBone("HipsBone");
-const std::string GameEngine::SpineBone("SpineBone");
-const std::string GameEngine::Spine1Bone("Spine1Bone");
-const std::string GameEngine::Spine2Bone("Spine2Bone");
-const std::string GameEngine::NeckBone("NeckBone");
-const std::string GameEngine::HeadBone("HeadBone");
-const std::string GameEngine::HeadTop_EndBone("HeadTop_EndBone");
-const std::string GameEngine::LeftEyeBone("LeftEyeBone");
-const std::string GameEngine::RightEyeBone("RightEyeBone");
-const std::string GameEngine::LeftShoulderBone("LeftShoulderBone");
-const std::string GameEngine::LeftArmBone("LeftArmBone");
-const std::string GameEngine::LeftForeArmBone("LeftForeArmBone");
-const std::string GameEngine::LeftHandBone("LeftHandBone");
-const std::string GameEngine::LeftHandThumb1Bone("LeftHandThumb1Bone");
-const std::string GameEngine::LeftHandThumb2Bone("LeftHandThumb2Bone");
-const std::string GameEngine::LeftHandThumb3Bone("LeftHandThumb3Bone");
-const std::string GameEngine::LeftHandThumb4Bone("LeftHandThumb4Bone");
-const std::string GameEngine::LeftHandIndex1Bone("LeftHandIndex1Bone");
-const std::string GameEngine::LeftHandIndex2Bone("LeftHandIndex2Bone");
-const std::string GameEngine::LeftHandIndex3Bone("LeftHandIndex3Bone");
-const std::string GameEngine::LeftHandIndex4Bone("LeftHandIndex4Bone");
-const std::string GameEngine::LeftHandMiddle1Bone("LeftHandMiddle1Bone");
-const std::string GameEngine::LeftHandMiddle2Bone("LeftHandMiddle2Bone");
-const std::string GameEngine::LeftHandMiddle3Bone("LeftHandMiddle3Bone");
-const std::string GameEngine::LeftHandMiddle4Bone("LeftHandMiddle4Bone");
-const std::string GameEngine::LeftHandRing1Bone("LeftHandRing1Bone");
-const std::string GameEngine::LeftHandRing2Bone("LeftHandRing2Bone");
-const std::string GameEngine::LeftHandRing3Bone("LeftHandRing3Bone");
-const std::string GameEngine::LeftHandRing4Bone("LeftHandRing4Bone");
-const std::string GameEngine::LeftHandPinky1Bone("LeftHandPinky1Bone");
-const std::string GameEngine::LeftHandPinky2Bone("LeftHandPinky2Bone");
-const std::string GameEngine::LeftHandPinky3Bone("LeftHandPinky3Bone");
-const std::string GameEngine::LeftHandPinky4Bone("LeftHandPinky4Bone");
-const std::string GameEngine::Shield_jointBone("Shield_jointBone");
-const std::string GameEngine::RightShoulderBone("RightShoulderBone");
-const std::string GameEngine::RightArmBone("RightArmBone");
-const std::string GameEngine::RightForeArmBone("RightForeArmBone");
-const std::string GameEngine::RightHandBone("RightHandBone");
-const std::string GameEngine::RightHandThumb1Bone("RightHandThumb1Bone");
-const std::string GameEngine::RightHandThumb2Bone("RightHandThumb2Bone");
-const std::string GameEngine::RightHandThumb3Bone("RightHandThumb3Bone");
-const std::string GameEngine::RightHandThumb4Bone("RightHandThumb4Bone");
-const std::string GameEngine::RightHandIndex1Bone("RightHandIndex1Bone");
-const std::string GameEngine::RightHandIndex2Bone("RightHandIndex2Bone");
-const std::string GameEngine::RightHandIndex3Bone("RightHandIndex3Bone");
-const std::string GameEngine::RightHandIndex4Bone("RightHandIndex4Bone");
-const std::string GameEngine::RightHandMiddle1Bone("RightHandMiddle1Bone");
-const std::string GameEngine::RightHandMiddle2Bone("RightHandMiddle2Bone");
-const std::string GameEngine::RightHandMiddle3Bone("RightHandMiddle3Bone");
-const std::string GameEngine::RightHandMiddle4Bone("RightHandMiddle4Bone");
-const std::string GameEngine::RightHandRing1Bone("RightHandRing1Bone");
-const std::string GameEngine::RightHandRing2Bone("RightHandRing2Bone");
-const std::string GameEngine::RightHandRing3Bone("RightHandRing3Bone");
-const std::string GameEngine::RightHandRing4Bone("RightHandRing4Bone");
-const std::string GameEngine::RightHandPinky1Bone("RightHandPinky1Bone");
-const std::string GameEngine::RightHandPinky2Bone("RightHandPinky2Bone");
-const std::string GameEngine::RightHandPinky3Bone("RightHandPinky3Bone");
-const std::string GameEngine::RightHandPinky4Bone("RightHandPinky4Bone");
-const std::string GameEngine::Sword_jointBone("Sword_jointBone");
-const std::string GameEngine::LeftUpLegBone("LeftUpLegBone");
-const std::string GameEngine::LeftLegBone("LeftLegBone");
-const std::string GameEngine::LeftFootBone("LeftFootBone");
-const std::string GameEngine::LeftToeBaseBone("LeftToeBaseBone");
-const std::string GameEngine::LeftToe_EndBone("LeftToe_EndBone");
-const std::string GameEngine::RightUpLegBone("RightUpLegBone");
-const std::string GameEngine::RightLegBone("RightLegBone");
-const std::string GameEngine::RightFootBone("RightFootBone");
-const std::string GameEngine::RightToeBaseBone("RightToeBaseBone");
-const std::string GameEngine::RightToe_EndBone("RightToe_EndBone");
+const std::string GameEngine::rootBone("rootBone");
+const std::string GameEngine::center_of_massBone("center_of_massBone");
+const std::string GameEngine::ik_foot_rootBone("ik_foot_rootBone");
+const std::string GameEngine::ik_foot_lBone("ik_foot_lBone");
+const std::string GameEngine::ik_foot_rBone("ik_foot_rBone");
+const std::string GameEngine::ik_hand_rootBone("ik_hand_rootBone");
+const std::string GameEngine::ik_hand_gunBone("ik_hand_gunBone");
+const std::string GameEngine::ik_hand_lBone("ik_hand_lBone");
+const std::string GameEngine::ik_hand_rBone("ik_hand_rBone");
+const std::string GameEngine::interactionBone("interactionBone");
+const std::string GameEngine::pelvisBone("pelvisBone");
+const std::string GameEngine::spine_01Bone("spine_01Bone");
+const std::string GameEngine::spine_02Bone("spine_02Bone");
+const std::string GameEngine::spine_03Bone("spine_03Bone");
+const std::string GameEngine::spine_04Bone("spine_04Bone");
+const std::string GameEngine::spine_05Bone("spine_05Bone");
+const std::string GameEngine::clavicle_lBone("clavicle_lBone");
+const std::string GameEngine::upperarm_lBone("upperarm_lBone");
+const std::string GameEngine::lowerarm_lBone("lowerarm_lBone");
+const std::string GameEngine::hand_lBone("hand_lBone");
+const std::string GameEngine::index_metacarpal_lBone("index_metacarpal_lBone");
+const std::string GameEngine::index_01_lBone("index_01_lBone");
+const std::string GameEngine::index_02_lBone("index_02_lBone");
+const std::string GameEngine::index_03_lBone("index_03_lBone");
+const std::string GameEngine::middle_metacarpal_lBone("middle_metacarpal_lBone");
+const std::string GameEngine::middle_01_lBone("middle_01_lBone");
+const std::string GameEngine::middle_02_lBone("middle_02_lBone");
+const std::string GameEngine::middle_03_lBone("middle_03_lBone");
+const std::string GameEngine::pinky_metacarpal_lBone("pinky_metacarpal_lBone");
+const std::string GameEngine::pinky_01_lBone("pinky_01_lBone");
+const std::string GameEngine::pinky_02_lBone("pinky_02_lBone");
+const std::string GameEngine::pinky_03_lBone("pinky_03_lBone");
+const std::string GameEngine::ring_metacarpal_lBone("ring_metacarpal_lBone");
+const std::string GameEngine::ring_01_lBone("ring_01_lBone");
+const std::string GameEngine::ring_02_lBone("ring_02_lBone");
+const std::string GameEngine::ring_03_lBone("ring_03_lBone");
+const std::string GameEngine::thumb_01_lBone("thumb_01_lBone");
+const std::string GameEngine::thumb_02_lBone("thumb_02_lBone");
+const std::string GameEngine::thumb_03_lBone("thumb_03_lBone");
+const std::string GameEngine::lowerarm_twist_01_lBone("lowerarm_twist_01_lBone");
+const std::string GameEngine::lowerarm_twist_02_lBone("lowerarm_twist_02_lBone");
+const std::string GameEngine::upperarm_twist_01_lBone("upperarm_twist_01_lBone");
+const std::string GameEngine::upperarm_twist_02_lBone("upperarm_twist_02_lBone");
+const std::string GameEngine::clavicle_rBone("clavicle_rBone");
+const std::string GameEngine::upperarm_rBone("upperarm_rBone");
+const std::string GameEngine::lowerarm_rBone("lowerarm_rBone");
+const std::string GameEngine::hand_rBone("hand_rBone");
+const std::string GameEngine::index_metacarpal_rBone("index_metacarpal_rBone");
+const std::string GameEngine::index_01_rBone("index_01_rBone");
+const std::string GameEngine::index_02_rBone("index_02_rBone");
+const std::string GameEngine::index_03_rBone("index_03_rBone");
+const std::string GameEngine::middle_metacarpal_rBone("middle_metacarpal_rBone");
+const std::string GameEngine::middle_01_rBone("middle_01_rBone");
+const std::string GameEngine::middle_02_rBone("middle_02_rBone");
+const std::string GameEngine::middle_03_rBone("middle_03_rBone");
+const std::string GameEngine::pinky_metacarpal_rBone("pinky_metacarpal_rBone");
+const std::string GameEngine::pinky_01_rBone("pinky_01_rBone");
+const std::string GameEngine::pinky_02_rBone("pinky_02_rBone");
+const std::string GameEngine::pinky_03_rBone("pinky_03_rBone");
+const std::string GameEngine::ring_metacarpal_rBone("ring_metacarpal_rBone");
+const std::string GameEngine::ring_01_rBone("ring_01_rBone");
+const std::string GameEngine::ring_02_rBone("ring_02_rBone");
+const std::string GameEngine::ring_03_rBone("ring_03_rBone");
+const std::string GameEngine::thumb_01_rBone("thumb_01_rBone");
+const std::string GameEngine::thumb_02_rBone("thumb_02_rBone");
+const std::string GameEngine::thumb_03_rBone("thumb_03_rBone");
+const std::string GameEngine::lowerarm_twist_01_rBone("lowerarm_twist_01_rBone");
+const std::string GameEngine::lowerarm_twist_02_rBone("lowerarm_twist_02_rBone");
+const std::string GameEngine::upperarm_twist_01_rBone("upperarm_twist_01_rBone");
+const std::string GameEngine::upperarm_twist_02_rBone("upperarm_twist_02_rBone");
+const std::string GameEngine::neck_01Bone("neck_01Bone");
+const std::string GameEngine::neck_02Bone("neck_02Bone");
+const std::string GameEngine::headBone("headBone");
+const std::string GameEngine::thigh_lBone("thigh_lBone");
+const std::string GameEngine::calf_lBone("calf_lBone");
+const std::string GameEngine::calf_twist_01_lBone("calf_twist_01_lBone");
+const std::string GameEngine::calf_twist_02_lBone("calf_twist_02_lBone");
+const std::string GameEngine::foot_lBone("foot_lBone");
+const std::string GameEngine::ball_lBone("ball_lBone");
+const std::string GameEngine::thigh_twist_01_lBone("thigh_twist_01_lBone");
+const std::string GameEngine::thigh_twist_02_lBone("thigh_twist_02_lBone");
+const std::string GameEngine::thigh_rBone("thigh_rBone");
+const std::string GameEngine::calf_rBone("calf_rBone");
+const std::string GameEngine::calf_twist_01_rBone("calf_twist_01_rBone");
+const std::string GameEngine::calf_twist_02_rBone("calf_twist_02_rBone");
+const std::string GameEngine::foot_rBone("foot_rBone");
+const std::string GameEngine::ball_rBone("ball_rBone");
+const std::string GameEngine::thigh_twist_01_rBone("thigh_twist_01_rBone");
+const std::string GameEngine::thigh_twist_02_rBone("thigh_twist_02_rBone");
 
 // Animation
-const std::size_t GameEngine::SaluteAnimation = std::hash<std::string>()("A_Salute");
+const std::size_t GameEngine::PistolReloadAnimation = std::hash<std::string>()("A_PistolReload");
 
 void GameEngine::OnScreenResize(const ScreenPoint& InScreenSize)
 {
@@ -319,7 +338,7 @@ void GameEngine::LoadAsset()
 	std::vector<std::vector<std::pair<std::string, float>>> WeightInfo;
 
 	std::string TexturePath;
-	TestLoader.LoadCharacterFBX("Paladin", OUT v, OUT i, OUT uv, OUT TexturePath, OUT CharacterSkeleton, OUT WeightInfo);
+	TestLoader.LoadCharacterFBX("Quinn", OUT v, OUT i, OUT uv, OUT TexturePath, OUT CharacterSkeleton, OUT WeightInfo);
 
 	Texture& CharacterTexture = CreateTexture(GameEngine::CharacterTexture);
 	CharacterTexture.LoadFromPath(TexturePath);
@@ -406,76 +425,95 @@ void GameEngine::LoadAsset()
 	};
 
 	std::vector<std::string> boneOrder = {
-		GameEngine::RootBone,
-		GameEngine::HipsBone,
-		GameEngine::SpineBone,
-		GameEngine::Spine1Bone,
-		GameEngine::Spine2Bone,
-		GameEngine::NeckBone,
-		GameEngine::HeadBone,
-		GameEngine::HeadTop_EndBone,
-		GameEngine::LeftEyeBone,
-		GameEngine::RightEyeBone,
-		GameEngine::LeftShoulderBone,
-		GameEngine::LeftArmBone,
-		GameEngine::LeftForeArmBone,
-		GameEngine::LeftHandBone,
-		GameEngine::LeftHandThumb1Bone,
-		GameEngine::LeftHandThumb2Bone,
-		GameEngine::LeftHandThumb3Bone,
-		GameEngine::LeftHandThumb4Bone,
-		GameEngine::LeftHandIndex1Bone,
-		GameEngine::LeftHandIndex2Bone,
-		GameEngine::LeftHandIndex3Bone,
-		GameEngine::LeftHandIndex4Bone,
-		GameEngine::LeftHandMiddle1Bone,
-		GameEngine::LeftHandMiddle2Bone,
-		GameEngine::LeftHandMiddle3Bone,
-		GameEngine::LeftHandMiddle4Bone,
-		GameEngine::LeftHandRing1Bone,
-		GameEngine::LeftHandRing2Bone,
-		GameEngine::LeftHandRing3Bone,
-		GameEngine::LeftHandRing4Bone,
-		GameEngine::LeftHandPinky1Bone,
-		GameEngine::LeftHandPinky2Bone,
-		GameEngine::LeftHandPinky3Bone,
-		GameEngine::LeftHandPinky4Bone,
-		GameEngine::Shield_jointBone,
-		GameEngine::RightShoulderBone,
-		GameEngine::RightArmBone,
-		GameEngine::RightForeArmBone,
-		GameEngine::RightHandBone,
-		GameEngine::RightHandThumb1Bone,
-		GameEngine::RightHandThumb2Bone,
-		GameEngine::RightHandThumb3Bone,
-		GameEngine::RightHandThumb4Bone,
-		GameEngine::RightHandIndex1Bone,
-		GameEngine::RightHandIndex2Bone,
-		GameEngine::RightHandIndex3Bone,
-		GameEngine::RightHandIndex4Bone,
-		GameEngine::RightHandMiddle1Bone,
-		GameEngine::RightHandMiddle2Bone,
-		GameEngine::RightHandMiddle3Bone,
-		GameEngine::RightHandMiddle4Bone,
-		GameEngine::RightHandRing1Bone,
-		GameEngine::RightHandRing2Bone,
-		GameEngine::RightHandRing3Bone,
-		GameEngine::RightHandRing4Bone,
-		GameEngine::RightHandPinky1Bone,
-		GameEngine::RightHandPinky2Bone,
-		GameEngine::RightHandPinky3Bone,
-		GameEngine::RightHandPinky4Bone,
-		GameEngine::Sword_jointBone,
-		GameEngine::LeftUpLegBone,
-		GameEngine::LeftLegBone,
-		GameEngine::LeftFootBone,
-		GameEngine::LeftToeBaseBone,
-		GameEngine::LeftToe_EndBone,
-		GameEngine::RightUpLegBone,
-		GameEngine::RightLegBone,
-		GameEngine::RightFootBone,
-		GameEngine::RightToeBaseBone,
-		GameEngine::RightToe_EndBone,
+		GameEngine::rootBone;
+		GameEngine::center_of_massBone;
+		GameEngine::ik_foot_rootBone;
+		GameEngine::ik_foot_lBone;
+		GameEngine::ik_foot_rBone;
+		GameEngine::ik_hand_rootBone;
+		GameEngine::ik_hand_gunBone;
+		GameEngine::ik_hand_lBone;
+		GameEngine::ik_hand_rBone;
+		GameEngine::interactionBone;
+		GameEngine::pelvisBone;
+		GameEngine::spine_01Bone;
+		GameEngine::spine_02Bone;
+		GameEngine::spine_03Bone;
+		GameEngine::spine_04Bone;
+		GameEngine::spine_05Bone;
+		GameEngine::clavicle_lBone;
+		GameEngine::upperarm_lBone;
+		GameEngine::lowerarm_lBone;
+		GameEngine::hand_lBone;
+		GameEngine::index_metacarpal_lBone;
+		GameEngine::index_01_lBone;
+		GameEngine::index_02_lBone;
+		GameEngine::index_03_lBone;
+		GameEngine::middle_metacarpal_lBone;
+		GameEngine::middle_01_lBone;
+		GameEngine::middle_02_lBone;
+		GameEngine::middle_03_lBone;
+		GameEngine::pinky_metacarpal_lBone;
+		GameEngine::pinky_01_lBone;
+		GameEngine::pinky_02_lBone;
+		GameEngine::pinky_03_lBone;
+		GameEngine::ring_metacarpal_lBone;
+		GameEngine::ring_01_lBone;
+		GameEngine::ring_02_lBone;
+		GameEngine::ring_03_lBone;
+		GameEngine::thumb_01_lBone;
+		GameEngine::thumb_02_lBone;
+		GameEngine::thumb_03_lBone;
+		GameEngine::lowerarm_twist_01_lBone;
+		GameEngine::lowerarm_twist_02_lBone;
+		GameEngine::upperarm_twist_01_lBone;
+		GameEngine::upperarm_twist_02_lBone;
+		GameEngine::clavicle_rBone;
+		GameEngine::upperarm_rBone;
+		GameEngine::lowerarm_rBone;
+		GameEngine::hand_rBone;
+		GameEngine::index_metacarpal_rBone;
+		GameEngine::index_01_rBone;
+		GameEngine::index_02_rBone;
+		GameEngine::index_03_rBone;
+		GameEngine::middle_metacarpal_rBone;
+		GameEngine::middle_01_rBone;
+		GameEngine::middle_02_rBone;
+		GameEngine::middle_03_rBone;
+		GameEngine::pinky_metacarpal_rBone;
+		GameEngine::pinky_01_rBone;
+		GameEngine::pinky_02_rBone;
+		GameEngine::pinky_03_rBone;
+		GameEngine::ring_metacarpal_rBone;
+		GameEngine::ring_01_rBone;
+		GameEngine::ring_02_rBone;
+		GameEngine::ring_03_rBone;
+		GameEngine::thumb_01_rBone;
+		GameEngine::thumb_02_rBone;
+		GameEngine::thumb_03_rBone;
+		GameEngine::lowerarm_twist_01_rBone;
+		GameEngine::lowerarm_twist_02_rBone;
+		GameEngine::upperarm_twist_01_rBone;
+		GameEngine::upperarm_twist_02_rBone;
+		GameEngine::neck_01Bone;
+		GameEngine::neck_02Bone;
+		GameEngine::headBone;
+		GameEngine::thigh_lBone;
+		GameEngine::calf_lBone;
+		GameEngine::calf_twist_01_lBone;
+		GameEngine::calf_twist_02_lBone;
+		GameEngine::foot_lBone;
+		GameEngine::ball_lBone;
+		GameEngine::thigh_twist_01_lBone;
+		GameEngine::thigh_twist_02_lBone;
+		GameEngine::thigh_rBone;
+		GameEngine::calf_rBone;
+		GameEngine::calf_twist_01_rBone;
+		GameEngine::calf_twist_02_rBone;
+		GameEngine::foot_rBone;
+		GameEngine::ball_rBone;
+		GameEngine::thigh_twist_01_rBone;
+		GameEngine::thigh_twist_02_rBone;
 	};
 
 	// Connecting Bones
