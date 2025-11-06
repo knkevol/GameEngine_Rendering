@@ -188,7 +188,7 @@ namespace PGE
 			static const std::size_t CharacterTexture;
 
 			// Animation
-			static const std::size_t SaluteAnimation;
+			static const std::size_t PistolReloadAnimation;
 
 			// GameObject Factories
 			static PGameObjectFactory PFactory;

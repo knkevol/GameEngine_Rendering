@@ -352,168 +352,187 @@ void GameEngine::LoadAsset()
 	auto& bones = CharacterMesh.GetBones();
 
 	bones = {
-		{ GameEngine::RootBone, Bone(GameEngine::RootBone, Transform())},
-		{ GameEngine::HipsBone, Bone(GameEngine::HipsBone, Transform(CharacterSkeleton.GetTargetBoneInfo("Hips").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("Hips").Quat)))},
-		{ GameEngine::SpineBone, Bone(GameEngine::SpineBone, Transform(CharacterSkeleton.GetTargetBoneInfo("Spine").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("Spine").Quat)))},
-		{ GameEngine::Spine1Bone, Bone(GameEngine::Spine1Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("Spine1").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("Spine1").Quat)))},
-		{ GameEngine::Spine2Bone, Bone(GameEngine::Spine2Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("Spine2").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("Spine2").Quat)))},
-		{ GameEngine::NeckBone, Bone(GameEngine::NeckBone, Transform(CharacterSkeleton.GetTargetBoneInfo("Neck").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("Neck").Quat)))},
-		{ GameEngine::HeadBone, Bone(GameEngine::HeadBone, Transform(CharacterSkeleton.GetTargetBoneInfo("Head").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("Head").Quat)))},
-		{ GameEngine::HeadTop_EndBone, Bone(GameEngine::HeadTop_EndBone, Transform(CharacterSkeleton.GetTargetBoneInfo("HeadTop_End").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("HeadTop_End").Quat)))},
-		{ GameEngine::LeftEyeBone, Bone(GameEngine::LeftEyeBone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftEye").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftEye").Quat)))},
-		{ GameEngine::RightEyeBone, Bone(GameEngine::RightEyeBone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightEye").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightEye").Quat)))},
-		{ GameEngine::LeftShoulderBone, Bone(GameEngine::LeftShoulderBone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftShoulder").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftShoulder").Quat)))},
-		{ GameEngine::LeftArmBone, Bone(GameEngine::LeftArmBone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftArm").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftArm").Quat)))},
-		{ GameEngine::LeftForeArmBone, Bone(GameEngine::LeftForeArmBone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftForeArm").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftForeArm").Quat)))},
-		{ GameEngine::LeftHandBone, Bone(GameEngine::LeftHandBone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHand").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHand").Quat)))},
-		{ GameEngine::LeftHandThumb1Bone, Bone(GameEngine::LeftHandThumb1Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandThumb1").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandThumb1").Quat)))},
-		{ GameEngine::LeftHandThumb2Bone, Bone(GameEngine::LeftHandThumb2Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandThumb2").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandThumb2").Quat)))},
-		{ GameEngine::LeftHandThumb3Bone, Bone(GameEngine::LeftHandThumb3Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandThumb3").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandThumb3").Quat)))},
-		{ GameEngine::LeftHandThumb4Bone, Bone(GameEngine::LeftHandThumb4Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandThumb4").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandThumb4").Quat)))},
-		{ GameEngine::LeftHandIndex1Bone, Bone(GameEngine::LeftHandIndex1Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandIndex1").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandIndex1").Quat)))},
-		{ GameEngine::LeftHandIndex2Bone, Bone(GameEngine::LeftHandIndex2Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandIndex2").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandIndex2").Quat)))},
-		{ GameEngine::LeftHandIndex3Bone, Bone(GameEngine::LeftHandIndex3Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandIndex3").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandIndex3").Quat)))},
-		{ GameEngine::LeftHandIndex4Bone, Bone(GameEngine::LeftHandIndex4Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandIndex4").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandIndex4").Quat)))},
-		{ GameEngine::LeftHandMiddle1Bone, Bone(GameEngine::LeftHandMiddle1Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandMiddle1").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandMiddle1").Quat)))},
-		{ GameEngine::LeftHandMiddle2Bone, Bone(GameEngine::LeftHandMiddle2Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandMiddle2").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandMiddle2").Quat)))},
-		{ GameEngine::LeftHandMiddle3Bone, Bone(GameEngine::LeftHandMiddle3Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandMiddle3").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandMiddle3").Quat)))},
-		{ GameEngine::LeftHandMiddle4Bone, Bone(GameEngine::LeftHandMiddle4Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandMiddle4").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandMiddle4").Quat)))},
-		{ GameEngine::LeftHandRing1Bone, Bone(GameEngine::LeftHandRing1Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandRing1").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandRing1").Quat)))},
-		{ GameEngine::LeftHandRing2Bone, Bone(GameEngine::LeftHandRing2Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandRing2").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandRing2").Quat)))},
-		{ GameEngine::LeftHandRing3Bone, Bone(GameEngine::LeftHandRing3Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandRing3").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandRing3").Quat)))},
-		{ GameEngine::LeftHandRing4Bone, Bone(GameEngine::LeftHandRing4Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandRing4").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandRing4").Quat)))},
-		{ GameEngine::LeftHandPinky1Bone, Bone(GameEngine::LeftHandPinky1Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandPinky1").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandPinky1").Quat)))},
-		{ GameEngine::LeftHandPinky2Bone, Bone(GameEngine::LeftHandPinky2Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandPinky2").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandPinky2").Quat)))},
-		{ GameEngine::LeftHandPinky3Bone, Bone(GameEngine::LeftHandPinky3Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandPinky3").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandPinky3").Quat)))},
-		{ GameEngine::LeftHandPinky4Bone, Bone(GameEngine::LeftHandPinky4Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftHandPinky4").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftHandPinky4").Quat)))},
-		{ GameEngine::Shield_jointBone, Bone(GameEngine::Shield_jointBone, Transform(CharacterSkeleton.GetTargetBoneInfo("Shield_joint").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("Shield_joint").Quat)))},
-		{ GameEngine::RightShoulderBone, Bone(GameEngine::RightShoulderBone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightShoulder").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightShoulder").Quat)))},
-		{ GameEngine::RightArmBone, Bone(GameEngine::RightArmBone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightArm").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightArm").Quat)))},
-		{ GameEngine::RightForeArmBone, Bone(GameEngine::RightForeArmBone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightForeArm").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightForeArm").Quat)))},
-		{ GameEngine::RightHandBone, Bone(GameEngine::RightHandBone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHand").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHand").Quat)))},
-		{ GameEngine::RightHandThumb1Bone, Bone(GameEngine::RightHandThumb1Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandThumb1").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandThumb1").Quat)))},
-		{ GameEngine::RightHandThumb2Bone, Bone(GameEngine::RightHandThumb2Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandThumb2").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandThumb2").Quat)))},
-		{ GameEngine::RightHandThumb3Bone, Bone(GameEngine::RightHandThumb3Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandThumb3").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandThumb3").Quat)))},
-		{ GameEngine::RightHandThumb4Bone, Bone(GameEngine::RightHandThumb4Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandThumb4").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandThumb4").Quat)))},
-		{ GameEngine::RightHandIndex1Bone, Bone(GameEngine::RightHandIndex1Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandIndex1").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandIndex1").Quat)))},
-		{ GameEngine::RightHandIndex2Bone, Bone(GameEngine::RightHandIndex2Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandIndex2").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandIndex2").Quat)))},
-		{ GameEngine::RightHandIndex3Bone, Bone(GameEngine::RightHandIndex3Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandIndex3").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandIndex3").Quat)))},
-		{ GameEngine::RightHandIndex4Bone, Bone(GameEngine::RightHandIndex4Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandIndex4").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandIndex4").Quat)))},
-		{ GameEngine::RightHandMiddle1Bone, Bone(GameEngine::RightHandMiddle1Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandMiddle1").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandMiddle1").Quat)))},
-		{ GameEngine::RightHandMiddle2Bone, Bone(GameEngine::RightHandMiddle2Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandMiddle2").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandMiddle2").Quat)))},
-		{ GameEngine::RightHandMiddle3Bone, Bone(GameEngine::RightHandMiddle3Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandMiddle3").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandMiddle3").Quat)))},
-		{ GameEngine::RightHandMiddle4Bone, Bone(GameEngine::RightHandMiddle4Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandMiddle4").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandMiddle4").Quat)))},
-		{ GameEngine::RightHandRing1Bone, Bone(GameEngine::RightHandRing1Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandRing1").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandRing1").Quat)))},
-		{ GameEngine::RightHandRing2Bone, Bone(GameEngine::RightHandRing2Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandRing2").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandRing2").Quat)))},
-		{ GameEngine::RightHandRing3Bone, Bone(GameEngine::RightHandRing3Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandRing3").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandRing3").Quat)))},
-		{ GameEngine::RightHandRing4Bone, Bone(GameEngine::RightHandRing4Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandRing4").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandRing4").Quat)))},
-		{ GameEngine::RightHandPinky1Bone, Bone(GameEngine::RightHandPinky1Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandPinky1").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandPinky1").Quat)))},
-		{ GameEngine::RightHandPinky2Bone, Bone(GameEngine::RightHandPinky2Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandPinky2").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandPinky2").Quat)))},
-		{ GameEngine::RightHandPinky3Bone, Bone(GameEngine::RightHandPinky3Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandPinky3").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandPinky3").Quat)))},
-		{ GameEngine::RightHandPinky4Bone, Bone(GameEngine::RightHandPinky4Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightHandPinky4").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightHandPinky4").Quat)))},
-		{ GameEngine::Sword_jointBone, Bone(GameEngine::Sword_jointBone, Transform(CharacterSkeleton.GetTargetBoneInfo("Sword_joint").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("Sword_joint").Quat)))},
-		{ GameEngine::LeftUpLegBone, Bone(GameEngine::LeftUpLegBone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftUpLeg").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftUpLeg").Quat)))},
-		{ GameEngine::LeftLegBone, Bone(GameEngine::LeftLegBone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftLeg").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftLeg").Quat)))},
-		{ GameEngine::LeftFootBone, Bone(GameEngine::LeftFootBone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftFoot").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftFoot").Quat)))},
-		{ GameEngine::LeftToeBaseBone, Bone(GameEngine::LeftToeBaseBone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftToeBase").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftToeBase").Quat)))},
-		{ GameEngine::LeftToe_EndBone, Bone(GameEngine::LeftToe_EndBone, Transform(CharacterSkeleton.GetTargetBoneInfo("LeftToe_End").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("LeftToe_End").Quat)))},
-		{ GameEngine::RightUpLegBone, Bone(GameEngine::RightUpLegBone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightUpLeg").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightUpLeg").Quat)))},
-		{ GameEngine::RightLegBone, Bone(GameEngine::RightLegBone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightLeg").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightLeg").Quat)))},
-		{ GameEngine::RightFootBone, Bone(GameEngine::RightFootBone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightFoot").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightFoot").Quat)))},
-		{ GameEngine::RightToeBaseBone, Bone(GameEngine::RightToeBaseBone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightToeBase").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightToeBase").Quat)))},
-		{ GameEngine::RightToe_EndBone, Bone(GameEngine::RightToe_EndBone, Transform(CharacterSkeleton.GetTargetBoneInfo("RightToe_End").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("RightToe_End").Quat)))},
+		{ GameEngine::rootBone, Bone(GameEngine::rootBone, Transform(CharacterSkeleton.GetTargetBoneInfo("root").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("root").Quat)))},
+		{ GameEngine::center_of_massBone, Bone(GameEngine::center_of_massBone, Transform(CharacterSkeleton.GetTargetBoneInfo("center_of_mass").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("center_of_mass").Quat)))},
+		{ GameEngine::ik_foot_rootBone, Bone(GameEngine::ik_foot_rootBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ik_foot_root").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ik_foot_root").Quat)))},
+		{ GameEngine::ik_foot_lBone, Bone(GameEngine::ik_foot_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ik_foot_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ik_foot_l").Quat)))},
+		{ GameEngine::ik_foot_rBone, Bone(GameEngine::ik_foot_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ik_foot_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ik_foot_r").Quat)))},
+		{ GameEngine::ik_hand_rootBone, Bone(GameEngine::ik_hand_rootBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ik_hand_root").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ik_hand_root").Quat)))},
+		{ GameEngine::ik_hand_gunBone, Bone(GameEngine::ik_hand_gunBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ik_hand_gun").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ik_hand_gun").Quat)))},
+		{ GameEngine::ik_hand_lBone, Bone(GameEngine::ik_hand_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ik_hand_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ik_hand_l").Quat)))},
+		{ GameEngine::ik_hand_rBone, Bone(GameEngine::ik_hand_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ik_hand_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ik_hand_r").Quat)))},
+		{ GameEngine::interactionBone, Bone(GameEngine::interactionBone, Transform(CharacterSkeleton.GetTargetBoneInfo("interaction").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("interaction").Quat)))},
+		{ GameEngine::pelvisBone, Bone(GameEngine::pelvisBone, Transform(CharacterSkeleton.GetTargetBoneInfo("pelvis").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("pelvis").Quat)))},
+		{ GameEngine::spine_01Bone, Bone(GameEngine::spine_01Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("spine_01").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("spine_01").Quat)))},
+		{ GameEngine::spine_02Bone, Bone(GameEngine::spine_02Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("spine_02").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("spine_02").Quat)))},
+		{ GameEngine::spine_03Bone, Bone(GameEngine::spine_03Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("spine_03").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("spine_03").Quat)))},
+		{ GameEngine::spine_04Bone, Bone(GameEngine::spine_04Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("spine_04").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("spine_04").Quat)))},
+		{ GameEngine::spine_05Bone, Bone(GameEngine::spine_05Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("spine_05").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("spine_05").Quat)))},
+		{ GameEngine::clavicle_lBone, Bone(GameEngine::clavicle_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("clavicle_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("clavicle_l").Quat)))},
+		{ GameEngine::upperarm_lBone, Bone(GameEngine::upperarm_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("upperarm_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("upperarm_l").Quat)))},
+		{ GameEngine::lowerarm_lBone, Bone(GameEngine::lowerarm_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("lowerarm_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("lowerarm_l").Quat)))},
+		{ GameEngine::hand_lBone, Bone(GameEngine::hand_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("hand_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("hand_l").Quat)))},
+		{ GameEngine::index_metacarpal_lBone, Bone(GameEngine::index_metacarpal_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("index_metacarpal_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("index_metacarpal_l").Quat)))},
+		{ GameEngine::index_01_lBone, Bone(GameEngine::index_01_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("index_01_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("index_01_lBone").Quat)))},
+		{ GameEngine::index_02_lBone, Bone(GameEngine::index_02_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("index_02_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("index_02_lBone").Quat)))},
+		{ GameEngine::index_03_lBone, Bone(GameEngine::index_03_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("index_03_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("index_03_lBone").Quat)))},
+		{ GameEngine::middle_metacarpal_lBone, Bone(GameEngine::middle_metacarpal_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("middle_metacarpal_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("middle_metacarpal_l").Quat)))},
+		{ GameEngine::middle_01_lBone, Bone(GameEngine::middle_01_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("middle_01_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("middle_01_lBone").Quat)))},
+		{ GameEngine::middle_02_lBone, Bone(GameEngine::middle_02_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("middle_02_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("middle_02_lBone").Quat)))},
+		{ GameEngine::middle_03_lBone, Bone(GameEngine::middle_03_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("middle_03_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("middle_03_lBone").Quat)))},
+		{ GameEngine::pinky_metacarpal_lBone, Bone(GameEngine::pinky_metacarpal_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("pinky_metacarpal_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("pinky_metacarpal_l").Quat)))},
+		{ GameEngine::pinky_01_lBone, Bone(GameEngine::pinky_01_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("pinky_01_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("pinky_01_lBone").Quat)))},
+		{ GameEngine::pinky_02_lBone, Bone(GameEngine::pinky_02_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("pinky_02_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("pinky_02_lBone").Quat)))},
+		{ GameEngine::pinky_03_lBone, Bone(GameEngine::pinky_03_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("pinky_03_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("pinky_03_lBone").Quat)))},
+		{ GameEngine::ring_metacarpal_lBone, Bone(GameEngine::ring_metacarpal_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ring_metacarpal_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ring_metacarpal_l").Quat)))},
+		{ GameEngine::ring_01_lBone, Bone(GameEngine::ring_01_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ring_01_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ring_01_lBone").Quat)))},
+		{ GameEngine::ring_02_lBone, Bone(GameEngine::ring_02_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ring_02_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ring_02_lBone").Quat)))},
+		{ GameEngine::ring_03_lBone, Bone(GameEngine::ring_03_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ring_03_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ring_03_lBone").Quat)))},
+		{ GameEngine::thumb_01_lBone, Bone(GameEngine::thumb_01_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("thumb_01_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("thumb_01_lBone").Quat)))},
+		{ GameEngine::thumb_02_lBone, Bone(GameEngine::thumb_02_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("thumb_02_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("thumb_02_lBone").Quat)))},
+		{ GameEngine::thumb_03_lBone, Bone(GameEngine::thumb_03_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("thumb_03_lBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("thumb_03_lBone").Quat)))},
+		{ GameEngine::lowerarm_twist_01_lBone, Bone(GameEngine::lowerarm_twist_01_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("lowerarm_twist_01_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("lowerarm_twist_01_l").Quat)))},
+		{ GameEngine::lowerarm_twist_02_lBone, Bone(GameEngine::lowerarm_twist_02_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("lowerarm_twist_02_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("lowerarm_twist_02_l").Quat)))},
+		{ GameEngine::upperarm_twist_01_lBone, Bone(GameEngine::upperarm_twist_01_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("upperarm_twist_01_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("upperarm_twist_01_l").Quat)))},
+		{ GameEngine::upperarm_twist_02_lBone, Bone(GameEngine::upperarm_twist_02_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("upperarm_twist_02_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("upperarm_twist_02_l").Quat)))},
+		{ GameEngine::clavicle_rBone, Bone(GameEngine::clavicle_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("clavicle_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("clavicle_r").Quat)))},
+		{ GameEngine::upperarm_rBone, Bone(GameEngine::upperarm_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("upperarm_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("upperarm_r").Quat)))},
+		{ GameEngine::lowerarm_rBone, Bone(GameEngine::lowerarm_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("lowerarm_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("lowerarm_r").Quat)))},
+		{ GameEngine::hand_rBone, Bone(GameEngine::hand_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("hand_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("hand_r").Quat)))},
+		{ GameEngine::index_metacarpal_rBone, Bone(GameEngine::index_metacarpal_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("index_metacarpal_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("index_metacarpal_r").Quat)))},
+		{ GameEngine::index_01_rBone, Bone(GameEngine::index_01_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("index_01_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("index_01_r").Quat)))},
+		{ GameEngine::index_02_rBone, Bone(GameEngine::index_02_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("index_02_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("index_02_r").Quat)))},
+		{ GameEngine::index_03_rBone, Bone(GameEngine::index_03_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("index_03_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("index_03_r").Quat)))},
+		{ GameEngine::middle_metacarpal_rBone, Bone(GameEngine::middle_metacarpal_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("middle_metacarpal_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("middle_metacarpal_r").Quat)))},
+		{ GameEngine::middle_01_rBone, Bone(GameEngine::middle_01_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("middle_01_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("middle_01_r").Quat)))},
+		{ GameEngine::middle_02_rBone, Bone(GameEngine::middle_02_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("middle_02_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("middle_02_r").Quat)))},
+		{ GameEngine::middle_03_rBone, Bone(GameEngine::middle_03_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("middle_03_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("middle_03_r").Quat)))},
+		{ GameEngine::pinky_metacarpal_rBone, Bone(GameEngine::pinky_metacarpal_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("pinky_metacarpal_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("pinky_metacarpal_r").Quat)))},
+		{ GameEngine::pinky_01_rBone, Bone(GameEngine::pinky_01_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("pinky_01_rBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("pinky_01_rBone").Quat)))},
+		{ GameEngine::pinky_02_rBone, Bone(GameEngine::pinky_02_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("pinky_02_rBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("pinky_02_rBone").Quat)))},
+		{ GameEngine::pinky_03_rBone, Bone(GameEngine::pinky_03_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("pinky_03_rBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("pinky_03_rBone").Quat)))},
+		{ GameEngine::ring_metacarpal_rBone, Bone(GameEngine::ring_metacarpal_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ring_metacarpal_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ring_metacarpal_r").Quat)))},
+		{ GameEngine::ring_01_rBone, Bone(GameEngine::ring_01_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ring_01_rBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ring_01_rBone").Quat)))},
+		{ GameEngine::ring_02_rBone, Bone(GameEngine::ring_02_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ring_02_rBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ring_02_rBone").Quat)))},
+		{ GameEngine::ring_03_rBone, Bone(GameEngine::ring_03_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ring_03_rBone").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ring_03_rBone").Quat)))},
+		{ GameEngine::thumb_01_rBone, Bone(GameEngine::thumb_01_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("thumb_01_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("thumb_01_r").Quat)))},
+		{ GameEngine::thumb_02_rBone, Bone(GameEngine::thumb_02_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("thumb_02_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("thumb_02_r").Quat)))},
+		{ GameEngine::thumb_03_rBone, Bone(GameEngine::thumb_03_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("thumb_03_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("thumb_03_r").Quat)))},
+		{ GameEngine::lowerarm_twist_01_rBone, Bone(GameEngine::lowerarm_twist_01_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("lowerarm_twist_01_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("lowerarm_twist_01_r").Quat)))},
+		{ GameEngine::lowerarm_twist_02_rBone, Bone(GameEngine::lowerarm_twist_02_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("lowerarm_twist_02_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("lowerarm_twist_02_r").Quat)))},
+		{ GameEngine::upperarm_twist_01_rBone, Bone(GameEngine::upperarm_twist_01_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("upperarm_twist_01_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("upperarm_twist_01_r").Quat)))},
+		{ GameEngine::upperarm_twist_02_rBone, Bone(GameEngine::upperarm_twist_02_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("upperarm_twist_02_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("upperarm_twist_02_r").Quat)))},
+		{ GameEngine::neck_01Bone, Bone(GameEngine::neck_01Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("neck_01").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("neck_01").Quat)))},
+		{ GameEngine::neck_02Bone, Bone(GameEngine::neck_02Bone, Transform(CharacterSkeleton.GetTargetBoneInfo("neck_02").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("neck_02").Quat)))},
+		{ GameEngine::headBone, Bone(GameEngine::headBone, Transform(CharacterSkeleton.GetTargetBoneInfo("head").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("head").Quat)))},
+		{ GameEngine::thigh_lBone, Bone(GameEngine::thigh_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("thigh_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("thigh_l").Quat)))},
+		{ GameEngine::calf_lBone, Bone(GameEngine::calf_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("calf_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("calf_l").Quat)))},
+		{ GameEngine::calf_twist_01_lBone, Bone(GameEngine::calf_twist_01_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("calf_twist_01_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("calf_twist_01_l").Quat)))},
+		{ GameEngine::calf_twist_02_lBone, Bone(GameEngine::calf_twist_02_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("calf_twist_02_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("calf_twist_02_l").Quat)))},
+		{ GameEngine::foot_lBone, Bone(GameEngine::foot_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("foot_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("foot_l").Quat)))},
+		{ GameEngine::ball_lBone, Bone(GameEngine::ball_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ball_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ball_l").Quat)))},
+		{ GameEngine::thigh_twist_01_lBone, Bone(GameEngine::thigh_twist_01_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("thigh_twist_01_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("thigh_twist_01_l").Quat)))},
+		{ GameEngine::thigh_twist_02_lBone, Bone(GameEngine::thigh_twist_02_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("thigh_twist_02_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("thigh_twist_02_l").Quat)))},
+		{ GameEngine::thigh_rBone, Bone(GameEngine::thigh_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("thigh_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("thigh_r").Quat)))},
+		{ GameEngine::calf_rBone, Bone(GameEngine::calf_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("calf_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("calf_r").Quat)))},
+		{ GameEngine::calf_twist_01_rBone, Bone(GameEngine::calf_twist_01_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("calf_twist_01_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("calf_twist_01_r").Quat)))},
+		{ GameEngine::calf_twist_02_rBone, Bone(GameEngine::calf_twist_02_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("calf_twist_02_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("calf_twist_02_r").Quat)))},
+		{ GameEngine::foot_rBone, Bone(GameEngine::foot_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("foot_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("foot_r").Quat)))},
+		{ GameEngine::ball_rBone, Bone(GameEngine::ball_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ball_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ball_r").Quat)))},
+		{ GameEngine::thigh_twist_01_rBone, Bone(GameEngine::thigh_twist_01_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("thigh_twist_01_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("thigh_twist_01_r").Quat)))},
+		{ GameEngine::thigh_twist_02_rBone, Bone(GameEngine::thigh_twist_02_rBone, Transform(CharacterSkeleton.GetTargetBoneInfo("thigh_twist_02_r").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("thigh_twist_02_r").Quat)))},
 	};
 
 	std::vector<std::string> boneOrder = {
-		GameEngine::rootBone;
-		GameEngine::center_of_massBone;
-		GameEngine::ik_foot_rootBone;
-		GameEngine::ik_foot_lBone;
-		GameEngine::ik_foot_rBone;
-		GameEngine::ik_hand_rootBone;
-		GameEngine::ik_hand_gunBone;
-		GameEngine::ik_hand_lBone;
-		GameEngine::ik_hand_rBone;
-		GameEngine::interactionBone;
-		GameEngine::pelvisBone;
-		GameEngine::spine_01Bone;
-		GameEngine::spine_02Bone;
-		GameEngine::spine_03Bone;
-		GameEngine::spine_04Bone;
-		GameEngine::spine_05Bone;
-		GameEngine::clavicle_lBone;
-		GameEngine::upperarm_lBone;
-		GameEngine::lowerarm_lBone;
-		GameEngine::hand_lBone;
-		GameEngine::index_metacarpal_lBone;
-		GameEngine::index_01_lBone;
-		GameEngine::index_02_lBone;
-		GameEngine::index_03_lBone;
-		GameEngine::middle_metacarpal_lBone;
-		GameEngine::middle_01_lBone;
-		GameEngine::middle_02_lBone;
-		GameEngine::middle_03_lBone;
-		GameEngine::pinky_metacarpal_lBone;
-		GameEngine::pinky_01_lBone;
-		GameEngine::pinky_02_lBone;
-		GameEngine::pinky_03_lBone;
-		GameEngine::ring_metacarpal_lBone;
-		GameEngine::ring_01_lBone;
-		GameEngine::ring_02_lBone;
-		GameEngine::ring_03_lBone;
-		GameEngine::thumb_01_lBone;
-		GameEngine::thumb_02_lBone;
-		GameEngine::thumb_03_lBone;
-		GameEngine::lowerarm_twist_01_lBone;
-		GameEngine::lowerarm_twist_02_lBone;
-		GameEngine::upperarm_twist_01_lBone;
-		GameEngine::upperarm_twist_02_lBone;
-		GameEngine::clavicle_rBone;
-		GameEngine::upperarm_rBone;
-		GameEngine::lowerarm_rBone;
-		GameEngine::hand_rBone;
-		GameEngine::index_metacarpal_rBone;
-		GameEngine::index_01_rBone;
-		GameEngine::index_02_rBone;
-		GameEngine::index_03_rBone;
-		GameEngine::middle_metacarpal_rBone;
-		GameEngine::middle_01_rBone;
-		GameEngine::middle_02_rBone;
-		GameEngine::middle_03_rBone;
-		GameEngine::pinky_metacarpal_rBone;
-		GameEngine::pinky_01_rBone;
-		GameEngine::pinky_02_rBone;
-		GameEngine::pinky_03_rBone;
-		GameEngine::ring_metacarpal_rBone;
-		GameEngine::ring_01_rBone;
-		GameEngine::ring_02_rBone;
-		GameEngine::ring_03_rBone;
-		GameEngine::thumb_01_rBone;
-		GameEngine::thumb_02_rBone;
-		GameEngine::thumb_03_rBone;
-		GameEngine::lowerarm_twist_01_rBone;
-		GameEngine::lowerarm_twist_02_rBone;
-		GameEngine::upperarm_twist_01_rBone;
-		GameEngine::upperarm_twist_02_rBone;
-		GameEngine::neck_01Bone;
-		GameEngine::neck_02Bone;
-		GameEngine::headBone;
-		GameEngine::thigh_lBone;
-		GameEngine::calf_lBone;
-		GameEngine::calf_twist_01_lBone;
-		GameEngine::calf_twist_02_lBone;
-		GameEngine::foot_lBone;
-		GameEngine::ball_lBone;
-		GameEngine::thigh_twist_01_lBone;
-		GameEngine::thigh_twist_02_lBone;
-		GameEngine::thigh_rBone;
-		GameEngine::calf_rBone;
-		GameEngine::calf_twist_01_rBone;
-		GameEngine::calf_twist_02_rBone;
-		GameEngine::foot_rBone;
-		GameEngine::ball_rBone;
-		GameEngine::thigh_twist_01_rBone;
-		GameEngine::thigh_twist_02_rBone;
+		GameEngine::rootBone,
+		GameEngine::center_of_massBone,
+		GameEngine::ik_foot_rootBone,
+		GameEngine::ik_foot_lBone,
+		GameEngine::ik_foot_rBone,
+		GameEngine::ik_hand_rootBone,
+		GameEngine::ik_hand_gunBone,
+		GameEngine::ik_hand_lBone,
+		GameEngine::ik_hand_rBone,
+		GameEngine::interactionBone,
+		GameEngine::pelvisBone,
+		GameEngine::spine_01Bone,
+		GameEngine::spine_02Bone,
+		GameEngine::spine_03Bone,
+		GameEngine::spine_04Bone,
+		GameEngine::spine_05Bone,
+		GameEngine::clavicle_lBone,
+		GameEngine::upperarm_lBone,
+		GameEngine::lowerarm_lBone,
+		GameEngine::hand_lBone,
+		GameEngine::index_metacarpal_lBone,
+		GameEngine::index_01_lBone,
+		GameEngine::index_02_lBone,
+		GameEngine::index_03_lBone,
+		GameEngine::middle_metacarpal_lBone,
+		GameEngine::middle_01_lBone,
+		GameEngine::middle_02_lBone,
+		GameEngine::middle_03_lBone,
+		GameEngine::pinky_metacarpal_lBone,
+		GameEngine::pinky_01_lBone,
+		GameEngine::pinky_02_lBone,
+		GameEngine::pinky_03_lBone,
+		GameEngine::ring_metacarpal_lBone,
+		GameEngine::ring_01_lBone,
+		GameEngine::ring_02_lBone,
+		GameEngine::ring_03_lBone,
+		GameEngine::thumb_01_lBone,
+		GameEngine::thumb_02_lBone,
+		GameEngine::thumb_03_lBone,
+		GameEngine::lowerarm_twist_01_lBone,
+		GameEngine::lowerarm_twist_02_lBone,
+		GameEngine::upperarm_twist_01_lBone,
+		GameEngine::upperarm_twist_02_lBone,
+		GameEngine::clavicle_rBone,
+		GameEngine::upperarm_rBone,
+		GameEngine::lowerarm_rBone,
+		GameEngine::hand_rBone,
+		GameEngine::index_metacarpal_rBone,
+		GameEngine::index_01_rBone,
+		GameEngine::index_02_rBone,
+		GameEngine::index_03_rBone,
+		GameEngine::middle_metacarpal_rBone,
+		GameEngine::middle_01_rBone,
+		GameEngine::middle_02_rBone,
+		GameEngine::middle_03_rBone,
+		GameEngine::pinky_metacarpal_rBone,
+		GameEngine::pinky_01_rBone,
+		GameEngine::pinky_02_rBone,
+		GameEngine::pinky_03_rBone,
+		GameEngine::ring_metacarpal_rBone,
+		GameEngine::ring_01_rBone,
+		GameEngine::ring_02_rBone,
+		GameEngine::ring_03_rBone,
+		GameEngine::thumb_01_rBone,
+		GameEngine::thumb_02_rBone,
+		GameEngine::thumb_03_rBone,
+		GameEngine::lowerarm_twist_01_rBone,
+		GameEngine::lowerarm_twist_02_rBone,
+		GameEngine::upperarm_twist_01_rBone,
+		GameEngine::upperarm_twist_02_rBone,
+		GameEngine::neck_01Bone,
+		GameEngine::neck_02Bone,
+		GameEngine::headBone,
+		GameEngine::thigh_lBone,
+		GameEngine::calf_lBone,
+		GameEngine::calf_twist_01_lBone,
+		GameEngine::calf_twist_02_lBone,
+		GameEngine::foot_lBone,
+		GameEngine::ball_lBone,
+		GameEngine::thigh_twist_01_lBone,
+		GameEngine::thigh_twist_02_lBone,
+		GameEngine::thigh_rBone,
+		GameEngine::calf_rBone,
+		GameEngine::calf_twist_01_rBone,
+		GameEngine::calf_twist_02_rBone,
+		GameEngine::foot_rBone,
+		GameEngine::ball_rBone,
+		GameEngine::thigh_twist_01_rBone,
+		GameEngine::thigh_twist_02_rBone
 	};
 
 	// Connecting Bones
@@ -552,24 +571,24 @@ void GameEngine::LoadAsset()
 	}
 
 	// Animation
-	Animation& SaluteAnimation = CreateAnimation(GameEngine::SaluteAnimation);
-	std::vector<std::string>& SaluteBoneNames = SaluteAnimation.GetBoneNames();;
-	std::vector<bool>& SaluteBoneUsage = SaluteAnimation.GetBoneUsage();
-	std::vector<std::vector<Vector3>>& SaluteFrameTranslations = SaluteAnimation.GetFrameTranslantions();
-	std::vector<std::vector<Quaternion>>& SaluteFrameQuaternions = SaluteAnimation.GetFrameQuaternions();
+	Animation& PistolReloadAnimation = CreateAnimation(GameEngine::PistolReloadAnimation);
+	std::vector<std::string>& PistolReloadBoneNames = PistolReloadAnimation.GetBoneNames();;
+	std::vector<bool>& PistolReloadBoneUsage = PistolReloadAnimation.GetBoneUsage();
+	std::vector<std::vector<Vector3>>& PistolReloadFrameTranslations = PistolReloadAnimation.GetFrameTranslantions();
+	std::vector<std::vector<Quaternion>>& PistolReloadFrameQuaternions = PistolReloadAnimation.GetFrameQuaternions();
 
-	SaluteBoneNames.resize(boneOrder.size());
-	SaluteBoneUsage.resize(boneOrder.size(), false);
-	SaluteFrameTranslations.resize(boneOrder.size(), std::vector<Vector3>());
-	SaluteFrameQuaternions.resize(boneOrder.size(), std::vector<Quaternion>());
-	TestLoader.LoadAnimationWithName("Salute", boneOrder, OUT SaluteBoneNames, OUT SaluteBoneUsage, OUT SaluteFrameTranslations, OUT SaluteFrameQuaternions);
+	PistolReloadBoneNames.resize(boneOrder.size());
+	PistolReloadBoneUsage.resize(boneOrder.size(), false);
+	PistolReloadFrameTranslations.resize(boneOrder.size(), std::vector<Vector3>());
+	PistolReloadFrameQuaternions.resize(boneOrder.size(), std::vector<Quaternion>());
+	TestLoader.LoadAnimationWithName("PistolReload", boneOrder, OUT PistolReloadBoneNames, OUT PistolReloadBoneUsage, OUT PistolReloadFrameTranslations, OUT PistolReloadFrameQuaternions);
 
 	// Check Loaded Animation & SKMesh's Skeleton Order
 	for (auto boneIdx = 1; boneIdx < boneOrder.size(); boneIdx++)
 	{
-		if (SaluteBoneUsage[boneIdx])
+		if (PistolReloadBoneUsage[boneIdx])
 		{
-			assert(boneOrder[boneIdx].compare(SaluteBoneNames[boneIdx]) == 0);
+			assert(boneOrder[boneIdx].compare(PistolReloadBoneNames[boneIdx]) == 0);
 
 		}
 	}
