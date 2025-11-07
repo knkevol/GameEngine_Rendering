@@ -56,7 +56,7 @@ void SoftRenderer::LateUpdate(float InDeltaSeconds)
 	GameObject& goPlayer = g.GetGameObject(MainPlayer);
 	Mesh& m = g.GetMesh(goPlayer.GetMeshKey());
 	SKMesh& skm = static_cast<SKMesh&>(m);
-	Animation& anim = g.GetAnimation(GameEngine::SaluteAnimation);
+	Animation& anim = g.GetAnimation(GameEngine::PistolReloadAnimation);
 
 	const std::vector<bool>& animBU = anim.GetBoneUsage();
 	const std::vector <std::string>& animBN = anim.GetBoneNames();
@@ -173,14 +173,14 @@ void SoftRenderer::RenderWorld()
 					const Bone& bone = b.second;
 
 					// Skip Drawing Root Bone
-					if (bone.GetName().compare("HipsBone") == 0 ||
-						bone.GetName().compare("Shield_jointBone") == 0 ||
-						bone.GetName().compare("Sword_jointBone") == 0 ||
-						bone.GetName().compare("LeftEyeBone") == 0 ||
-						bone.GetName().compare("RightEyeBone") == 0)
-					{
-						continue;
-					}
+					//if (bone.GetName().compare("HipsBone") == 0 ||
+					//	bone.GetName().compare("Shield_jointBone") == 0 ||
+					//	bone.GetName().compare("Sword_jointBone") == 0 ||
+					//	bone.GetName().compare("LeftEyeBone") == 0 ||
+					//	bone.GetName().compare("RightEyeBone") == 0)
+					//{
+					//	continue;
+					//}
 
 					const Bone& parentBone = currSKMesh.GetBone(bone.GetParentName());
 					const Transform& tGameObject = transform.GetWorldTransform();

@@ -24,7 +24,7 @@ void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<V
 {
 	assert(_FbxManager);
 	
-	const std::string InFilePath = AssetFolderPath + "Character/" + AssetName + ".fbx";
+	const std::string InFilePath = AssetFolderPath + "Character/" + AssetName + ".FBX";
 	const std::string TextureFilePath = AssetFolderPath + "Character/" + AssetName + ".fbm/" + AssetName + "_";
 	TexturePath = TextureFilePath;
 
@@ -82,7 +82,7 @@ void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<V
 				//	for Paladin i==2
 				//	for Mannequin i==0
 
-				if (i == 2)
+				if (i == 0)
 				{
 					LoadMesh(childNode, OUT MeshVertexIndex, OUT Vertices, OUT Indices, OUT Uvs, OUT InSkeletonInfo, OUT InWeightInfo);
 				}

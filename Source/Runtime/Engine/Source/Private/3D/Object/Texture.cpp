@@ -17,7 +17,7 @@ void Texture::Release()
 
 void PGE::Texture::LoadFromPath(const std::string& InFilePath)
 {
-	std::string TargetFilePath = InFilePath + "diffuse.png";
+	std::string TargetFilePath = InFilePath + "diffuse.PNG";
 
 	FILE* f = NULL;
 	if (0 != fopen_s(&f, TargetFilePath.c_str(), "rb"))
