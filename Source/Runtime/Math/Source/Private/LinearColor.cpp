@@ -1,6 +1,6 @@
 
 #include "Precompiled.h"
-using namespace PGE;
+using namespace GER;
 
 const LinearColor LinearColor::Error(1.f, 0.f, 1.f, 1.f);
 const LinearColor LinearColor::White(1.f, 1.f, 1.f, 1.f);

@@ -1,6 +1,6 @@
 
 #include "Precompiled.h"
-using namespace PGE;
+using namespace GER;
 
 Plane::Plane(const Vector3& InPoint1, const Vector3& InPoint2, const Vector3& InPoint3)
 {

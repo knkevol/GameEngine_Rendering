@@ -1,7 +1,7 @@
 #include "Precompiled.h"
 #include "SoftRenderer.h"
 
-using namespace PGE::DDD;
+using namespace GER::DDD;
 
 SoftRenderer::SoftRenderer(RendererInterface* InRSI) : _RSIPtr(InRSI)
 {

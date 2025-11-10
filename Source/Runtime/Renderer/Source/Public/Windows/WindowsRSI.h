@@ -1,7 +1,7 @@
 
 #pragma once
 
-namespace PGE
+namespace GER
 {
 
 	class WindowsRSI : public WindowsGDI, public RendererInterface

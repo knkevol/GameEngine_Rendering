@@ -1,6 +1,6 @@
 
 #include "Precompiled.h"
-using namespace PGE;
+using namespace GER;
 
 const Matrix2x2 Matrix2x2::Identity(Vector2(1.f, 0.f), Vector2(0.f, 1.f));
 

@@ -1,6 +1,6 @@
 
 #include "Precompiled.h"
-using namespace PGE;
+using namespace GER;
 
 Circle::Circle(const std::vector<Vector2> InVertices)
 {

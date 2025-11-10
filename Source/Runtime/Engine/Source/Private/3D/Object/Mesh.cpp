@@ -1,5 +1,5 @@
 #include "Precompiled.h"
-using namespace PGE::DDD;
+using namespace GER::DDD;
 
 void Mesh::CalculateBounds()
 {

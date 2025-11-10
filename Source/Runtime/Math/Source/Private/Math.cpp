@@ -1,6 +1,6 @@
 
 #include "Precompiled.h"
-using namespace PGE;
+using namespace GER;
 
 //const float Math::PI = 3.14159265358979323846f;
 //const float Math::TwoPI = 2.f * PI;

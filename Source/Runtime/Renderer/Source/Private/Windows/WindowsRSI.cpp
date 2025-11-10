@@ -300,7 +300,7 @@ void WindowsRSI::PushLogTexts(std::vector<std::string>&& InTexts)
 	std::move(InTexts.begin(), InTexts.end(), std::back_inserter(_PermanentLogs));
 }
 
-void PGE::WindowsRSI::PushLogText(std::size_t& Hash, std::string&& InText)
+void GER::WindowsRSI::PushLogText(std::size_t& Hash, std::string&& InText)
 {
 	if (Hash == Math::InvalidHash)
 	{
@@ -311,7 +311,7 @@ void PGE::WindowsRSI::PushLogText(std::size_t& Hash, std::string&& InText)
 	_TempLogs.emplace_back(std::make_pair(Hash, InText));
 }
 
-void PGE::WindowsRSI::PushLogTexts(std::vector<std::pair<std::size_t, std::string>>& NewLogs)
+void GER::WindowsRSI::PushLogTexts(std::vector<std::pair<std::size_t, std::string>>& NewLogs)
 {
 	for (const auto& NewLog : NewLogs)
 	{
@@ -325,7 +325,7 @@ void PGE::WindowsRSI::PushLogTexts(std::vector<std::pair<std::size_t, std::strin
 	}
 }
 
-void PGE::WindowsRSI::DeleteLogText(std::size_t& HashToDelete)
+void GER::WindowsRSI::DeleteLogText(std::size_t& HashToDelete)
 {
 	if (HashToDelete == Math::InvalidHash)
 	{
@@ -342,7 +342,7 @@ void PGE::WindowsRSI::DeleteLogText(std::size_t& HashToDelete)
 	}
 }
 
-void PGE::WindowsRSI::DeleteLogTexts(std::vector<std::size_t>& HashesToDelete)
+void GER::WindowsRSI::DeleteLogTexts(std::vector<std::size_t>& HashesToDelete)
 {
 	for (auto& HashToDelete : HashesToDelete)
 	{

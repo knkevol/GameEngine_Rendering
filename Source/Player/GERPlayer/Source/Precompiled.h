@@ -17,4 +17,4 @@
 #include "RendererHeaders.h"
 #include "SystemInputManager.h"
 
-using namespace PGE;
+using namespace GER;

@@ -132,7 +132,7 @@ void FBXLoader::LoadMesh(FbxNode* InNode, OUT unsigned int& StartVIndex, OUT std
 			float y = static_cast<float>(ConvertedMesh->GetControlPointAt(vi).mData[1]);
 			float z = static_cast<float>(ConvertedMesh->GetControlPointAt(vi).mData[2]);
 
-			Vertices.push_back(PGE::Vector3(x, y, z));
+			Vertices.push_back(GER::Vector3(x, y, z));
 			Indices.push_back(VertexCount);
 
 			// link vi to Vertices

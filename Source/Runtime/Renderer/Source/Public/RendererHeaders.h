@@ -14,4 +14,4 @@
 #include "Windows/WindowsRSI.h"
 #endif
 
-using namespace PGE;
+using namespace GER;

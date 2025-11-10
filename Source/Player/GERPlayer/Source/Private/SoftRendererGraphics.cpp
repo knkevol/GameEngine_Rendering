@@ -2,7 +2,7 @@
 #include "SoftRenderer.h"
 #include <random>
 
-using namespace PGE::DDD;
+using namespace GER::DDD;
 
 const std::string MainPlayer("Player");
 const std::string MainCameraTarget("MainCameraTarget");

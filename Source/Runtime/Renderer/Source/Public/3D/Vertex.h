@@ -1,7 +1,7 @@
 
 #pragma once
 
-namespace PGE
+namespace GER
 {
 namespace DDD
 {

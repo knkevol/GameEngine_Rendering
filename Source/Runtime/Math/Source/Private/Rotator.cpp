@@ -1,6 +1,6 @@
 
 #include "Precompiled.h"
-using namespace PGE;
+using namespace GER;
 
 const Rotator Rotator::Identity(0.f, 0.f, 0.f);
 

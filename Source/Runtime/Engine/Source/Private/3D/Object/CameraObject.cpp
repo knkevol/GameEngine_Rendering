@@ -1,6 +1,6 @@
 #include "Precompiled.h"
 
-using namespace PGE::DDD;
+using namespace GER::DDD;
 
 void CameraObject::SetLookAtRotation(const GameObject& InGameObject, const Vector3& InUp)
 {

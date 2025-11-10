@@ -1,6 +1,6 @@
 
 #include "Precompiled.h"
-using namespace PGE;
+using namespace GER;
 
 Transform::Transform(const Matrix4x4& InMatrix)
 {

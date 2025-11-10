@@ -15,7 +15,7 @@ void Texture::Release()
 	_Specular.clear();
 }
 
-void PGE::Texture::LoadFromPath(const std::string& InFilePath)
+void GER::Texture::LoadFromPath(const std::string& InFilePath)
 {
 	std::string TargetFilePath = InFilePath + "diffuse.PNG";
 
@@ -27,7 +27,7 @@ void PGE::Texture::LoadFromPath(const std::string& InFilePath)
 	LoadFromFile(f);
 }
 
-void PGE::Texture::LoadFromFile(FILE* InFilePtr)
+void GER::Texture::LoadFromFile(FILE* InFilePtr)
 {
 	if (InFilePtr == NULL)
 	{

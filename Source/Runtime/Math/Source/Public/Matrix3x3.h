@@ -1,6 +1,6 @@
 #pragma once
 
-namespace PGE
+namespace GER
 {
 
 struct Matrix3x3

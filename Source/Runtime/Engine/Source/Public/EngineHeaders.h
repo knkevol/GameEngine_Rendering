@@ -28,4 +28,4 @@
 #include "3D/Framework/GameMode.h"
 #include "3D/GameEngine.h"
 
-using namespace PGE;
+using namespace GER;

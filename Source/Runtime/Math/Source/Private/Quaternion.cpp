@@ -1,6 +1,6 @@
 
 #include "Precompiled.h"
-using namespace PGE;
+using namespace GER;
 
 const Quaternion Quaternion::Identity(0.f, 0.f, 0.f, 1.f);
 

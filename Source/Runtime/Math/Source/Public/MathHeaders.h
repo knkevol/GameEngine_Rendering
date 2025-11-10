@@ -45,4 +45,4 @@
 
 #include "Frustum.h"
 
-using namespace PGE;
+using namespace GER;

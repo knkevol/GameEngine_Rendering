@@ -1,6 +1,6 @@
 
 #include "Precompiled.h"
-using namespace PGE;
+using namespace GER;
 
 Sphere::Sphere(const std::vector<Vector3>& InVertices)
 {

@@ -1,6 +1,6 @@
 
 #include "Precompiled.h"
-using namespace PGE;
+using namespace GER;
 
 const Vector2 Vector2::UnitX(1.f, 0.f);
 const Vector2 Vector2::UnitY(0.f, 1.f);
