@@ -1,4 +1,4 @@
-#include "Precompiled.h"
+ï»¿#include "Precompiled.h"
 #include "SoftRenderer.h"
 #include <random>
 
@@ -121,15 +121,15 @@ void SoftRenderer::RenderWorld()
 			continue;
 		}
 
-		// ·»´õ¸µ¿¡ ÇÊ¿äÇÑ °ÔÀÓ ¿ÀºêÁ§Æ®ÀÇ ÁÖ¿ä ·¹ÆÛ·±½º¸¦ ¾ò±â
+		// ë Œë”ë§ì— í•„ìš”í•œ ê²Œì„ ì˜¤ë¸Œì íŠ¸ì˜ ì£¼ìš” ë ˆí¼ëŸ°ìŠ¤ë¥¼ ì–»ê¸°
 		const Mesh& mesh = g.GetMesh(gameObject.GetMeshKey());
 		const TransformComponent& transform = gameObject.GetTransform();
 
-		// ÃÖÁ¾ Çà·Ä °è»ê
+		// ìµœì¢… í–‰ë ¬ ê³„ì‚°
 		Matrix4x4 finalMatrix = pvMatrix * transform.GetWorldMatrix();
 		LinearColor finalColor = gameObject.GetColor();
 
-		// ÃÖÁ¾ º¯È¯ Çà·Ä·ÎºÎÅÍ Æò¸éÀÇ ¹æÁ¤½Ä°ú ÀıµÎÃ¼ »ı¼º
+		// ìµœì¢… ë³€í™˜ í–‰ë ¬ë¡œë¶€í„° í‰ë©´ì˜ ë°©ì •ì‹ê³¼ ì ˆë‘ì²´ ìƒì„±
 		Matrix4x4 finalTransposedMatrix = finalMatrix.Transpose();
 		std::array<Plane, 6> frustumPlanesFromMatrix = {
 			Plane(-(finalTransposedMatrix[3] - finalTransposedMatrix[1])), // up
@@ -141,7 +141,7 @@ void SoftRenderer::RenderWorld()
 		};
 		Frustum frustumFromMatrix(frustumPlanesFromMatrix);
 
-		// ¹Ù¿îµù ¿µ¿ªÀ» »ç¿ëÇØ ÀıµÎÃ¼ ÄÃ¸µÀ» ±¸Çö
+		// ë°”ìš´ë”© ì˜ì—­ì„ ì‚¬ìš©í•´ ì ˆë‘ì²´ ì»¬ë§ì„ êµ¬í˜„
 		Box boxBound = mesh.GetBoxBound();
 		auto checkResult = frustumFromMatrix.CheckBound(boxBound);
 		if (checkResult == BoundCheckResult::Outside)
@@ -151,11 +151,11 @@ void SoftRenderer::RenderWorld()
 		}
 		else if (checkResult == BoundCheckResult::Intersect)
 		{
-			// °ãÄ£ °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ Åë°è¿¡ Æ÷ÇÔ
+			// ê²¹ì¹œ ê²Œì„ ì˜¤ë¸Œì íŠ¸ë¥¼ í†µê³„ì— í¬í•¨
 			intersectedObjects++;
 		}
 
-		// ½ºÅ°´×ÀÌ°í WireFrameÀÎ °æ¿ì º»À» ±×¸®±â
+		// ìŠ¤í‚¤ë‹ì´ê³  WireFrameì¸ ê²½ìš° ë³¸ì„ ê·¸ë¦¬ê¸°
 		if (mesh.IsSKMesh() && (IsWireframeDrawing() || IsOnlyBoneDrawing()))
 		{
 			const Mesh& boneMesh = g.GetMesh(GameEngine::ArrowMesh);
@@ -185,11 +185,11 @@ void SoftRenderer::RenderWorld()
 					const Bone& parentBone = currSKMesh.GetBone(bone.GetParentName());
 					const Transform& tGameObject = transform.GetWorldTransform();
 
-					// ¸ğµ¨¸µ °ø°£¿¡¼­ÀÇ º»ÀÇ À§Ä¡
+					// ëª¨ë¸ë§ ê³µê°„ì—ì„œì˜ ë³¸ì˜ ìœ„ì¹˜
 					const Transform& t1 = parentBone.GetTransform().GetWorldTransform();
 					const Transform& t2 = bone.GetTransform().GetWorldTransform();
 
-					// °ÔÀÓ ¿ùµå °ø°£¿¡¼­ÀÇ º»ÀÇ À§Ä¡
+					// ê²Œì„ ì›”ë“œ ê³µê°„ì—ì„œì˜ ë³¸ì˜ ìœ„ì¹˜
 					const Transform& wt1 = t1.LocalToWorld(tGameObject);
 					const Transform& wt2 = t2.LocalToWorld(tGameObject);
 
@@ -226,7 +226,7 @@ void SoftRenderer::DrawMesh3D(const DDD::Mesh& InMesh, const Matrix4x4& InMatrix
 	size_t indexCount = InMesh.GetIndices().size();
 	size_t triangleCount = indexCount / 3;
 
-	// ·»´õ·¯°¡ »ç¿ëÇÒ Á¤Á¡ ¹öÆÛ¿Í ÀÎµ¦½º ¹öÆÛ·Î º¯È¯
+	// ë Œë”ëŸ¬ê°€ ì‚¬ìš©í•  ì •ì  ë²„í¼ì™€ ì¸ë±ìŠ¤ ë²„í¼ë¡œ ë³€í™˜
 	std::vector<Vertex3D> vertices(vertexCount);
 	std::vector<size_t> indice(InMesh.GetIndices());
 	for (size_t vi = 0; vi < vertexCount; ++vi)
@@ -266,10 +266,10 @@ void SoftRenderer::DrawMesh3D(const DDD::Mesh& InMesh, const Matrix4x4& InMatrix
 		}
 	}
 
-	// Á¤Á¡ º¯È¯ ÁøÇà
+	// ì •ì  ë³€í™˜ ì§„í–‰
 	VertexShader3D(vertices, InMatrix);
 
-	// »ï°¢Çü º°·Î ±×¸®±â
+	// ì‚¼ê°í˜• ë³„ë¡œ ê·¸ë¦¬ê¸°
 	for (int ti = 0; ti < triangleCount; ++ti)
 	{
 
@@ -277,7 +277,7 @@ void SoftRenderer::DrawMesh3D(const DDD::Mesh& InMesh, const Matrix4x4& InMatrix
 		int bi0 = ti * 3, bi1 = ti * 3 + 1, bi2 = ti * 3 + 2;
 		std::vector<Vertex3D> tvs = { vertices[indice[bi0]] , vertices[indice[bi1]] , vertices[indice[bi2]] };
 
-		// µ¿Â÷ÁÂÇ¥°è¿¡¼­ Å¬¸®ÇÎÀ» À§ÇÑ ¼³Á¤
+		// ë™ì°¨ì¢Œí‘œê³„ì—ì„œ í´ë¦¬í•‘ì„ ìœ„í•œ ì„¤ì •
 		std::vector<PerspectiveTest> testPlanes = {
 			{ TestFuncW0, EdgeFuncW0 },
 			{ TestFuncNY, EdgeFuncNY },
@@ -288,7 +288,7 @@ void SoftRenderer::DrawMesh3D(const DDD::Mesh& InMesh, const Matrix4x4& InMatrix
 			{ TestFuncNear, EdgeFuncNear }
 		};
 
-		// µ¿Â÷ÁÂÇ¥°è¿¡¼­ Å¬¸®ÇÎ ÁøÇà
+		// ë™ì°¨ì¢Œí‘œê³„ì—ì„œ í´ë¦¬í•‘ ì§„í–‰
 		for (auto& p : testPlanes)
 		{
 			p.ClipTriangles(tvs);
@@ -314,14 +314,14 @@ void SoftRenderer::DrawTriangle3D(std::vector<DDD::Vertex3D>& InVertices, const 
 	const GameEngine& g = GetDirectGameEngine();
 	const CameraObject& mainCamera = g.GetMainCamera();
 
-	// Ä«¸Ş¶óÀÇ ±ÙÆò¸é°ú ¿øÆò¸é °ª
+	// ì¹´ë©”ë¼ì˜ ê·¼í‰ë©´ê³¼ ì›í‰ë©´ ê°’
 	float n = mainCamera.GetNearZ();
 	float f = mainCamera.GetFarZ();
 
-	// Å¬¸³ ÁÂÇ¥¸¦ NDC ÁÂÇ¥·Î º¯°æ
+	// í´ë¦½ ì¢Œí‘œë¥¼ NDC ì¢Œí‘œë¡œ ë³€ê²½
 	for (auto& v : InVertices)
 	{
-		// ¹«ÇÑ ¿øÁ¡ÀÎ °æ¿ì, ¾à°£ º¸Á¤ÇØÁØ´Ù.
+		// ë¬´í•œ ì›ì ì¸ ê²½ìš°, ì•½ê°„ ë³´ì •í•´ì¤€ë‹¤.
 		if (v.Position.W == 0.f) v.Position.W = SMALL_NUMBER;
 
 		float invW = 1.f / v.Position.W;
@@ -330,9 +330,10 @@ void SoftRenderer::DrawTriangle3D(std::vector<DDD::Vertex3D>& InVertices, const 
 		v.Position.Z *= invW;
 	}
 
-	// ¹éÆäÀÌ½º ÄÃ¸µ
+	// ë°±í˜ì´ìŠ¤ ì»¬ë§
 	Vector3 edge1 = (InVertices[1].Position - InVertices[0].Position).ToVector3();
 	Vector3 edge2 = (InVertices[2].Position - InVertices[0].Position).ToVector3();
+	//ë°©í–¥ ë°”ê¾¸ë©´ - ì•ˆë¶™ì—¬ë„ ë ê±°ê°™ì€ë°??
 	Vector3 faceNormal = -edge1.Cross(edge2);
 	Vector3 viewDirection = Vector3::UnitZ;
 	if (faceNormal.Dot(viewDirection) >= 0.f)
@@ -340,7 +341,7 @@ void SoftRenderer::DrawTriangle3D(std::vector<DDD::Vertex3D>& InVertices, const 
 		return;
 	}
 
-	// NDC ÁÂÇ¥¸¦ È­¸é ÁÂÇ¥·Î ´Ã¸®±â
+	// NDC ì¢Œí‘œë¥¼ í™”ë©´ ì¢Œí‘œë¡œ ëŠ˜ë¦¬ê¸°
 	for (auto& v : InVertices)
 	{
 		v.Position.X *= _ScreenSize.X * 0.5f;
@@ -361,26 +362,26 @@ void SoftRenderer::DrawTriangle3D(std::vector<DDD::Vertex3D>& InVertices, const 
 	}
 	else
 	{
-		// TODO : ´Ù¸¥ MeshÀÇ InVertice ¸é ´Ù¸¥ Texture ºÒ·¯¿Í¼­ ±×¸®µµ·Ï 
+		// TODO : ë‹¤ë¥¸ Meshì˜ InVertice ë©´ ë‹¤ë¥¸ Texture ë¶ˆëŸ¬ì™€ì„œ ê·¸ë¦¬ë„ë¡ 
 		//const Texture& mainTexture = g.GetTexture(GameEngine::BaseTexture);
 		const Texture& mainTexture = g.GetTexture(GameEngine::CharacterTexture);
 
-		// »ï°¢Çü Ä¥ÇÏ±â
-		// »ï°¢ÇüÀÇ ¿µ¿ª ¼³Á¤
+		// ì‚¼ê°í˜• ì¹ í•˜ê¸°
+		// ì‚¼ê°í˜•ì˜ ì˜ì—­ ì„¤ì •
 		Vector2 minPos(Math::Min3(InVertices[0].Position.X, InVertices[1].Position.X, InVertices[2].Position.X), Math::Min3(InVertices[0].Position.Y, InVertices[1].Position.Y, InVertices[2].Position.Y));
 		Vector2 maxPos(Math::Max3(InVertices[0].Position.X, InVertices[1].Position.X, InVertices[2].Position.X), Math::Max3(InVertices[0].Position.Y, InVertices[1].Position.Y, InVertices[2].Position.Y));
 
-		// ¹«°ÔÁß½ÉÁÂÇ¥¸¦ À§ÇØ Á¡À» º¤ÅÍ·Î º¯È¯
+		// ë¬´ê²Œì¤‘ì‹¬ì¢Œí‘œë¥¼ ìœ„í•´ ì ì„ ë²¡í„°ë¡œ ë³€í™˜
 		Vector2 u = InVertices[1].Position.ToVector2() - InVertices[0].Position.ToVector2();
 		Vector2 v = InVertices[2].Position.ToVector2() - InVertices[0].Position.ToVector2();
 
-		// °øÅë ºĞ¸ğ °ª ( uu * vv - uv * uv )
+		// ê³µí†µ ë¶„ëª¨ ê°’ ( uu * vv - uv * uv )
 		float udotv = u.Dot(v);
 		float vdotv = v.Dot(v);
 		float udotu = u.Dot(u);
 		float denominator = udotv * udotv - vdotv * udotu;
 
-		// ÅğÈ­ »ï°¢Çü ÆÇÁ¤.
+		// í‡´í™” ì‚¼ê°í˜• íŒì •.
 		if (denominator == 0.f)
 		{
 			return;
@@ -391,18 +392,18 @@ void SoftRenderer::DrawTriangle3D(std::vector<DDD::Vertex3D>& InVertices, const 
 		ScreenPoint lowerLeftPoint = ScreenPoint::ToScreenCoordinate(_ScreenSize, minPos);
 		ScreenPoint upperRightPoint = ScreenPoint::ToScreenCoordinate(_ScreenSize, maxPos);
 
-		// µÎ Á¡ÀÌ È­¸é ¹ÛÀ» ¹ş¾î³ª´Â °æ¿ì Å¬¸®ÇÎ Ã³¸®
+		// ë‘ ì ì´ í™”ë©´ ë°–ì„ ë²—ì–´ë‚˜ëŠ” ê²½ìš° í´ë¦¬í•‘ ì²˜ë¦¬
 		lowerLeftPoint.X = Math::Max(0, lowerLeftPoint.X);
 		lowerLeftPoint.Y = Math::Min(_ScreenSize.Y, lowerLeftPoint.Y);
 		upperRightPoint.X = Math::Min(_ScreenSize.X, upperRightPoint.X);
 		upperRightPoint.Y = Math::Max(0, upperRightPoint.Y);
 
-		// °¢ Á¤Á¡¸¶´Ù º¸Á¸µÈ ºä °ø°£ÀÇ z°ª
+		// ê° ì •ì ë§ˆë‹¤ ë³´ì¡´ëœ ë·° ê³µê°„ì˜ zê°’
 		float invZ0 = 1.f / InVertices[0].Position.W;
 		float invZ1 = 1.f / InVertices[1].Position.W;
 		float invZ2 = 1.f / InVertices[2].Position.W;
 
-		// »ï°¢Çü ¿µ¿ª ³» ¸ğµç Á¡À» Á¡°ËÇÏ°í »öÄ¥
+		// ì‚¼ê°í˜• ì˜ì—­ ë‚´ ëª¨ë“  ì ì„ ì ê²€í•˜ê³  ìƒ‰ì¹ 
 		for (int x = lowerLeftPoint.X; x <= upperRightPoint.X; ++x)
 		{
 			for (int y = upperRightPoint.Y; y <= lowerLeftPoint.Y; ++y)
@@ -417,37 +418,37 @@ void SoftRenderer::DrawTriangle3D(std::vector<DDD::Vertex3D>& InVertices, const 
 				float t = (wdotu * udotv - wdotv * udotu) * invDenominator;
 				float oneMinusST = 1.f - s - t;
 
-				// Åõ¿µº¸Á¤¿¡ »ç¿ëÇÒ °øÅë ºĞ¸ğ
+				// íˆ¬ì˜ë³´ì •ì— ì‚¬ìš©í•  ê³µí†µ ë¶„ëª¨
 				float z = invZ0 * oneMinusST + invZ1 * s + invZ2 * t;
 				float invZ = 1.f / z;
 
 				if (((s >= 0.f) && (s <= 1.f)) && ((t >= 0.f) && (t <= 1.f)) && ((oneMinusST >= 0.f) && (oneMinusST <= 1.f)))
 				{
-					// ±íÀÌ Å×½ºÆÃ
+					// ê¹Šì´ í…ŒìŠ¤íŒ…
 					float newDepth = InVertices[0].Position.Z * oneMinusST + InVertices[1].Position.Z * s + InVertices[2].Position.Z * t;
 					float prevDepth = r.GetDepthBufferValue(fragment);
 					if (newDepth < prevDepth)
 					{
-						// ÇÈ¼¿À» Ã³¸®ÇÏ±â Àü ±íÀÌ °ªÀ» ¹öÆÛ¿¡ º¸°ü
+						// í”½ì…€ì„ ì²˜ë¦¬í•˜ê¸° ì „ ê¹Šì´ ê°’ì„ ë²„í¼ì— ë³´ê´€
 						r.SetDepthBufferValue(fragment, newDepth);
 					}
 					else
 					{
-						// ÀÌ¹Ì ¾Õ¿¡ ¹«¾ğ°¡ ±×·ÁÁ®ÀÖÀ¸¹Ç·Î ÇÈ¼¿±×¸®±â´Â »ı·«
+						// ì´ë¯¸ ì•ì— ë¬´ì–¸ê°€ ê·¸ë ¤ì ¸ìˆìœ¼ë¯€ë¡œ í”½ì…€ê·¸ë¦¬ê¸°ëŠ” ìƒëµ
 						continue;
 					}
 
 					if (IsDepthBufferDrawing())
 					{
-						// Ä«¸Ş¶ó·ÎºÎÅÍÀÇ °Å¸®¿¡ µû¶ó ±ÕÀÏÇÏ°Ô Áõ°¨ÇÏ´Â Èæ¹é °ªÀ¸·Î º¯È¯
+						// ì¹´ë©”ë¼ë¡œë¶€í„°ì˜ ê±°ë¦¬ì— ë”°ë¼ ê· ì¼í•˜ê²Œ ì¦ê°í•˜ëŠ” í‘ë°± ê°’ìœ¼ë¡œ ë³€í™˜
 						float grayScale = (invZ - n) / (f - n);
 
-						// µª½º ¹öÆÛ ±×¸®±â
+						// ëìŠ¤ ë²„í¼ ê·¸ë¦¬ê¸°
 						r.DrawPoint(fragment, LinearColor::White * grayScale);
 					}
 					else
 					{
-						// ÃÖÁ¾ º¸Á¤º¸°£µÈ UV ÁÂÇ¥
+						// ìµœì¢… ë³´ì •ë³´ê°„ëœ UV ì¢Œí‘œ
 						Vector2 targetUV = (InVertices[0].UV * oneMinusST * invZ0 + InVertices[1].UV * s * invZ1 + InVertices[2].UV * t * invZ2) * invZ;
 						r.DrawPoint(fragment, FragmentShader3D(mainTexture.GetSample(targetUV), InColor));
 					}
