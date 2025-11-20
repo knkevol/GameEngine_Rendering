@@ -55,9 +55,13 @@ void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<V
 	for (auto i = 0; i < childCount; ++i)
 	{
 		FbxNode* childNode = rootNode->GetChild(i);
+		auto childNodeName = childNode->GetName();
+		
 		FbxNodeAttribute* childAttribute = childNode->GetNodeAttribute();
 		if (childAttribute)
 		{
+			auto childName = childAttribute->GetName();
+			auto childAttributeTypeName = childAttribute->GetAttributeType();
 			if (childAttribute->GetAttributeType() == FbxNodeAttribute::eSkeleton)
 			{
 				LoadSkeleton(childNode, OUT InSkeletonInfo);
