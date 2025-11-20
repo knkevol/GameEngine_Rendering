@@ -1,4 +1,4 @@
-#include "Precompiled.h"
+ï»¿#include "Precompiled.h"
 using namespace GER::DDD;
 
 // GameObject Factories
@@ -224,7 +224,7 @@ GameObject& GameEngine::CreateNewGameObject(const std::string& InName)
 		std::size_t targetHash = (*it)->GetHash();
 		if (targetHash == inHash)
 		{
-			// Áßº¹µÈ Å° ¹ß»ı. ¹«½Ã.
+			// ì¤‘ë³µëœ í‚¤ ë°œìƒ. ë¬´ì‹œ.
 			assert(false);
 			return GameObject::Invalid;
 		}
@@ -275,7 +275,7 @@ GameObject& GameEngine::CreateNewGameObjectOfClass(const std::string& InName, co
 		std::size_t targetHash = (*it)->GetHash();
 		if (targetHash == inHash)
 		{
-			// Áßº¹µÈ Å° ¹ß»ı. ¹«½Ã.
+			// ì¤‘ë³µëœ í‚¤ ë°œìƒ. ë¬´ì‹œ.
 			assert(false);
 			return GameObject::Invalid;
 		}
@@ -581,7 +581,8 @@ void GameEngine::LoadAsset()
 	PistolReloadBoneUsage.resize(boneOrder.size(), false);
 	PistolReloadFrameTranslations.resize(boneOrder.size(), std::vector<Vector3>());
 	PistolReloadFrameQuaternions.resize(boneOrder.size(), std::vector<Quaternion>());
-	TestLoader.LoadAnimationWithName("PistolReload", boneOrder, OUT PistolReloadBoneNames, OUT PistolReloadBoneUsage, OUT PistolReloadFrameTranslations, OUT PistolReloadFrameQuaternions);
+	//ì• ë‹ˆë©”ì´ì…˜ ì„ì‹œë§‰ìŒ
+	//TestLoader.LoadAnimationWithName("PistolReload", boneOrder, OUT PistolReloadBoneNames, OUT PistolReloadBoneUsage, OUT PistolReloadFrameTranslations, OUT PistolReloadFrameQuaternions);
 
 	// Check Loaded Animation & SKMesh's Skeleton Order
 	for (auto boneIdx = 1; boneIdx < boneOrder.size(); boneIdx++)

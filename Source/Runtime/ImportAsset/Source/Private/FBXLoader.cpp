@@ -24,7 +24,7 @@ void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<V
 {
 	assert(_FbxManager);
 	
-	const std::string InFilePath = AssetFolderPath + "Character/" + AssetName + ".FBX";
+	const std::string InFilePath = AssetFolderPath + "Character/" + AssetName + ".fbx";
 	const std::string TextureFilePath = AssetFolderPath + "Character/" + AssetName + ".fbm/" + AssetName + "_";
 	TexturePath = TextureFilePath;
 
@@ -47,35 +47,40 @@ void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<V
 
 	FbxNode* rootNode = scene->GetRootNode();
 	
-	const int childCount = rootNode->GetChildCount();
+	//SKM_Quinn_Simple
+	FbxNode* meshRootNode = rootNode->GetChild(0);
+	auto meshRootNodeName = meshRootNode->GetName();
+	const int meshChildCount = meshRootNode->GetChildCount();
 	unsigned int MeshVertexIndex = 0;
 
 	std::vector<BoneInfo>& sk = InSkeletonInfo.BoneInfoVector;
 
-	for (auto i = 0; i < childCount; ++i)
+	for (auto i = 0; i < meshChildCount; ++i)
 	{
-		FbxNode* childNode = rootNode->GetChild(i);
-		auto childNodeName = childNode->GetName();
-		
-		FbxNodeAttribute* childAttribute = childNode->GetNodeAttribute();
-		if (childAttribute)
+		FbxNode* meshChildNode = meshRootNode->GetChild(i);
+		auto childNodeName = meshChildNode->GetName();
+
+		FbxNodeAttribute* meshChildAttribute = meshChildNode->GetNodeAttribute();
+		if (meshChildAttribute)
 		{
-			auto childName = childAttribute->GetName();
-			auto childAttributeTypeName = childAttribute->GetAttributeType();
-			if (childAttribute->GetAttributeType() == FbxNodeAttribute::eSkeleton)
+			auto childName = meshChildAttribute->GetName();
+			auto childAttributeTypeName = meshChildAttribute->GetAttributeType();
+			if (meshChildAttribute->GetAttributeType() == FbxNodeAttribute::eSkeleton)
 			{
-				LoadSkeleton(childNode, OUT InSkeletonInfo);
+				LoadSkeleton(meshChildNode, OUT InSkeletonInfo);
 				break;
 			}
 		}
 	}
 
-	for (auto i = 0; i < childCount; ++i)
+	for (auto i = 0; i < meshChildCount; ++i)
 	{
-		FbxNode* childNode = rootNode->GetChild(i);
+		FbxNode* childNode = meshRootNode->GetChild(i);
+		auto childName = childNode->GetName();
 		FbxNodeAttribute* childAttribute = childNode->GetNodeAttribute();
 		if (childAttribute)
 		{
+			auto childAttributeName = childAttribute->GetAttributeType();;
 			if (childAttribute->GetAttributeType() == FbxNodeAttribute::eMesh)
 			{
 				char buffer[50];
@@ -86,7 +91,7 @@ void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<V
 				//	for Paladin i==2
 				//	for Mannequin i==0
 
-				if (i == 0)
+				if (i == 1)
 				{
 					LoadMesh(childNode, OUT MeshVertexIndex, OUT Vertices, OUT Indices, OUT Uvs, OUT InSkeletonInfo, OUT InWeightInfo);
 				}
@@ -240,11 +245,11 @@ void FBXLoader::GetBoneInfoRecursive(OUT SkeletonInfo& InSkeletonInfo, FbxNode* 
 	assert(InNode->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eSkeleton);
 
 	const char* currJointFullName = InNode->GetName();
-	char* cpy = strdup(currJointFullName);
+	//char* cpy = strdup(currJointFullName);
 
-	char* currJointName = NULL;
-	char* temp = strtok_s(cpy, ":", &currJointName);
-	InSkeletonInfo.BoneInfoVector.push_back(BoneInfo(InNode, MyIndex, ParentIndex, currJointName));
+	//char* currJointName = NULL;
+	//char* temp = strtok_s(cpy, ":", &currJointName);
+	InSkeletonInfo.BoneInfoVector.push_back(BoneInfo(InNode, MyIndex, ParentIndex, currJointFullName));
 	//free(cpy);
 
 	for (int childIndex = 0; childIndex < InNode->GetChildCount(); ++childIndex)
