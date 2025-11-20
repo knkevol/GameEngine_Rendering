@@ -121,6 +121,7 @@
       <UseFullPaths>false</UseFullPaths>
       <DisableSpecificWarnings>4099;4018;4083;4996;4267</DisableSpecificWarnings>
       <AdditionalOptions>/IGNORE:4099 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -72,10 +72,12 @@ void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<V
 		FbxNodeAttribute* childAttribute = childNode->GetNodeAttribute();
 		if (childAttribute)
 		{
+			auto childAttributeTypeName = childAttribute->GetAttributeType();
+			auto childName = childAttribute->GetName();
 			if (childAttribute->GetAttributeType() == FbxNodeAttribute::eMesh)
 			{
 				char buffer[50];
-				auto childName = childAttribute->GetName();
+				childName = childAttribute->GetName();
 				sprintf(buffer, "Node %d : %s \n\n", i, childName);
 				OutputDebugString(buffer);
 
