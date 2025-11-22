@@ -181,13 +181,9 @@ void FBXLoader::LoadMesh(FbxNode* InNode, OUT unsigned int& StartVIndex, OUT std
 			FbxCluster* currCluster = currSkin->GetCluster(ClusterIndex);
 
 			// convert fbx joint name to my form
-			// e.g.)  "mixamorig:Hips" -> "HipsBone"
 			const char* currJointFullName = (currCluster->GetLink()->GetName());
-			char* cpy = strdup(currJointFullName);
-			char* currJointName = NULL;
-			char* temp = strtok_s(cpy, ":", &currJointName);
 
-			std::string currJointString(currJointName);
+			std::string currJointString(currJointFullName);
 			currJointString.append("Bone");
 			//~ convert name
 
@@ -200,7 +196,7 @@ void FBXLoader::LoadMesh(FbxNode* InNode, OUT unsigned int& StartVIndex, OUT std
 			FbxVector4 ClusterTranslation = ClusterGlobalTransform.GetT();
 			FbxQuaternion ClusterQuaternion = ClusterGlobalTransform.GetQ();
 
-			BoneInfo& currBoneInfo = InSkeletonInfo.GetTargetBoneInfo(currJointName);
+			BoneInfo& currBoneInfo = InSkeletonInfo.GetTargetBoneInfo(currJointFullName);
 			// free(cpy);
 
 			int currBoneIdx = currBoneInfo.Index;
@@ -279,7 +275,7 @@ void FBXLoader::LoadAnimation()
 void FBXLoader::LoadAnimationWithName(const std::string& AnimationName, const std::vector<std::string>& SKBones, OUT std::vector<std::string>& BoneNames, OUT std::vector<bool>& BoneUsage, OUT std::vector<std::vector<Vector3>>& FTranslations, OUT std::vector <std::vector<Quaternion>>& FRotations)
 {
 	assert(_FbxManager);
-	const std::string InFilePath = AssetFolderPath + "Character/Animation/" + AnimationName + ".fbx";
+	const std::string InFilePath = AssetFolderPath + "Character/Animation/" + AnimationName + ".FBX";
 
 	OutputDebugString("LoadAnim With Name Called \n");
 
