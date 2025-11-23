@@ -145,7 +145,7 @@ void WindowsGDI::DrawStatisticTexts()
 	hFont = (HFONT)GetStockObject(ANSI_VAR_FONT);
 	if (hOldFont = (HFONT)SelectObject(_MemoryDC, hFont))
 	{
-		static const int leftPosition = 600;
+		static const int leftPosition = 550;
 		static const int topPosition = 10;
 		static const int rowHeight = 20;
 		int currentPosition = topPosition;
