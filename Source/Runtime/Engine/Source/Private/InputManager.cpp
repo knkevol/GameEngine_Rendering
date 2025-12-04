@@ -4,6 +4,13 @@
 float InputManager::GetAxis(InputAxis InInputAxis) const
 {
 	assert(InInputAxis < InputAxis::LastAxis);
+
+	//if (!AxisMap[static_cast<size_t>(InInputAxis)])
+	//{
+	//	// 로그를 남기고 기본값(0.0f) 반환
+	//	// LogError("InputAxis::Z2Axis mapping is missing!");
+	//	return 0.0f;
+	//}
 	return AxisMap[static_cast<size_t>(InInputAxis)]();
 }
 
