@@ -141,9 +141,9 @@ namespace WindowsUtil
 		InInputManager.SetInputAxis(InputAxis::ZAxis, GetZAxisInput);
 		InInputManager.SetInputAxis(InputAxis::WAxis, GetWAxisInput);
 
-		//InInputManager.SetInputAxis(InputAxis::X2Axis, GetX2AxisInput);
-		//InInputManager.SetInputAxis(InputAxis::Y2Axis, GetY2AxisInput);
-		//InInputManager.SetInputAxis(InputAxis::Z2Axis, GetZ2AxisInput);
+		InInputManager.SetInputAxis(InputAxis::X2Axis, GetX2AxisInput);
+		InInputManager.SetInputAxis(InputAxis::Y2Axis, GetY2AxisInput);
+		InInputManager.SetInputAxis(InputAxis::Z2Axis, GetZ2AxisInput);
 
 		InInputManager.SetInputButton(InputButton::Space, []() { ISPRESSED(VK_SPACE); });
 		InInputManager.SetInputButton(InputButton::Z, []() { ISPRESSED(0x5A); });

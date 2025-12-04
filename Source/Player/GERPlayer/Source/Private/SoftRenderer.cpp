@@ -163,8 +163,8 @@ void SoftRenderer::Update(float InDeltaSeconds)
 	// TODO - Improve Camera Rotation
 	camera.GetTransform().AddLocalYawRotation(-input.GetAxis(InputAxis::XAxis) * CameraRotateSpeed * InDeltaSeconds);
 	camera.GetTransform().AddLocalPitchRotation(-input.GetAxis(InputAxis::YAxis) * CameraRotateSpeed * InDeltaSeconds);
-	//Vector3 CameraMovement(input.GetAxis(InputAxis::X2Axis) * CameraMoveSpeed * InDeltaSeconds, input.GetAxis(InputAxis::Y2Axis) * CameraMoveSpeed * InDeltaSeconds, input.GetAxis(InputAxis::Z2Axis) * CameraMoveSpeed * InDeltaSeconds);
-	//camera.GetTransform().AddWorldPosition(CameraMovement);
+	Vector3 CameraMovement(input.GetAxis(InputAxis::X2Axis) * CameraMoveSpeed * InDeltaSeconds, input.GetAxis(InputAxis::Y2Axis) * CameraMoveSpeed * InDeltaSeconds, input.GetAxis(InputAxis::Z2Axis) * CameraMoveSpeed * InDeltaSeconds);
+	camera.GetTransform().AddWorldPosition(CameraMovement);
 
 	if (input.IsReleased(InputButton::Z))
 	{
