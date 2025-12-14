@@ -52,7 +52,7 @@ FORCEINLINE void CameraObject::GetViewAxes(Vector3& OutViewX, Vector3& OutViewY,
 	// 로컬 Z축 값의 반대 방향을 뷰 공간의 Z축으로 설정
 	OutViewZ = -_Transform.GetLocalZ();
 	OutViewY = _Transform.GetLocalY();
-	OutViewX = -_Transform.GetLocalX();
+	OutViewX = _Transform.GetLocalX();
 }
 
 FORCEINLINE Matrix4x4 CameraObject::GetViewMatrix() const

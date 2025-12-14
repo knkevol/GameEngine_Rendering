@@ -152,7 +152,6 @@ FORCEINLINE constexpr void Quaternion::FromAxisAngle(const Vector3& InAxis, floa
 
 FORCEINLINE constexpr void Quaternion::FromRotator(const Rotator& InRotator)
 {
-	//Euler ZXY 의 쿼터니안을 오일러로 변환한 수식
 	float sp = 0.f, sy = 0.f, sr = 0.f;
 	float cp = 0.f, cy = 0.f, cr = 0.f;
 
@@ -266,8 +265,6 @@ FORCEINLINE void Quaternion::Normalize()
 
 FORCEINLINE Rotator Quaternion::ToRotator() const
 {
-
-	//Euler ZXY : 왼손좌표계 Roll, Pitch, Yaw
 	Rotator result;
 	float sinrCosp = 2 * (W * Z + X * Y);
 	float cosrCosp = 1.f - 2 * (Z * Z + X * X);

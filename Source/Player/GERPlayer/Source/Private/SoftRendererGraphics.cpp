@@ -125,6 +125,10 @@ void SoftRenderer::RenderWorld()
 		const Mesh& mesh = g.GetMesh(gameObject.GetMeshKey());
 		const TransformComponent& transform = gameObject.GetTransform();
 
+		Vector3 fx = transform.GetWorldTransform().GetZAxis();
+		Vector3 cx = mainCamera.GetTransform().GetLocalZ();
+		auto Temp = fx.Dot(cx);
+
 		// 최종 행렬 계산
 		Matrix4x4 finalMatrix = pvMatrix * transform.GetWorldMatrix();
 		LinearColor finalColor = gameObject.GetColor();

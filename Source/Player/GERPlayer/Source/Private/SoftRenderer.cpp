@@ -146,8 +146,8 @@ void SoftRenderer::Update(float InDeltaSeconds)
 	const InputManager& input = g.GetInputManager();
 
 
-	float CameraRotateSpeed = 180.0f;
-	float CameraMoveSpeed = 500.0f;
+	float CameraRotateSpeed = 90.0f;
+	float CameraMoveSpeed = 200.0f;
 
 	CameraObject& camera = g.GetMainCamera();
 
@@ -155,17 +155,17 @@ void SoftRenderer::Update(float InDeltaSeconds)
 	static bool firstUpdate = true;
 	if (firstUpdate)
 	{
-		camera.GetTransform().SetWorldPosition(Vector3(0.f, 170.f, 130.f));
+		camera.GetTransform().SetWorldPosition(Vector3(0.f, 200.f, 50.f));
 		//camera.GetTransform().SetWorldRotation(Rotator(179.f, 0.f, 10.f));
-		camera.GetTransform().SetWorldRotation(Rotator(180.f, 180.f, 80.f));
+		camera.GetTransform().SetWorldRotation(Rotator(0.f, 0.f, 80.f));
 		firstUpdate = false;
 	}
 
 	// TODO - Improve Camera Rotation
-	camera.GetTransform().AddLocalYawRotation(-input.GetAxis(InputAxis::XAxis) * CameraRotateSpeed * InDeltaSeconds);
+	camera.GetTransform().AddLocalYawRotation(input.GetAxis(InputAxis::XAxis) * CameraRotateSpeed * InDeltaSeconds);
 	camera.GetTransform().AddLocalPitchRotation(-input.GetAxis(InputAxis::YAxis) * CameraRotateSpeed * InDeltaSeconds);
-	//Vector3 CameraMovement(input.GetAxis(InputAxis::X2Axis) * CameraMoveSpeed * InDeltaSeconds, input.GetAxis(InputAxis::Y2Axis) * CameraMoveSpeed * InDeltaSeconds, input.GetAxis(InputAxis::Z2Axis) * CameraMoveSpeed * InDeltaSeconds);
-	//camera.GetTransform().AddWorldPosition(CameraMovement);
+	Vector3 CameraMovement(input.GetAxis(InputAxis::X2Axis) * CameraMoveSpeed * InDeltaSeconds, input.GetAxis(InputAxis::Y2Axis) * CameraMoveSpeed * InDeltaSeconds, input.GetAxis(InputAxis::Z2Axis) * CameraMoveSpeed * InDeltaSeconds);
+	camera.GetTransform().AddWorldPosition(CameraMovement);
 
 	if (input.IsReleased(InputButton::Z))
 	{
