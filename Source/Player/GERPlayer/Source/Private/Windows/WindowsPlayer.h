@@ -6,7 +6,7 @@ namespace WindowsPlayer
 	static HWND gHandle;
 	static std::function<void(ScreenPoint& InNewScreenSize)> gOnResizeFunc;
 
-	static const TCHAR* gClassName = _T("GAMEENGINERENDERING_PLAYER");
+	static const TCHAR* gClassName = _T("GameEngine_Rendering");
 	static TCHAR gTitle[64];
 	static TCHAR gPlayTitle[128];
 
@@ -17,8 +17,8 @@ namespace WindowsPlayer
 		case WM_DISPLAYCHANGE:
 		case WM_SIZE:
 		{
-			int newWidth = (lParam & 0xffff);
-			int newHeight = ((lParam >> 16) & 0xffff);
+			int newWidth = LOWORD(lParam);
+			int newHeight = HIWORD(lParam);
 			if (gOnResizeFunc)
 			{
 				gOnResizeFunc(ScreenPoint(newWidth, newHeight));
@@ -63,7 +63,7 @@ namespace WindowsPlayer
 		wcex.hInstance = gInstance;
 		wcex.hIcon = LoadIcon(gInstance, MAKEINTRESOURCE(IDI_SOFTRENDERER));
 		wcex.hIconSm = LoadIcon(gInstance, MAKEINTRESOURCE(IDI_SMALL));
-		wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+		wcex.hbrBackground = NULL;
 		wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 		wcex.lpszMenuName = NULL;
 		wcex.lpszClassName = gClassName;
