@@ -538,8 +538,14 @@ void GameEngine::LoadAsset()
 	// Connecting Bones
 	for (auto boneIdx = 1; boneIdx < boneOrder.size(); boneIdx++)
 	{
+		//auto temp = CharacterSkeleton.BoneInfoVector[0].Name;
+		//auto temp2 = CharacterSkeleton.BoneInfoVector[0].ParentIndex;
+		
 		int ParentIdx = CharacterSkeleton.BoneInfoVector[boneIdx - 1].ParentIndex + 1;
-		if (ParentIdx < 0) continue;
+		if (ParentIdx < 0)
+		{
+			continue;
+		}
 
 		Bone& TargetChild = CharacterMesh.GetBone(boneOrder[boneIdx]);
 		Bone& TargetParent = CharacterMesh.GetBone(boneOrder[CharacterSkeleton.BoneInfoVector[boneIdx - 1].ParentIndex + 1]);
@@ -551,23 +557,12 @@ void GameEngine::LoadAsset()
 	w.resize(v.size());
 	for (auto idx = 0; idx < WeightInfo.size(); ++idx)
 	{
-		char buffers[50];
-		sprintf(buffers, "%d, ", idx);
-		OutputDebugString(buffers);
-
 		for (std::pair<std::string, float> info : WeightInfo[idx])
 		{
 			cb[idx]++;
 			w[idx].Bones.push_back(info.first);
 			w[idx].Values.push_back(info.second);
-
-			char buffer[50];
-			sprintf(buffer, "%f, ", info.second);
-			OutputDebugString(buffer);
 		}
-		char bufferEnd[10];
-		sprintf(bufferEnd, "\n");
-		OutputDebugString(bufferEnd);
 	}
 
 	// Animation
