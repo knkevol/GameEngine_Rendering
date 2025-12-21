@@ -352,7 +352,7 @@ void GameEngine::LoadAsset()
 	auto& bones = CharacterMesh.GetBones();
 
 	bones = {
-		{ GameEngine::rootBone, Bone(GameEngine::rootBone, Transform(CharacterSkeleton.GetTargetBoneInfo("root").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("root").Quat)))},
+		//{ GameEngine::rootBone, Bone(GameEngine::rootBone, Transform(CharacterSkeleton.GetTargetBoneInfo("root").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("root").Quat)))},
 		{ GameEngine::center_of_massBone, Bone(GameEngine::center_of_massBone, Transform(CharacterSkeleton.GetTargetBoneInfo("center_of_mass").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("center_of_mass").Quat)))},
 		{ GameEngine::ik_foot_rootBone, Bone(GameEngine::ik_foot_rootBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ik_foot_root").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ik_foot_root").Quat)))},
 		{ GameEngine::ik_foot_lBone, Bone(GameEngine::ik_foot_lBone, Transform(CharacterSkeleton.GetTargetBoneInfo("ik_foot_l").Transform, Quaternion(CharacterSkeleton.GetTargetBoneInfo("ik_foot_l").Quat)))},
@@ -444,7 +444,7 @@ void GameEngine::LoadAsset()
 	};
 
 	std::vector<std::string> boneOrder = {
-		GameEngine::rootBone,
+		//GameEngine::rootBone,
 		GameEngine::center_of_massBone,
 		GameEngine::ik_foot_rootBone,
 		GameEngine::ik_foot_lBone,

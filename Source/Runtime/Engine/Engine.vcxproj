@@ -145,7 +145,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Precompiled.cpp" />
+    <ClCompile Include="Source\Precompiled.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Precompiled.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="Source\Private\3D\Actor\Actor.cpp" />
     <ClCompile Include="Source\Private\3D\Actor\Character.cpp" />
     <ClCompile Include="Source\Private\3D\Animation\Animation.cpp" />
@@ -165,7 +169,9 @@
     <ClCompile Include="Source\ThirdParty\Stb\stb_vorbis.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Precompiled.h" />
+    <ClInclude Include="Source\Precompiled.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Source\Public\3D\Actor\Actor.h" />
     <ClInclude Include="Source\Public\3D\Actor\Character.h" />
     <ClInclude Include="Source\Public\3D\Animation\Animation.h" />

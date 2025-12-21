@@ -12,7 +12,7 @@
 #include <sstream>
 
 #include "MathHeaders.h"
-//#include "AssetLoaderHeaders.h"
+#include "AssetLoaderHeaders.h"
 #include "EngineHeaders.h"
 #include "RendererHeaders.h"
 #include "SystemInputManager.h"

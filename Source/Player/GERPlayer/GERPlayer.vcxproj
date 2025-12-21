@@ -120,6 +120,8 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <DisableSpecificWarnings>4099;4018;4083;4996;4267</DisableSpecificWarnings>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -156,7 +158,9 @@
     <ResourceCompile Include="Source\Private\Windows\Res\player.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Precompiled.h" />
+    <ClInclude Include="Source\Precompiled.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Source\Private\Windows\Res\resource.h" />
     <ClInclude Include="Source\Private\Windows\WindowsPlayer.h" />
     <ClInclude Include="Source\Private\Windows\WindowsUtil.h" />
@@ -164,7 +168,10 @@
     <ClInclude Include="Source\Public\SystemInputManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Precompiled.cpp" />
+    <ClCompile Include="Source\Precompiled.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Source\Private\SoftRenderer.cpp" />
     <ClCompile Include="Source\Private\SoftRendererGraphics.cpp" />
     <ClCompile Include="Source\Private\SystemInputManager.cpp" />

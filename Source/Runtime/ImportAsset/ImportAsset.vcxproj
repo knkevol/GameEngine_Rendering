@@ -715,7 +715,9 @@
     <ClInclude Include="Source\Library\FBXSDK\include\libxml2\libxml\xpath.h" />
     <ClInclude Include="Source\Library\FBXSDK\include\libxml2\libxml\xpathInternals.h" />
     <ClInclude Include="Source\Library\FBXSDK\include\libxml2\libxml\xpointer.h" />
-    <ClInclude Include="Source\Precompiled.h" />
+    <ClInclude Include="Source\Precompiled.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Source\Public\AssetLoader.h" />
     <ClInclude Include="Source\Public\AssetLoaderHeaders.h" />
     <ClInclude Include="Source\Public\FBXDataStructure.h" />

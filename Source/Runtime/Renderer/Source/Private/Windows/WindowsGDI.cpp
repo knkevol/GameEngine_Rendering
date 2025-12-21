@@ -18,13 +18,14 @@ bool WindowsGDI::InitializeGDI(const ScreenPoint& InScreenSize)
 		}
 	}
 
-	if (_GDIInitialized)
-	{
-		DeleteObject(_DefaultBitmap);
-		DeleteObject(DIBitmap);
-		ReleaseDC(_Handle, _ScreenDC);
-		ReleaseDC(_Handle, _MemoryDC);
-	}
+	//중복구현
+	//if (_GDIInitialized)
+	//{
+	//	DeleteObject(_DefaultBitmap);
+	//	DeleteObject(DIBitmap);
+	//	ReleaseDC(_Handle, _ScreenDC);
+	//	ReleaseDC(_Handle, _MemoryDC);
+	//}
 
 	_ScreenDC = GetDC(_Handle);
 	if (_ScreenDC == NULL)
@@ -35,6 +36,8 @@ bool WindowsGDI::InitializeGDI(const ScreenPoint& InScreenSize)
 	_MemoryDC = CreateCompatibleDC(_ScreenDC);
 	if (_MemoryDC == NULL)
 	{
+		//_ScreenDC 살아있으므로 ReleaseGDI()
+		ReleaseGDI();
 		return false;
 	}
 
@@ -73,7 +76,8 @@ void WindowsGDI::ReleaseGDI()
 {
 	if (_GDIInitialized)
 	{
-		DeleteObject(_DefaultBitmap);
+		SelectObject(_MemoryDC, _DefaultBitmap);
+		_DefaultBitmap = nullptr;
 		DeleteObject(DIBitmap);
 		ReleaseDC(_Handle, _ScreenDC);
 		ReleaseDC(_Handle, _MemoryDC);

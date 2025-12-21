@@ -145,7 +145,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Precompiled.cpp" />
+    <ClCompile Include="Source\Precompiled.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Precompiled.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="Source\Private\Box.cpp" />
     <ClCompile Include="Source\Private\Circle.cpp" />
     <ClCompile Include="Source\Private\Color32.cpp" />
@@ -166,7 +170,9 @@
     <ClCompile Include="Source\Private\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Precompiled.h" />
+    <ClInclude Include="Source\Precompiled.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Source\Public\Box.h" />
     <ClInclude Include="Source\Public\Circle.h" />
     <ClInclude Include="Source\Public\Color32.h" />
