@@ -332,7 +332,7 @@ void FBXLoader::LoadAnimationWithName(const std::string& AnimationName, const st
 void FBXLoader::GetBoneAnimationRecursive(FbxNode* InNode, const FbxLongLong& InStartIndex, const FbxLongLong& InEndIndex, const std::vector<std::string>& SKBones, OUT std::vector<std::string>& BoneNames, OUT std::vector<bool>& BoneUsage, OUT std::vector<std::vector<Vector3>>& FTranslations, OUT std::vector <std::vector<Quaternion>>& FRotations)
 {
 	const char* currClusterName = InNode->GetName();
-	std::string CutString = std::string(currClusterName).substr(10).append("Bone");
+	std::string CutString = std::string(currClusterName).append("Bone");
 	
 	int SKIndex = -1;
 	for (auto i = 0; i < SKBones.size(); ++i)
