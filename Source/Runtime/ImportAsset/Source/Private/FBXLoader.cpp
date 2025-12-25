@@ -307,36 +307,14 @@ void FBXLoader::LoadAnimationWithName(const std::string& AnimationName, const st
 	FbxLongLong timeEndIndex = endTime.GetFrameCount(FbxTime::eFrames24);
 
 	FbxNode* sceneRoot = scene->GetRootNode();
-	FbxNode* sceneChildRoot = sceneRoot->GetChild(0);
-	FbxNode* sceneChildRoot1 = sceneChildRoot->GetChild(0);
-	FbxNode* sceneChildRoot2 = sceneChildRoot1->GetChild(0);
-	FbxNode* sceneChildRoot2_1 = sceneChildRoot1->GetChild(1);
-	FbxNode* sceneChildRoot2_2 = sceneChildRoot1->GetChild(2);
-	auto temp = sceneChildRoot->GetName();
-	auto temp1 = sceneChildRoot1->GetName();
-	auto temp2 = sceneChildRoot2->GetName();
-	auto temp2_1 = sceneChildRoot2_1->GetName();
-	auto temp2_2 = sceneChildRoot2_2->GetName();
-	const int childCount = sceneChildRoot->GetChildCount();
+	const int childCount = sceneRoot->GetChildCount();
 
 	FbxNode* SkeletonNode = nullptr;
 
 	for (unsigned int i = 0; i < childCount; ++i)
 	{
 		FbxNode* childNode = sceneRoot->GetChild(i);
-		auto childName = childNode->GetName();
-		auto childNameChild = childNode->GetChild(0);
-		auto childNameChildN = childNameChild->GetName();
-		auto childNameChild1 = childNode->GetChild(1);
-		auto childNameChild1N = childNameChild1->GetName();
-		auto childNameChild2 = childNode->GetChild(2);
-		auto childNameChild2N = childNameChild2->GetName();
-
-		auto childNameChild3 = childNode->GetChild(3);
-		auto childNameChild3N = childNameChild3->GetName();
-
 		FbxNodeAttribute* childNodeAttribute = childNode->GetNodeAttribute();
-		auto childNodeAttributeName = childNodeAttribute->GetName();
 
 		if (childNodeAttribute->GetAttributeType() == FbxNodeAttribute::eSkeleton)
 		{
