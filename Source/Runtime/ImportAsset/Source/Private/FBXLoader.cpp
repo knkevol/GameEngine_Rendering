@@ -44,7 +44,7 @@ void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<V
 	// Check Axis System
 	FbxAxisSystem ASR = scene->GetGlobalSettings().GetAxisSystem();
 	FbxAxisSystem MyAxisSystem(FbxAxisSystem::eYAxis, FbxAxisSystem::eParityOdd, FbxAxisSystem::eRightHanded);
-	MyAxisSystem.ConvertScene(scene);
+	//MyAxisSystem.ConvertScene(scene);
 	//ASR = scene->GetGlobalSettings().GetAxisSystem();
 
 	FbxNode* rootNode = scene->GetRootNode();
