@@ -536,20 +536,18 @@ void GameEngine::LoadAsset()
 	};
 
 	// Connecting Bones
-	for (auto boneIdx = 1; boneIdx < boneOrder.size(); boneIdx++)
+	for (int i = 0; i < CharacterSkeleton.BoneInfoVector.size(); ++i)
 	{
-		//auto temp = CharacterSkeleton.BoneInfoVector[0].Name;
-		//auto temp2 = CharacterSkeleton.BoneInfoVector[0].ParentIndex;
-		
-		int ParentIdx = CharacterSkeleton.BoneInfoVector[boneIdx - 1].ParentIndex + 1;
-		if (ParentIdx < 0)
+		const auto& boneInfo = CharacterSkeleton.BoneInfoVector[i];
+		if (boneInfo.ParentIndex < 0)
 		{
 			continue;
 		}
 
-		Bone& TargetChild = CharacterMesh.GetBone(boneOrder[boneIdx]);
-		Bone& TargetParent = CharacterMesh.GetBone(boneOrder[CharacterSkeleton.BoneInfoVector[boneIdx - 1].ParentIndex + 1]);
-		TargetChild.SetParent(TargetParent);
+		Bone& child = CharacterMesh.GetBone(std::string(boneInfo.Name) + "Bone");
+		Bone& parent = CharacterMesh.GetBone(std::string(CharacterSkeleton.BoneInfoVector[boneInfo.ParentIndex].Name) + "Bone");
+
+		child.SetParent(parent);
 	}
 
 	// Moving Weight Information
