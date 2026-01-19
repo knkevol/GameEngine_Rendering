@@ -155,9 +155,8 @@ void SoftRenderer::Update(float InDeltaSeconds)
 	static bool firstUpdate = true;
 	if (firstUpdate)
 	{
-		camera.GetTransform().SetWorldPosition(Vector3(0.f, 200.f, 50.f));
-		//camera.GetTransform().SetWorldRotation(Rotator(179.f, 0.f, 10.f));
-		camera.GetTransform().SetWorldRotation(Rotator(0.f, 0.f, 80.f));
+		camera.GetTransform().SetWorldPosition(Vector3(5.f, -200.f, 111.f));
+		camera.GetTransform().SetWorldRotation(Rotator(-170.f, -10.f, -85.f));
 		firstUpdate = false;
 	}
 
