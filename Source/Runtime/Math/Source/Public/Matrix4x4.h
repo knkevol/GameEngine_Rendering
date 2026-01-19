@@ -40,6 +40,10 @@ public:
 	static constexpr BYTE Rank = 4;
 
 	// 멤버변수 
+	//Cols[0](UnitX) : x축의 방향과 x - 스케일
+	//Cols[1](UnitY) : y축의 방향과 y - 스케일
+	//Cols[2](UnitZ) : z축의 방향과 z - 스케일
+	//Cols[3](UnitW) : 이동값(Translation)
 	std::array<Vector4, Rank> Cols = { Vector4::UnitX, Vector4::UnitY, Vector4::UnitZ, Vector4::UnitW };
 };
 
