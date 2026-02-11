@@ -72,7 +72,7 @@ void SoftRenderer::LateUpdate(float InDeltaSeconds)
 		TargetFrame++;
 	}
 
-	if (TargetFrame >= 30)
+	if (TargetFrame >= 20)
 	{
 		TargetFrame = 0;
 	}
@@ -85,10 +85,36 @@ void SoftRenderer::LateUpdate(float InDeltaSeconds)
 
 			std::string CurrName = animBN[idx];
 
-			TargetBone.GetTransform().SetLocalPosition(animTran[idx][TargetFrame]);
-			TargetBone.GetTransform().SetLocalRotation(animQuat[idx][TargetFrame]);
+			//TargetBone.GetTransform().SetLocalPosition(animTran[idx][TargetFrame]);
+			//TargetBone.GetTransform().SetLocalRotation(animQuat[idx][TargetFrame]);
+
+			if (animBN[idx].find("hand") != std::string::npos || animBN[idx].find("thumb") != std::string::npos
+				|| animBN[idx].find("ring") != std::string::npos || animBN[idx].find("pinky") != std::string::npos
+				|| animBN[idx].find("middle") != std::string::npos || animBN[idx].find("index") != std::string::npos)
+			{
+				Vector3 pos = animTran[idx][TargetFrame];
+				auto temp = pos;
+				// 이 값이 0.0001처럼 아주 작거나, 반대로 500.0처럼 메쉬 크기에 비해 너무 큰지 확인
+			}
+
+			Bone newLocalBone;
+			newLocalBone.GetTransform().SetLocalPosition(animTran[idx][TargetFrame]);
+			newLocalBone.GetTransform().SetLocalRotation(animQuat[idx][TargetFrame]);
+			newLocalBone.GetTransform().SetLocalScale(Vector3(1.0f, 1.0f, 1.0f));
+			
+			Transform newLocalTransform = newLocalBone.GetTransform().GetLocalTransform();
+
+			TargetBone.GetTransform().SetLocalTransform(newLocalTransform);
+
 
 		}
+	}
+
+	if (skm.HasBone("rootBone"))
+	{
+		TransformComponent& rootTC = skm.GetBone("rootBone").GetTransform();
+		rootTC.SetLocalTransform(rootTC.GetLocalTransform());
+	
 	}
 }
 
@@ -237,60 +263,24 @@ void SoftRenderer::DrawMesh3D(const DDD::Mesh& InMesh, const Matrix4x4& InMatrix
 	{
 		vertices[vi].Position = Vector4(InMesh.GetVertices()[vi]);
 
-		// TODO : should Change Casting
 		if (InMesh.IsSKMesh())
 		{
-
-			//static Vector3 lastPos = Vector3::Zero;
-			//static int printCount = 0; // 너무 많이 찍히는 것 방지
-
-			//const auto& skMesh = static_cast<const DDD::SKMesh&>(InMesh);
-			//std::string debugBoneName = "pelvisBone"; // 확인하신 이름 사용
-
-			//if (skMesh.HasBone(debugBoneName))
-			//{
-			//	const Matrix4x4& m = skMesh.GetBone(debugBoneName).GetTransform().GetWorldTransform().GetMatrix();
-			//	Vector3 currentPos = Vector3(m.Cols[3].X, m.Cols[3].Y, m.Cols[3].Z);
-
-			//	// 이전 프레임과 위치가 변했는지 체크 (애니메이션 시작 포착)
-			//	if ((currentPos - lastPos).Size() > 0.0001f && printCount < 10)
-			//	{
-			//		char buffer[512];
-			//		sprintf(buffer, "\n[SKMesh Anim Change] Bone: %s\n", debugBoneName.c_str());
-			//		OutputDebugString(buffer);
-
-			//		// 행렬의 전체 성분을 확인 (Scale이 왜 0인지 파악)
-			//		sprintf(buffer, " - Row0(X-Axis): %.4f, %.4f, %.4f\n", m.Cols[0].X, m.Cols[0].Y, m.Cols[0].Z);
-			//		OutputDebugString(buffer);
-			//		sprintf(buffer, " - Row1(Y-Axis): %.4f, %.4f, %.4f\n", m.Cols[1].X, m.Cols[1].Y, m.Cols[1].Z);
-			//		OutputDebugString(buffer);
-			//		sprintf(buffer, " - Row2(Z-Axis): %.4f, %.4f, %.4f\n", m.Cols[2].X, m.Cols[2].Y, m.Cols[2].Z);
-			//		OutputDebugString(buffer);
-			//		sprintf(buffer, " - Translation: %.4f, %.4f, %.4f\n", currentPos.X, currentPos.Y, currentPos.Z);
-			//		OutputDebugString(buffer);
-
-			//		lastPos = currentPos;
-			//		printCount++; // 딱 10번만 찍고 멈춤
-			//	}
-			//}
-
 			Vector4 totalPosition = Vector4::Zero;
 			float sum = 0;
-			Weight w = static_cast<const DDD::SKMesh&>(InMesh).GetWeights()[vi];
-			for (size_t wi = 0; wi < static_cast<const DDD::SKMesh&>(InMesh).GetConnectedBones()[vi]; ++wi)
+			const auto& skm = static_cast<const DDD::SKMesh&>(InMesh);
+			Weight w = skm.GetWeights()[vi];
+
+
+			for (size_t wi = 0; wi < skm.GetConnectedBones()[vi]; ++wi)
 			{
 				std::string boneName = w.Bones[wi];
-				if (static_cast<const DDD::SKMesh&>(InMesh).HasBone(boneName))
+				if (skm.HasBone(boneName))
 				{
-					const Transform& bindPoseTransform = static_cast<const DDD::SKMesh&>(InMesh).GetBindPose(boneName);
-					const Transform& boneTransform = static_cast<const DDD::SKMesh&>(InMesh).GetBone(boneName).GetTransform().GetWorldTransform();
+					const Transform& bindPoseTransform = skm.GetBindPose(boneName);
+					const Transform& boneTransform = skm.GetBone(boneName).GetTransform().GetWorldTransform();
 
-					Matrix4x4 testMatrix = boneTransform.GetMatrix();
-					testMatrix.Cols[3] = bindPoseTransform.GetMatrix().Cols[3];
 					Vector4 localPosition = boneTransform.GetMatrix() * bindPoseTransform.Inverse().GetMatrix() * vertices[vi].Position;
-					//Vector4 localPosition = testMatrix * bindPoseTransform.Inverse().GetMatrix() * vertices[vi].Position;
-					//Vector4 localPosition = bindPoseTransform.GetMatrix() * bindPoseTransform.Inverse().GetMatrix() * vertices[vi].Position;
-
+					
 					totalPosition += localPosition * w.Values[wi];
 					sum += w.Values[wi];
 				}
