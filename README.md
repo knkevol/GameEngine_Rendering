@@ -5,25 +5,43 @@
 
 또한 FBX SDK를 연동을 통해 외부 애셋을 처리할 수 있는 구조로 확장하였습니다.
 
-> USE FBX SDK [FBX SDK 2020.3.7  VS2019](https://aps.autodesk.com/developer/overview/fbx-sdk)
+✅ 주요 기능
+
+* Static Mesh / Skeletal Mesh 렌더링
+* Bone Hierarchy
+* Skinning Animation
+* Windows GDI 기반 소프트웨어 렌더링 시스템
+* Sutherland–Hodgman 알고리즘을 적용한 3D 삼각형 클리핑
+* 자체 Rasterizer를 통해 애니메이션 렌더링 구현
+* 엔진 모듈 구조 분리 설계 (Math / Import / Engine / Renderer / Player)
+
+<br />
+<br />
+
+> Use FBX Version : [FBX SDK 2020.3.7  VS2019](https://aps.autodesk.com/developer/overview/fbx-sdk)
 <br />
 <br />
 
 ***
 
-## 📌 Overview
+## 📌 Module
 <br />
 
-✅ 주요 기능
+### 1️⃣ Engine Module
 
-* 정적 Mesh 렌더링
-* Skeletal Animation 렌더링
-* Bone Hierarchy 계산
-* Skinning 적용
+### 2️⃣ Math Module
+
+### 3️⃣ Renerer Module
+
+### 4️⃣ ImportAsset Module
+
+### 5️⃣ GERPlayer Module
+
+
 
 
 <br />
 <br />
 
 
-(Gif 추가)
+(Gif 및 모듈별 상세 내용 추가)
