@@ -28,6 +28,11 @@ FBX SDK를 연동하여 외부 애셋을 처리할 수 있는 구조로 확장�
 ## 📌 Module
 
 ### 1️⃣ Engine Module
+* 캐릭터의 골격구조(Skeletal) 정의 및 Weight 처리 행렬 계산과 시간에 따른 Bone의 변환 데이터를 관리
+
+* 캐릭터의 3D Vertex 데이터 저장, Texture
+
+* 캐릭터의 SRT행렬을 계산하여 World/Local Matrix 생성 및 View/Projection Matrix를 생성하여 3D 공간을 2D 화면으로 투영
 
 ```c++
   FORCEINLINE Matrix4x4 CameraObject::GetPerspectiveViewMatrix() const
@@ -54,14 +59,17 @@ FBX SDK를 연동하여 외부 애셋을 처리할 수 있는 구조로 확장�
   	);
   }
   ```
+
+* 객체 생성 로직 및 초기화
+  
 <br />
 <br />
 
 
 ### 2️⃣ Math Module
-* 렌더링 엔진 내 모든 객체의 위치, 회전, 크기 및 기하학적 형태를 정의하기 위한 기초 수학 자료형과 연산 로직을 담고 있습니다.
+* 렌더링 엔진 내 모든 객체의 위치, 회전, 크기 및 기하학적 형태를 정의하기 위한 기초 수학 자료형과 연산 로직
   
-* 공간 데이터를 처리할 수 있도록 표준화된 인터페이스를 제공하는 엔진의 기초라이브러리 모듈입니다.
+* 공간 데이터를 처리할 수 있도록 표준화된 인터페이스를 제공하는 엔진의 기초라이브러리 모듈.
 
 * 주요 구성 요소
   * Vector (2, 3, 4)
@@ -76,23 +84,31 @@ FBX SDK를 연동하여 외부 애셋을 처리할 수 있는 구조로 확장�
 <br />
 
 ### 3️⃣ Renerer Module
+* Win32 GDI를 활용해 프레임 버퍼를 구축
+  
+* 코헨-서덜랜드 알고리즘과 같은 기하 연산을 통해 렌더링 성능 최적화와 클리핑 처리를 CPU 레벨에서 구현
+
+*  Vertex 위치 값 * 최종행렬 연산을 통한 쉐이더 정점 변환
 
 <br />
 <br />
 
 ### 4️⃣ ImportAsset Module
+* 정점(Vertex), 인덱스(Index), UV 좌표 등의 Mesh 데이터와 계층 구조로 이루어진 Skeleton(Bone) 데이터 파싱 및 변환
+
+* FBX Node 트리를 순회하며 Bone 계층 구조 처리 및 시간에 따른 각 Bone의 Transform데이터를 저장하여 사용
+
 
 <br />
 <br />
 
 ### 5️⃣ GERPlayer Module
+* 운영체제로부터 프로세스 권한을 할당받고, 창을 띄우는 WindowsApp 환경 설정
+
+* 엔진 생명 주기 제어(Loop)
+
+* 씬(Scene) 관리
 
 <br />
 <br />
 
-
-<br />
-<br />
-
-
-(Gif 및 모듈별 상세 내용 추가)
