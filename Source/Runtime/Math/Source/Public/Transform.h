@@ -85,7 +85,7 @@ FORCEINLINE constexpr Transform Transform::Inverse() const
 	Transform result;
 	result.SetScale(reciprocalScale);
 	result.SetRotation(Rotation.Inverse());
-	result.SetPosition(result.GetScale() * (result.GetRotation() * -Position));
+	result.SetPosition(result.GetRotation() * (result.GetScale() * -Position));
 	return result;
 }
 
@@ -96,7 +96,7 @@ FORCEINLINE constexpr Transform Transform::LocalToWorld(const Transform& InParen
 	Transform result;
 	result.SetScale(InParentWorldTransform.GetScale() * GetScale());
 	result.SetRotation(InParentWorldTransform.GetRotation() * GetRotation());
-	result.SetPosition(InParentWorldTransform.GetPosition() + InParentWorldTransform.GetScale() * (InParentWorldTransform.GetRotation() * GetPosition()));
+	result.SetPosition(InParentWorldTransform.GetPosition() + InParentWorldTransform.GetRotation() * (InParentWorldTransform.GetScale() * GetPosition()));
 	return result;
 }
 
@@ -108,7 +108,7 @@ FORCEINLINE constexpr Transform Transform::WorldToLocal(const Transform& InParen
 	Transform result;
 	result.SetScale(invParent.GetScale() * GetScale());
 	result.SetRotation(invParent.GetRotation() * GetRotation());
-	result.SetPosition(invParent.GetPosition() + invParent.GetScale() * (invParent.GetRotation() * GetPosition()));
+	result.SetPosition(invParent.GetPosition() + invParent.GetRotation() * (invParent.GetScale() * GetPosition()));
 	return result;
 }
 

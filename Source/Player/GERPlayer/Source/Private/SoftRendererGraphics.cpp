@@ -65,7 +65,7 @@ void SoftRenderer::LateUpdate(float InDeltaSeconds)
 
 	int BoneSize = animQuat.size();
 	static int TargetFrame = 0;
-	float AnimFrameTime = 0.1f;
+	float AnimFrameTime = 0.03f;
 	if (elapsedTime > AnimFrameTime)
 	{
 		elapsedTime = 0;
@@ -83,38 +83,20 @@ void SoftRenderer::LateUpdate(float InDeltaSeconds)
 		{
 			Bone& TargetBone = skm.GetBone(animBN[idx]);
 
-			std::string CurrName = animBN[idx];
+			std::string name = animBN[idx];
 
-			//TargetBone.GetTransform().SetLocalPosition(animTran[idx][TargetFrame]);
-			//TargetBone.GetTransform().SetLocalRotation(animQuat[idx][TargetFrame]);
+			bool isFinger = (name.find("index") != std::string::npos ||
+				name.find("middle") != std::string::npos ||
+				name.find("pinky") != std::string::npos ||
+				name.find("ring") != std::string::npos ||
+				name.find("thumb") != std::string::npos);
 
-			if (animBN[idx].find("hand") != std::string::npos || animBN[idx].find("thumb") != std::string::npos
-				|| animBN[idx].find("ring") != std::string::npos || animBN[idx].find("pinky") != std::string::npos
-				|| animBN[idx].find("middle") != std::string::npos || animBN[idx].find("index") != std::string::npos)
-			{
-				Vector3 pos = animTran[idx][TargetFrame];
-				auto temp = pos;
-				// 이 값이 0.0001처럼 아주 작거나, 반대로 500.0처럼 메쉬 크기에 비해 너무 큰지 확인
-			}
+			if (isFinger) continue;
 
-			Bone newLocalBone;
-			newLocalBone.GetTransform().SetLocalPosition(animTran[idx][TargetFrame]);
-			newLocalBone.GetTransform().SetLocalRotation(animQuat[idx][TargetFrame]);
-			newLocalBone.GetTransform().SetLocalScale(Vector3(1.0f, 1.0f, 1.0f));
-			
-			Transform newLocalTransform = newLocalBone.GetTransform().GetLocalTransform();
-
-			TargetBone.GetTransform().SetLocalTransform(newLocalTransform);
-
+			TargetBone.GetTransform().SetLocalPosition(animTran[idx][TargetFrame]);
+			TargetBone.GetTransform().SetLocalRotation(animQuat[idx][TargetFrame]);
 
 		}
-	}
-
-	if (skm.HasBone("rootBone"))
-	{
-		TransformComponent& rootTC = skm.GetBone("rootBone").GetTransform();
-		rootTC.SetLocalTransform(rootTC.GetLocalTransform());
-	
 	}
 }
 
@@ -284,6 +266,15 @@ void SoftRenderer::DrawMesh3D(const DDD::Mesh& InMesh, const Matrix4x4& InMatrix
 					totalPosition += localPosition * w.Values[wi];
 					sum += w.Values[wi];
 				}
+				//else
+				//{
+				//	if (vi % 100 == 0) // 로그 폭주 방지
+				//	{
+				//		char buffers[50];
+				//		sprintf(buffers, "Missing Bone Weight Link: %s\n", boneName.c_str());
+				//		OutputDebugString(buffers);
+				//	}
+				//}
 			}
 
 			vertices[vi].Position = totalPosition;
