@@ -535,6 +535,8 @@ void GameEngine::LoadAsset()
 		GameEngine::thigh_twist_02_rBone
 	};
 
+	CharacterMesh.BuildBoneIndex(boneOrder);
+
 	// Connecting Bones
 	for (int i = 0; i < CharacterSkeleton.BoneInfoVector.size(); ++i)
 	{
@@ -555,11 +557,14 @@ void GameEngine::LoadAsset()
 	w.resize(v.size());
 	for (auto idx = 0; idx < WeightInfo.size(); ++idx)
 	{
-		for (std::pair<std::string, float> info : WeightInfo[idx])
+		for (const std::pair<std::string, float>& info : WeightInfo[idx])
 		{
-			cb[idx]++;
-			w[idx].Bones.push_back(info.first);
-			w[idx].Values.push_back(info.second);
+			if (CharacterMesh.HasBoneIndex(info.first))
+			{
+				cb[idx]++;
+				w[idx].BoneIndices.push_back(CharacterMesh.GetBoneIndex(info.first));
+				w[idx].Values.push_back(info.second);
+			}
 		}
 	}
 

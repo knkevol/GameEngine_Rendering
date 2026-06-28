@@ -255,26 +255,14 @@ void SoftRenderer::DrawMesh3D(const DDD::Mesh& InMesh, const Matrix4x4& InMatrix
 
 			for (size_t wi = 0; wi < skm.GetConnectedBones()[vi]; ++wi)
 			{
-				std::string boneName = w.Bones[wi];
-				if (skm.HasBone(boneName))
-				{
-					const Transform& bindPoseTransform = skm.GetBindPose(boneName);
-					const Transform& boneTransform = skm.GetBone(boneName).GetTransform().GetWorldTransform();
+				uint8_t boneIdx = w.BoneIndices[wi];
+				const Transform& bindPoseTransform = skm.GetBindPoseByIndex(boneIdx);
+				const Transform& boneTransform = skm.GetBoneByIndex(boneIdx).GetTransform().GetWorldTransform();
 
-					Vector4 localPosition = boneTransform.GetMatrix() * bindPoseTransform.Inverse().GetMatrix() * vertices[vi].Position;
-					
-					totalPosition += localPosition * w.Values[wi];
-					sum += w.Values[wi];
-				}
-				//else
-				//{
-				//	if (vi % 100 == 0) // 로그 폭주 방지
-				//	{
-				//		char buffers[50];
-				//		sprintf(buffers, "Missing Bone Weight Link: %s\n", boneName.c_str());
-				//		OutputDebugString(buffers);
-				//	}
-				//}
+				Vector4 localPosition = boneTransform.GetMatrix() * bindPoseTransform.Inverse().GetMatrix() * vertices[vi].Position;
+
+				totalPosition += localPosition * w.Values[wi];
+				sum += w.Values[wi];
 			}
 
 			vertices[vi].Position = totalPosition;
