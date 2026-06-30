@@ -40,7 +40,29 @@ public:
 		_BoneNameToIndex.clear();
 		uint8_t idx = 0;
 		for (const auto& name : InBoneOrder)
+		{
 			_BoneNameToIndex[name] = idx++;
+		}
+	}
+
+	void PrecomputeInverseBindPoses()
+	{
+		size_t boneCount = _BoneNames.size();
+		_InverseBindPoses.resize(boneCount);
+		_SkinMatrices.resize(boneCount, Matrix4x4::Identity);
+		for (size_t i = 0; i < boneCount; ++i)
+		{
+			_InverseBindPoses[i] = _Bones.at(_BoneNames[i]).GetBindPose().Inverse().GetMatrix();
+		}
+	}
+
+	void UpdateSkinMatrices()
+	{
+		size_t boneCount = _BoneNames.size();
+		for (size_t i = 0; i < boneCount; ++i)
+		{
+			_SkinMatrices[i] = _Bones.at(_BoneNames[i]).GetTransform().GetWorldMatrix() * _InverseBindPoses[i];
+		}
 	}
 
 	FORCEINLINE bool HasBoneIndex(const std::string& name) const { return _BoneNameToIndex.count(name) > 0; }
@@ -48,6 +70,7 @@ public:
 	FORCEINLINE Bone& GetBoneByIndex(uint8_t idx) { return _Bones.at(_BoneNames[idx]); }
 	FORCEINLINE const Bone& GetBoneByIndex(uint8_t idx) const { return _Bones.at(_BoneNames[idx]); }
 	FORCEINLINE const Transform& GetBindPoseByIndex(uint8_t idx) const { return _Bones.at(_BoneNames[idx]).GetBindPose(); }
+	FORCEINLINE const std::vector<Matrix4x4>& GetSkinMatrices() const { return _SkinMatrices; }
 
 protected:
 	std::vector<BYTE> _ConnectedBones;
@@ -56,6 +79,8 @@ protected:
 
 	std::vector<std::string> _BoneNames;
 	std::unordered_map<std::string, uint8_t> _BoneNameToIndex;
+	std::vector<Matrix4x4> _InverseBindPoses;
+	std::vector<Matrix4x4> _SkinMatrices;
 };
 
 }

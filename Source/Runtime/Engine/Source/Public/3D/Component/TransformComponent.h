@@ -14,7 +14,7 @@ public:
 		UpdateWorld();
 	}
 
-public: // ·ÎÄÃ Æ®·£½ºÆû °ü·Ã ÇÔ¼ö
+public: // ï¿½ï¿½ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	FORCEINLINE Transform& GetLocalTransform() { return _LocalTransform; }
 	FORCEINLINE void SetLocalTransform(const Transform& InTransform) { _LocalTransform = InTransform; UpdateWorld(); }
 	FORCEINLINE const Transform& GetLocalTransform() const { return _LocalTransform; }
@@ -39,7 +39,7 @@ public: // ·ÎÄÃ Æ®·£½ºÆû °ü·Ã ÇÔ¼ö
 	FORCEINLINE Vector3 GetLocalZ() const { return _LocalTransform.GetZAxis(); }
 	FORCEINLINE Matrix4x4 GetLocalMatrix() const { return _LocalTransform.GetMatrix(); }
 
-public: // ¿ùµå Æ®·£½ºÆû °ü·Ã ÇÔ¼ö
+public: // ï¿½ï¿½ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	FORCEINLINE Transform& GetWorldTransform() { return _WorldTransform; }
 	FORCEINLINE void SetWorldTransform(const Transform& InTransform) { _WorldTransform = InTransform; UpdateLocal(); }
 	FORCEINLINE const Transform& GetWorldTransform() const { return _WorldTransform; }
@@ -61,7 +61,7 @@ public: // ¿ùµå Æ®·£½ºÆû °ü·Ã ÇÔ¼ö
 
 	FORCEINLINE Matrix4x4 GetWorldMatrix() const { return _WorldTransform.GetMatrix(); }
 
-public: // °èÃþ ±¸Á¶ °ü·Ã ÇÔ¼ö
+public: // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 	bool SetRoot();
 	bool RemoveFromParent();
 	TransformComponent& GetRoot();
@@ -72,13 +72,13 @@ public: // °èÃþ ±¸Á¶ °ü·Ã ÇÔ¼ö
 	std::vector<TransformComponent*>::const_iterator ChildBegin() const { return _ChildrenPtr.begin(); }
 	std::vector<TransformComponent*>::const_iterator ChildEnd() const { return _ChildrenPtr.end(); }
 
-private: // ³»ºÎ¿¡¼­¸¸ È£ÃâÇÏ´Â ÇÔ¼ö
+private: // ï¿½ï¿½ï¿½Î¿ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 	FORCEINLINE TransformComponent* GetParentPtr() const { return _ParentPtr; }
 	void UpdateLocal();
 	void UpdateWorld();
 	void UpdateChildrenWorld();
 
-private: // °èÃþ ±¸Á¶¸¦ À§ÇÑ º¯¼ö
+private: // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	Transform _LocalTransform;
 	Transform _WorldTransform;
 

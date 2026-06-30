@@ -552,6 +552,9 @@ void GameEngine::LoadAsset()
 		child.SetParent(parent);
 	}
 
+	CharacterMesh.PrecomputeInverseBindPoses();
+	CharacterMesh.UpdateSkinMatrices();
+
 	// Moving Weight Information
 	cb.resize(v.size(), 0);
 	w.resize(v.size());

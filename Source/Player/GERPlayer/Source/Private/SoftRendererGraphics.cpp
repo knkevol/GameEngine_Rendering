@@ -98,6 +98,8 @@ void SoftRenderer::LateUpdate(float InDeltaSeconds)
 
 		}
 	}
+
+	skm.UpdateSkinMatrices();
 }
 
 void SoftRenderer::Render()
@@ -253,13 +255,11 @@ void SoftRenderer::DrawMesh3D(const DDD::Mesh& InMesh, const Matrix4x4& InMatrix
 			Weight w = skm.GetWeights()[vi];
 
 
+			const std::vector<Matrix4x4>& skinMatrices = skm.GetSkinMatrices();
 			for (size_t wi = 0; wi < skm.GetConnectedBones()[vi]; ++wi)
 			{
 				uint8_t boneIdx = w.BoneIndices[wi];
-				const Transform& bindPoseTransform = skm.GetBindPoseByIndex(boneIdx);
-				const Transform& boneTransform = skm.GetBoneByIndex(boneIdx).GetTransform().GetWorldTransform();
-
-				Vector4 localPosition = boneTransform.GetMatrix() * bindPoseTransform.Inverse().GetMatrix() * vertices[vi].Position;
+				Vector4 localPosition = skinMatrices[boneIdx] * vertices[vi].Position;
 
 				totalPosition += localPosition * w.Values[wi];
 				sum += w.Values[wi];
