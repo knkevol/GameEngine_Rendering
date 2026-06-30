@@ -1,5 +1,5 @@
 # 🎮 *Rendering Engine Project*
-<img width="233" height="500" alt="image" src="https://github.com/user-attachments/assets/3b0fd3ad-01ad-40a7-9c09-5386fb72977f" /> 
+<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/3b0fd3ad-01ad-40a7-9c09-5386fb72977f" /> 
 
 본 프로젝트는 이득우의 게임수학 내용을 기반으로, 모듈화된 설계를 중심으로 발전시킨 엔진 프로젝트입니다.
 
@@ -9,8 +9,8 @@ FBX SDK를 연동하여 외부 애셋을 처리할 수 있는 구조로 확장�
 
 ✅ 주요 기능
 
-* Static Mesh / Skeletal Mesh 렌더링
-* Bone Hierarchy
+* Skeletal Mesh 렌더링
+* Bone Hierarchy기반 계층 구조
 * Skinning Animation
 * Windows GDI 기반 소프트웨어 렌더링 시스템
 * Sutherland–Hodgman 알고리즘을 적용한 3D 삼각형 클리핑
@@ -112,3 +112,139 @@ FBX SDK를 연동하여 외부 애셋을 처리할 수 있는 구조로 확장�
 <br />
 <br />
 
+***
+
+## 📌 최적화
+
+## 1. Bone 조회 최적화
+
+### Before
+- `std::string` 기반 Bone 이름 저장
+- 스키닝 루프마다 `unordered_map` 조회 수행
+
+```cpp
+std::string boneName = w.Bones[wi];
+
+if (skm.HasBone(boneName))
+{
+    ...
+}
+```
+
+### After
+- Bone 이름을 `uint8_t` 인덱스로 변환
+- 로드 시점에 Bone Index Table 구축
+- 런타임에서는 배열 직접 접근 방식 사용
+
+```cpp
+uint8_t boneIdx = w.BoneIndices[wi];
+```
+
+### Optimization Result
+- 문자열 복사 제거
+- 해시 탐색 제거
+- 스키닝 루프 분기 감소
+- 런타임 검증 비용 제거
+
+<br />
+
+## 2. Inverse 연산 Precompute
+
+### Before
+정점마다 다음 연산이 반복 수행되었습니다.
+
+```cpp
+boneTransform.GetMatrix()
+* bindPoseTransform.Inverse().GetMatrix()
+* position
+```
+
+### After
+로드 시점에 `Inverse BindPose`를 사전 계산하고,  
+프레임마다 최종 Skin Matrix만 갱신하도록 변경했습니다.
+
+```cpp
+skinMatrices[boneIdx] * position
+```
+
+### Optimization Result
+- Inverse 행렬 계산 제거
+- Bone 조회 제거
+- 정점당 행렬 곱 연산 감소
+- 스키닝 루프 연산 단순화
+
+<br />
+
+---
+
+## 📌 Performance Result
+
+| Version | FPS |
+|---|---|
+| Before Optimization | 0.36 FPS |
+| After Optimization | 0.71 FPS |
+
+- 약 97% 성능 향상
+- CPU 기반 Software Skinning 병목 감소
+- Runtime Skinning 연산 비용 최적화
+
+<br />
+
+---
+
+## 📌 FPS Measurement
+
+## Measurement Method
+
+- Windows High Resolution Performance Counter 기반 측정
+- `QueryPerformanceCounter` 계열 사용
+- 프레임 시간(ms) 기반 FPS 계산
+
+```cpp
+_FrameFPS = 1000.f / _FrameTime;
+```
+
+## Measurement Flow
+
+### 1. Performance Counter Initialization
+
+```cpp
+_CyclesPerMilliSeconds = WindowsUtil::GetCyclesPerMilliSeconds();
+```
+
+- 프로그램 초기화 시 1ms당 CPU 사이클 수 계산
+
+---
+
+### 2. Frame Timestamp Measurement
+
+```cpp
+_FrameTimeStamp = _PerformanceMeasureFunc();
+
+if (_FrameCount == 0)
+{
+    _StartTimeStamp = _FrameTimeStamp;
+}
+```
+
+- 프레임 시작 시점의 타임스탬프 기록
+
+---
+
+### 3. FPS Calculation
+
+```cpp
+INT64 currentTimeStamp = _PerformanceMeasureFunc();
+
+INT64 frameCycles   = currentTimeStamp - _FrameTimeStamp;
+INT64 elapsedCycles = currentTimeStamp - _StartTimeStamp;
+
+_FrameTime  = frameCycles / _CyclesPerMilliSeconds;
+_ElapsedTime = elapsedCycles / _CyclesPerMilliSeconds;
+
+_FrameFPS   = 1000.f / _FrameTime;
+_AverageFPS = 1000.f / _ElapsedTime * _FrameCount;
+```
+
+- 현재 프레임 소요 시간 기반 FPS 계산
+- 누적 평균 FPS 계산
