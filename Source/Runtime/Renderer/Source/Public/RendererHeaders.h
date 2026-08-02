@@ -12,6 +12,12 @@
 #include <windows.h>
 #include "Windows/WindowsGDI.h"
 #include "Windows/WindowsRSI.h"
+#include "Windows/WindowsGLContext.h"
+
+#include "OpenGL/OpenGLDevice.h"
+#include "OpenGL/OpenGLRSI.h"
+#include "glad.h"
+
 #endif
 
 using namespace GER;

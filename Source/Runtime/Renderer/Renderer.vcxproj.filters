@@ -33,6 +33,18 @@
     <ClCompile Include="Source\Precompiled.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\Windows\WindowsGLContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ThirdParty\Glad\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\OpenGL\OpenGLDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Private\OpenGL\OpenGLRSI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Public\3D\PerspectiveTest.h">
@@ -57,6 +69,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Precompiled.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\Windows\WindowsGLContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\OpenGL\OpenGLDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\OpenGL\OpenGLRSI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
