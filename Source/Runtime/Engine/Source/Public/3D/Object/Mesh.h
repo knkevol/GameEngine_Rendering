@@ -30,6 +30,11 @@ public:
 	const Sphere& GetSphereBound() const { return _SphereBound; }
 	const Box& GetBoxBound() const { return _BoxBound; }
 
+	// GPU Upload
+	virtual void UploadToGPU(OpenGLDevice& InDevice);
+	bool IsUploadedToGPU() const { return _IsUploadedToGPU; }
+	const GPUMeshHandle& GetGPUHandle() const { return _GPUHandle; }
+
 protected:
 	std::vector<Vector3> _Vertices;
 	std::vector<size_t> _Indices;
@@ -40,6 +45,11 @@ protected:
 	MeshType _MeshType = MeshType::Normal;
 	Sphere _SphereBound;
 	Box _BoxBound;
+
+protected:
+	GPUMeshHandle _GPUHandle;
+	bool _IsUploadedToGPU = false;
+
 };
 
 }

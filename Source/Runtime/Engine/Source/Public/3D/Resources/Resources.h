@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 
 namespace GER
 {
@@ -6,7 +6,7 @@ namespace DDD
 {
 
 /// <summary>
-/// ≈•∫Í ∏ﬁΩ√ ¡§∫∏
+/// ÌÅêÎ∏å Î©îÏãú Ï†ïÎ≥¥
 /// </summary>
 
 constexpr static std::array<Vector3, 24> cubeMeshPositions = {
@@ -27,8 +27,18 @@ constexpr static std::array<size_t, 36> cubeMeshIndice = {
 	20, 22, 21, 20, 23, 22  // Bottom
 };
 
+// ÌÅêÎ∏å UV
+constexpr static std::array<Vector2, 24> cubeMeshUVs = {
+	  Vector2(0.f,1.f), Vector2(0.f,0.f), Vector2(1.f,0.f), Vector2(1.f,1.f), // Right
+	  Vector2(0.f,1.f), Vector2(0.f,0.f), Vector2(1.f,0.f), Vector2(1.f,1.f), // Front
+	  Vector2(0.f,1.f), Vector2(0.f,0.f), Vector2(1.f,0.f), Vector2(1.f,1.f), // Back
+	  Vector2(0.f,1.f), Vector2(0.f,0.f), Vector2(1.f,0.f), Vector2(1.f,1.f), // Left
+	  Vector2(0.f,1.f), Vector2(0.f,0.f), Vector2(1.f,0.f), Vector2(1.f,1.f), // Top
+	  Vector2(0.f,1.f), Vector2(0.f,0.f), Vector2(1.f,0.f), Vector2(1.f,1.f), // Bottom
+};
+
 /// <summary>
-/// »≠ªÏ«• ∏ﬁΩ√ ¡§∫∏
+/// ÌôîÏÇ¥Ìëú Î©îÏãú Ï†ïÎ≥¥
 /// </summary>
 
 constexpr static std::array<Vector3, 29> arrowPositions = {

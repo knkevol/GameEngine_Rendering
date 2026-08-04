@@ -1,4 +1,5 @@
-#include "Precompiled.h"
+﻿#include "Precompiled.h"
+using namespace GER::DDD;
 
 GPUBufferHandle OpenGLDevice::CreateVertexBuffer(const void* InData, size_t InBytes)
 {
@@ -42,7 +43,7 @@ ShaderHandle OpenGLDevice::CreateShaderProgram(const char* InVsSrc, const char* 
     return program;
 }
 
-GPUMeshHandle GER::OpenGLDevice::CreateMesh(const void* InVertexData, size_t InVertexBytes, const UINT32* InIndices, UINT32 InIndexCount)
+GPUMeshHandle OpenGLDevice::CreateMesh(const void* InVertexData, size_t InVertexBytes, const UINT32* InIndices, UINT32 InIndexCount)
 {
     GPUMeshHandle mesh;
 
@@ -53,36 +54,94 @@ GPUMeshHandle GER::OpenGLDevice::CreateMesh(const void* InVertexData, size_t InV
     mesh.EBO = CreateIndexBuffer(InIndices, InIndexCount);
     mesh.IndexCount = InIndexCount;
 
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(DDD::Vertex3D), (void*)offsetof(DDD::Vertex3D, Position));
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (void*)offsetof(Vertex3D, Position));
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(DDD::Vertex3D), (void*)offsetof(DDD::Vertex3D, Color));
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (void*)offsetof(Vertex3D, Color));
     glEnableVertexAttribArray(1);
 
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(DDD::Vertex3D), (void*)offsetof(DDD::Vertex3D, UV));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (void*)offsetof(Vertex3D, UV));
     glEnableVertexAttribArray(2);
 
-    glBindVertexArray(0); // VAO ������� ����
+    glBindVertexArray(0); // VAO 편집모드 종료
 
     return mesh;
 }
 
-void GER::OpenGLDevice::UseShader(ShaderHandle InShader)
+TextureHandle OpenGLDevice::CreateTexture(const void* InPixelData, UINT32 InWidth, UINT32 InHeight)
+{
+    UINT32 texture = 0;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, InWidth, InHeight, 0, GL_RGBA, GL_FLOAT, InPixelData);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    return texture;
+}
+
+GPUMeshHandle OpenGLDevice::CreateSkinnedMesh(const void* InVertexData, size_t InVertexBytes, const UINT32* InIndices, UINT32 InIndexCount)
+{
+    GPUMeshHandle mesh;
+
+    //VAO 생성 및 바인딩
+    glGenVertexArrays(1, &mesh.VAO);
+    glBindVertexArray(mesh.VAO);
+
+    // VBO(정점버퍼), EBO(인덱스버퍼) Upload to GPU
+    mesh.VBO = CreateVertexBuffer(InVertexData, InVertexBytes);
+    mesh.EBO = CreateIndexBuffer(InIndices, InIndexCount);
+    mesh.IndexCount = InIndexCount;
+
+    // 3) attribute 0~2: 위치/색/UV
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, Position));
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, Color));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, UV));
+    glEnableVertexAttribArray(2);
+    // 4) attribute 3: 본 인덱스 — 정수는 반드시 'I' 버전(glVertexAttribIPointer)을 써야 0~1로 정규화되지 않음
+    glVertexAttribIPointer(3, 4, GL_INT, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, BoneIndices));
+    glEnableVertexAttribArray(3);
+    // 5) attribute 4: 본 가중치
+    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, BoneWeights));
+    glEnableVertexAttribArray(4);
+    
+
+    glBindVertexArray(0);
+
+    return mesh;
+}
+
+void OpenGLDevice::BindTexture(TextureHandle InTexture, UINT32 InSlot)
+{
+    glActiveTexture(GL_TEXTURE0 + InSlot);
+    glBindTexture(GL_TEXTURE_2D, InTexture);
+}
+
+void OpenGLDevice::UseShader(ShaderHandle InShader)
 {
     glUseProgram(InShader);
 }
 
-void GER::OpenGLDevice::SetUniformMat4(ShaderHandle InShader, const char* InName, const Matrix4x4& InMatrix)
+void OpenGLDevice::SetUniformMat4(ShaderHandle InShader, const char* InName, const Matrix4x4& InMatrix)
 {
     glUseProgram(InShader);
-    int location = glGetUniformLocation(InShader, InName); // ���� �̸��� GPU ���� ���� ��ȣ�� ��ȯ
+    int location = glGetUniformLocation(InShader, InName); // 변수 이름을 GPU 내부 슬롯 번호로 변환
     if (location >= 0)
     {
         glUniformMatrix4fv(location, 1, GL_FALSE, &InMatrix.Cols[0].X);
     }
 }
 
-void GER::OpenGLDevice::SetUniformMat4Array(ShaderHandle InShader, const char* InName, const std::vector<Matrix4x4>& InMatrices)
+void OpenGLDevice::SetUniformMat4Array(ShaderHandle InShader, const char* InName, const std::vector<Matrix4x4>& InMatrices)
 {
     if (InMatrices.empty())
     {
@@ -97,12 +156,48 @@ void GER::OpenGLDevice::SetUniformMat4Array(ShaderHandle InShader, const char* I
     }
 }
 
-void GER::OpenGLDevice::BindMesh(const GPUMeshHandle& InMesh)
+void OpenGLDevice::SetUniformInt(ShaderHandle InShader, const char* InName, int InValue)
+{
+    glUseProgram(InShader);
+    int location = glGetUniformLocation(InShader, InName);
+    if (location >= 0)
+    {
+        glUniform1i(location, InValue);
+    }
+}
+
+void OpenGLDevice::SetUniformFloat(ShaderHandle InShader, const char* InName, float InValue)
+{
+    // DepthBuffer 셰이더의 near/far 값 전달용
+    glUseProgram(InShader);
+    int location = glGetUniformLocation(InShader, InName);
+    if (location >= 0)
+    {
+        glUniform1f(location, InValue);
+    }
+}
+
+void OpenGLDevice::SetUniformColor(ShaderHandle InShader, const char* InName, const LinearColor& InColor)
+{
+    glUseProgram(InShader);
+    int location = glGetUniformLocation(InShader, InName);
+    if (location >= 0)
+    {
+        glUniform4f(location, InColor.R, InColor.G, InColor.B, InColor.A);
+    }
+}
+
+void OpenGLDevice::SetPolygonMode(bool InWireframe)
+{
+    glPolygonMode(GL_FRONT_AND_BACK, InWireframe ? GL_LINE : GL_FILL);
+}
+
+void OpenGLDevice::BindMesh(const GPUMeshHandle& InMesh)
 {
     glBindVertexArray(InMesh.VAO);
 }
 
-void GER::OpenGLDevice::DrawIndexed(UINT32 InIndexCount)
+void OpenGLDevice::DrawIndexed(UINT32 InIndexCount)
 {
     glDrawElements(GL_TRIANGLES, InIndexCount, GL_UNSIGNED_INT, nullptr);
 }
@@ -123,7 +218,7 @@ bool OpenGLDevice::CheckShaderCompile(UINT32 InShader, const char* InStageName)
     return success != 0;
 }
 
-bool GER::OpenGLDevice::CheckProgramLink(UINT32 InProgram)
+bool OpenGLDevice::CheckProgramLink(UINT32 InProgram)
 {
     int success = 0;
     glGetProgramiv(InProgram, GL_LINK_STATUS, &success);

@@ -173,6 +173,12 @@
     <ClInclude Include="Source\Public\Windows\WindowsGLContext.h" />
     <ClInclude Include="Source\Public\Windows\WindowsRSI.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\basic.frag" />
+    <None Include="Shaders\basic.vert" />
+    <None Include="Shaders\depth.frag" />
+    <None Include="Shaders\skinned.vert" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

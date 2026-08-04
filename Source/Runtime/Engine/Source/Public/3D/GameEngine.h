@@ -76,6 +76,7 @@ namespace GER
 			FORCEINLINE const CameraObject& GetMainCamera() const { return _MainCamera; }
 
 			// 메인 텍스처
+			FORCEINLINE Texture& GetTexture(const std::size_t& InTextureKey) { return *_Textures.at(InTextureKey).get(); }
 			FORCEINLINE const Texture& GetTexture(const std::size_t& InTextureKey) const { return *_Textures.at(InTextureKey).get(); }
 
 			//// 본을 그리기 위한 목록

@@ -22,6 +22,9 @@ FORCEINLINE LinearColor FragmentShader3D(LinearColor& InColor, const LinearColor
 	return InColor * InColorParam;
 }
 
+// vert, frag 파일을 string으로 읽어오도록 (파일로딩헬퍼)
+std::string LoadShaderSource(const std::string& InPath);
+
 
 }
 }

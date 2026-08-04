@@ -137,6 +137,7 @@ void SoftRenderer::PreUpdate()
 	if (sinput.IsReleased(SystemInputButton::F3)) { SetDrawMode(DrawMode::OnlyBone); }
 	if (sinput.IsReleased(SystemInputButton::F7)) { TestPermLog(); }
 	if (sinput.IsReleased(SystemInputButton::F4)) { TestTempLog(); }
+	if (sinput.IsReleased(SystemInputButton::F5)) { SetDrawMode(DrawMode::DepthBuffer); } // GPU
 	if (sinput.IsReleased(SystemInputButton::F9)) { TestFunc(); }
 }
 
@@ -155,8 +156,8 @@ void SoftRenderer::Update(float InDeltaSeconds)
 	static bool firstUpdate = true;
 	if (firstUpdate)
 	{
-		camera.GetTransform().SetWorldPosition(Vector3(5.f, -200.f, 111.f));
-		camera.GetTransform().SetWorldRotation(Rotator(-170.f, -10.f, -85.f));
+		//camera.GetTransform().SetWorldPosition(Vector3(5.f, -200.f, 111.f));
+		//camera.GetTransform().SetWorldRotation(Rotator(-170.f, -10.f, -85.f));
 		firstUpdate = false;
 	}
 

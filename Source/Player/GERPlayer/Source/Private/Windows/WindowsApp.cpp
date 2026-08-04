@@ -4,30 +4,7 @@
 #include "WindowsPlayer.h"
 #include "WindowsGLContext.h"
 
-//test
 using namespace GER::DDD;
-
-static const char* TestVertexShaderSrc = R"(
-#version 330 core
-layout(location=0) in vec4 aPosition;
-layout(location=1) in vec4 aColor;
-out vec4 vColor;
-void main()
-{
-	gl_Position = aPosition;
-	vColor = aColor;
-}
-)";
-
-static const char* TestFragmentShaderSrc = R"(
-#version 330 core
-in vec4 vColor;
-out vec4 FragColor;
-void main()
-{
-	FragColor = vColor;
-}
-)";
 
 int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -63,15 +40,19 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	//----------
 	OpenGLDevice glDevice;
 
-	Vertex3D triangleVertices[3] = {
-		Vertex3D(Vector4(0.0f, 0.5f, 0.0f, 1.0f), LinearColor::Red),
-		Vertex3D(Vector4(0.5f, -0.5f, 0.0f, 1.0f), LinearColor::Green),
-		Vertex3D(Vector4(-0.5f, -0.5f, 0.0f, 1.0f), LinearColor::Blue),
-	};
-	UINT32 triangleIndices[3] = { 0, 1, 2 };
+	std::string vsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/basic.vert");
+	std::string fsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/basic.frag");
+	ShaderHandle testShader = glDevice.CreateShaderProgram(vsSrc.c_str(), fsSrc.c_str());
 
-	GPUMeshHandle triangleMesh = glDevice.CreateMesh(triangleVertices, sizeof(triangleVertices), triangleIndices, 3);
-	ShaderHandle testShader = glDevice.CreateShaderProgram(TestVertexShaderSrc, TestFragmentShaderSrc);
+
+	std::string skinnedVsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/skinned.vert");
+	ShaderHandle skinnedShader = glDevice.CreateShaderProgram(skinnedVsSrc.c_str(), fsSrc.c_str());
+
+	std::string depthFsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/depth.frag");
+	ShaderHandle depthShader = glDevice.CreateShaderProgram(vsSrc.c_str(), depthFsSrc.c_str());
+	ShaderHandle skinnedDepthShader = glDevice.CreateShaderProgram(skinnedVsSrc.c_str(), depthFsSrc.c_str());
+
+
 	//---------
 
 	WindowsUtil::Show(WindowsPlayer::gHandle);
@@ -86,13 +67,12 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
 		glContext.Clear(0.15f, 0.15f, 0.2f, 1.0f);
 		
-		
-		glDevice.UseShader(testShader);
-		glDevice.BindMesh(triangleMesh);
-		glDevice.DrawIndexed(3);
+		if (instance.GetDirectGameEngine().IsInitialized())
+		{
+			instance.RenderWorldGPU(glDevice, testShader, skinnedShader, depthShader, skinnedDepthShader);
 
+		}
 		glContext.SwapBuffers();
-
 
 		float currentTime = instance.GetElapsedTime();
 		if (currentTime - previousTimer > updatePeriod)

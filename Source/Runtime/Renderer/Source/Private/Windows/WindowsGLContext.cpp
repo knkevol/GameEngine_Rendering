@@ -45,6 +45,8 @@ bool WindowsGLContext::Init(HWND InHandle)
 		return false;
 	}
 
+	glEnable(GL_DEPTH_TEST);
+
 	//VSync ¼³Á¤
 	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
 

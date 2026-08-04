@@ -37,5 +37,14 @@ public:
 	Vector2 UV;
 };
 
+struct SkinnedVertex3D
+{
+	Vector4 Position;
+	LinearColor Color;
+	Vector2 UV;
+	UINT32 BoneIndices[4] = { 0, 0, 0, 0 }; // 정점에 영향을 주는 본 4개 인덱스
+	float BoneWeights[4] = { 0.f, 0.f, 0.f, 0.f };
+};
+
 }
 }

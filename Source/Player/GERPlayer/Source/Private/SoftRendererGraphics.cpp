@@ -20,6 +20,13 @@ void SoftRenderer::LoadScene()
 	goPlayer.SetColor(LinearColor::White);
 	goPlayer.GetTransform().SetWorldScale(Vector3::One * playerScale);
 
+	// Making Cube
+	GameObject& goCube = g.CreateNewGameObject(SimpleCube);
+	goCube.SetMesh(GameEngine::CubeMesh);
+	goCube.SetColor(LinearColor::White);
+	goCube.GetTransform().SetWorldPosition(Vector3(0.0f, 0.0f, 0.0f));
+	goCube.GetTransform().SetWorldScale(Vector3::One * 30.0f);
+
 	// Making Camera
 	GameObject& goCameraTarget = g.CreateNewGameObject(MainCameraTarget);
 	goCameraTarget.GetTransform().SetWorldPosition(Vector3(0.0f, 0.0f, 0.0f));
@@ -231,6 +238,142 @@ void SoftRenderer::RenderWorld()
 
 	r.PushStatisticText("Camera Position : " + mainCamera.GetTransform().GetWorldTransform().GetPosition().ToString());
 	r.PushStatisticText("Camera Rotation : " + mainCamera.GetTransform().GetLocalRotation().ToString());
+}
+
+void SoftRenderer::RenderWorldGPU(OpenGLDevice& InDevice, ShaderHandle InStaticShader, ShaderHandle InSkinnedShader, ShaderHandle InStaticDepthShader, ShaderHandle InSkinnedDepthShader)
+{
+	GameEngine& g = GetDirectGameEngine();
+	const CameraObject& mainCamera = g.GetMainCamera();
+	const Matrix4x4 pvMatrix = mainCamera.GetPerspectiveViewMatrix();
+
+	bool bLineMode = IsWireframeDrawing() || IsOnlyBoneDrawing();
+	InDevice.SetPolygonMode(bLineMode);
+
+	for (auto it = g.SceneBegin(); it != g.SceneEnd(); ++it)
+	{
+		const GameObject& gameObject = *(*it);
+		if (!gameObject.HasMesh() || !gameObject.IsVisible())
+		{
+			continue;
+		}
+
+		Mesh& mesh = g.GetMesh(gameObject.GetMeshKey());
+		const TransformComponent& transform = gameObject.GetTransform();
+		Matrix4x4 finalMatrix = pvMatrix * transform.GetWorldMatrix();
+
+		// 프러스텀 컬링 — CPU RenderWorld 로직
+		Matrix4x4 finalTransposedMatrix = finalMatrix.Transpose();
+		std::array<Plane, 6> frustumPlanesFromMatrix = {
+			Plane(-(finalTransposedMatrix[3] - finalTransposedMatrix[1])),
+			Plane(-(finalTransposedMatrix[3] + finalTransposedMatrix[1])),
+			Plane(-(finalTransposedMatrix[3] - finalTransposedMatrix[0])),
+			Plane(-(finalTransposedMatrix[3] + finalTransposedMatrix[0])),
+			Plane(-(finalTransposedMatrix[3] - finalTransposedMatrix[2])),
+			Plane(-(finalTransposedMatrix[3] + finalTransposedMatrix[2])),
+		};
+		Frustum frustumFromMatrix(frustumPlanesFromMatrix);
+
+		if (frustumFromMatrix.CheckBound(mesh.GetBoxBound()) == BoundCheckResult::Outside)
+		{
+			continue;
+		}
+
+		// OnlyBone Mode
+		if (IsOnlyBoneDrawing())
+		{
+			if (mesh.IsSKMesh())
+			{
+				DrawBonesGPU(InDevice, InStaticShader, static_cast<SKMesh&>(mesh), transform, pvMatrix);
+			}
+			continue;
+		}
+
+		bool bDepthMode = IsDepthBufferDrawing();
+
+		if (mesh.IsSKMesh())
+		{
+			SKMesh& skm = static_cast<SKMesh&>(mesh);
+
+			if (!skm.IsUploadedToGPU())
+			{
+				skm.UploadToGPU(InDevice);
+			}
+			ShaderHandle shader = bDepthMode ? InSkinnedDepthShader : InSkinnedShader;
+
+			// 셰이더 전환 + 본 행렬 업로드
+			InDevice.UseShader(shader);
+			InDevice.SetUniformMat4(shader, "uMVP", finalMatrix);
+			InDevice.SetUniformMat4Array(shader, "uBoneMatrices", skm.GetSkinMatrices());
+
+			if (bDepthMode)
+			{
+				InDevice.SetUniformFloat(shader, "uNearZ", mainCamera.GetNearZ());
+				InDevice.SetUniformFloat(shader, "uFarZ", mainCamera.GetFarZ());
+			}
+			else
+			{
+				// 텍스처 바인딩
+				Texture& characterTexture = g.GetTexture(GameEngine::CharacterTexture);
+				if (!characterTexture.IsUploadedToGPU())
+				{
+					characterTexture.UploadToGPU(InDevice);
+				}
+				InDevice.BindTexture(characterTexture.GetGPUHandle(), 0);
+				InDevice.SetUniformInt(shader, "uTexture", 0);
+				InDevice.SetUniformInt(shader, "uUseTexture", 1);
+				InDevice.SetUniformColor(shader, "uColor", LinearColor::White);
+			}
+
+			// 드로우
+			InDevice.BindMesh(skm.GetGPUHandle());
+			InDevice.DrawIndexed((UINT32)skm.GetIndices().size());
+		}
+		else // 정적메시 분기
+		{
+			if (!mesh.IsUploadedToGPU())
+			{
+				mesh.UploadToGPU(InDevice);
+			}
+
+			ShaderHandle shader = bDepthMode ? InStaticDepthShader : InStaticShader;
+			InDevice.UseShader(shader);
+			InDevice.SetUniformMat4(shader, "uMVP", finalMatrix);
+
+			if (bDepthMode)
+			{
+				InDevice.SetUniformFloat(shader, "uNearZ", mainCamera.GetNearZ());
+				InDevice.SetUniformFloat(shader, "uFarZ", mainCamera.GetFarZ());
+			}
+			else if (gameObject.GetMeshKey() == GameEngine::CubeMesh)
+			{
+				//Texture& baseTexture = g.GetTexture(GameEngine::BaseTexture);
+				//if (!baseTexture.IsUploadedToGPU())
+				//{
+				//	baseTexture.UploadToGPU(InDevice);
+				//}
+				//InDevice.BindTexture(baseTexture.GetGPUHandle(), 0);
+				//InDevice.SetUniformInt(shader, "uTexture", 0);
+				//InDevice.SetUniformInt(shader, "uUseTexture", 1);
+				//InDevice.SetUniformColor(shader, "uColor", LinearColor::White);
+				InDevice.SetUniformInt(shader, "uUseTexture", 0);
+				InDevice.SetUniformColor(shader, "uColor", LinearColor::Blue);
+			}
+			else
+			{
+				InDevice.SetUniformInt(shader, "uUseTexture", 0);
+				InDevice.SetUniformColor(shader, "uColor", LinearColor::White);
+			}
+
+			InDevice.BindMesh(mesh.GetGPUHandle());
+			InDevice.DrawIndexed((UINT32)mesh.GetIndices().size());
+		}		
+	}
+
+	// 다음 프레임에 영향 미치지 않도록
+	if (bLineMode)
+	{
+		InDevice.SetPolygonMode(false);
+	}
 }
 
 void SoftRenderer::DrawMesh3D(const DDD::Mesh& InMesh, const Matrix4x4& InMatrix, const LinearColor& InColor)
@@ -473,6 +616,46 @@ void SoftRenderer::DrawTriangle3D(std::vector<DDD::Vertex3D>& InVertices, const 
 				}
 			}
 		}
+	}
+}
+
+void SoftRenderer::DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, DDD::SKMesh& InSKMesh, const DDD::TransformComponent& InTransform, const Matrix4x4 InPVM)
+{
+	// 최초 1회 GPU 업로드
+	GameEngine& g = GetDirectGameEngine();
+	Mesh& boneMesh = g.GetMesh(GameEngine::ArrowMesh);
+	if (!boneMesh.IsUploadedToGPU())
+	{
+		boneMesh.UploadToGPU(InDevice);
+	}
+
+	InDevice.UseShader(InShader);
+	InDevice.SetUniformInt(InShader, "uUseTexture", 0);
+
+	// 본의 쌍마다 화살표를 하나씩 배치하여 드로우
+	for (const auto& b : InSKMesh.GetBones())
+	{
+		if (!b.second.HasParent())
+		{
+			continue;
+		}
+
+		const Bone& bone = b.second;
+		const Bone& parentBone = InSKMesh.GetBone(bone.GetParentName());
+		const Transform& tGameObject = InTransform.GetWorldTransform();
+
+		const Transform& wt1 = parentBone.GetTransform().GetWorldTransform().LocalToWorld(tGameObject);
+		const Transform& wt2 = bone.GetTransform().GetWorldTransform().LocalToWorld(tGameObject);
+
+		Vector3 boneVector = wt2.GetPosition() - wt1.GetPosition();
+		Transform tboneObject(wt1.GetPosition(), Quaternion(boneVector), Vector3(10.f, 10.f, boneVector.Size()));
+		Matrix4x4 boneMatrix = InPVM * tboneObject.GetMatrix();
+
+		InDevice.SetUniformMat4(InShader, "uMVP", boneMatrix);
+		InDevice.SetUniformColor(InShader, "uColor", _BoneWireframeColor);
+
+		InDevice.BindMesh(boneMesh.GetGPUHandle());
+		InDevice.DrawIndexed((UINT32)boneMesh.GetIndices().size());
 	}
 }
 

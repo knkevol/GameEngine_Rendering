@@ -142,6 +142,7 @@ bool GameEngine::Init()
 	InitLogChannels();
 	RegisterGameObjectFactories();
 	LoadAsset();
+	LoadCube();
 
 	_IsInitialized = true;
 	return _IsInitialized;
@@ -302,12 +303,14 @@ void GameEngine::LoadCube()
 	Mesh& SimpleCubeMesh = CreateMesh(GameEngine::CubeMesh);
 	auto& v = SimpleCubeMesh.GetVertices();
 	auto& i = SimpleCubeMesh.GetIndices();
+	auto& uv = SimpleCubeMesh.GetUVs();
 
 	int PointSize = cubeMeshPositions.size();
 
 	for (int p = 0; p < PointSize; ++p)
 	{
 		v.push_back(cubeMeshPositions[p]);
+		uv.push_back(cubeMeshUVs[p]);
 	}
 
 	int IndexSize = cubeMeshIndice.size();
@@ -321,6 +324,7 @@ void GameEngine::LoadCube()
 	SimpleCubeMesh.CalculateBounds();
 
 	Texture& TextureBase = CreateTexture(GameEngine::BaseTexture);
+	TextureBase.LoadFromPath("Asset/Character/Quinn.fbm/Quinn_");
 
 	OutputDebugString("LoadCube Complete");
 }

@@ -5,11 +5,17 @@
 #include <queue>
 #include <fstream>
 
+// Renderer
+#include "OpenGL/OpenGLDevice.h"
+#include "3D/Vertex.h"
+
 #include "3D/GameLog.h"
 #include "InputManager.h"
 #include "EngineInterface.h"
 
 #include "3D/Object/Texture.h"
+
+
 
 #include "3D/Resources/Resources.h"
 #include "3D/Component/TransformComponent.h"

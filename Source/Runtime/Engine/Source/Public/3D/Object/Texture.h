@@ -28,6 +28,10 @@ public:
 	std::vector<LinearColor>& GetNormal() { return _Normal; }
 	std::vector<float>& GetSpecular() { return _Specular; }
 
+	void UploadToGPU(OpenGLDevice& InDevice);
+	bool IsUploadedToGPU() const { return _IsUploadedToGPU; }
+	TextureHandle GetGPUHandle() const { return _GPUHandle; }
+
 private:
 	static constexpr BYTE _Channel = 4;
 	std::vector<LinearColor> _BaseColor;
@@ -42,6 +46,9 @@ private:
 	TextureAddressMode _AddressMode = TextureAddressMode::Repeat;
 	bool _AnisotropyEnable = false;
 	float _MaxAnisotropy = 16.0f;
+
+	TextureHandle _GPUHandle = 0;
+	bool _IsUploadedToGPU = false;
 };
 
 }

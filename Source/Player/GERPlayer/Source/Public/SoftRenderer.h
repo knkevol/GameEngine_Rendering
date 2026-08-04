@@ -61,6 +61,8 @@ public:
 	// 게임 엔진 레퍼런스 
 	FORCEINLINE EngineInterface& GetGameEngine() { return static_cast<EngineInterface&>(_GameEngine); }
 	FORCEINLINE DDD::GameEngine& GetDirectGameEngine() { return _GameEngine; }
+
+	void RenderWorldGPU(OpenGLDevice& InDevice, ShaderHandle InStaticShader, ShaderHandle InSkinnedShader, ShaderHandle InStaticDepthShader, ShaderHandle InSkinnedDepthShader);
 private:
 	bool InitSubsystems();
 
@@ -84,6 +86,8 @@ private:
 
 	void DrawMesh3D(const class DDD::Mesh& InMesh, const Matrix4x4& InMatrix, const LinearColor& InColor);
 	void DrawTriangle3D(std::vector<DDD::Vertex3D>& InVertices, const LinearColor& InColor, FillMode InFillMode);
+
+	void DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, DDD::SKMesh& InSKMesh, const DDD::TransformComponent& InTransform, const Matrix4x4 InPVM);
 
 	void RenderWorld();
 	void RenderUI();

@@ -11,6 +11,12 @@ struct Weight
 	std::vector<float> Values;
 };
 
+struct BoneWeight4
+{
+	UINT32 Indices[4] = { 0, 0, 0,0 };
+	float Weight[4] = { 0.f,0.f,0.f,0.f };
+};
+
 class SKMesh : public Mesh
 {
 public:
@@ -72,6 +78,8 @@ public:
 	FORCEINLINE const Transform& GetBindPoseByIndex(uint8_t idx) const { return _Bones.at(_BoneNames[idx]).GetBindPose(); }
 	FORCEINLINE const std::vector<Matrix4x4>& GetSkinMatrices() const { return _SkinMatrices; }
 
+	virtual void UploadToGPU(OpenGLDevice& InDevice) override;
+
 protected:
 	std::vector<BYTE> _ConnectedBones;
 	std::vector<Weight> _Weights;
@@ -81,6 +89,11 @@ protected:
 	std::unordered_map<std::string, uint8_t> _BoneNameToIndex;
 	std::vector<Matrix4x4> _InverseBindPoses;
 	std::vector<Matrix4x4> _SkinMatrices;
+
+protected:
+	// 정점별 가중치 계산
+	void BuildFixedBoneWeight();
+	std::vector<BoneWeight4> _FixedWeights;
 };
 
 }

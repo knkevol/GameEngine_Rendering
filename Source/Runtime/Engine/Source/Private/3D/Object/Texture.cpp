@@ -82,3 +82,14 @@ LinearColor Texture::GetSample(Vector2 InUV) const
 
 	return _BaseColor[index];
 }
+
+void Texture::UploadToGPU(OpenGLDevice& InDevice)
+{
+	if (_IsUploadedToGPU || !IsInitialized())
+	{
+		return;
+	}
+
+	_GPUHandle = InDevice.CreateTexture(_BaseColor.data(), _Width, _Height);
+	_IsUploadedToGPU = true;
+}

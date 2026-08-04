@@ -8,10 +8,11 @@ OpenGLRSI::~OpenGLRSI()
 bool OpenGLRSI::Init(const ScreenPoint& InScreenSize)
 {
 	HWND handle = ::GetActiveWindow();
-	if (handle == nullptr);
+	if (handle == nullptr)
 	{
 		return false;
 	}
+
 	if (!_GLContext.Init(handle))
 	{
 		return false;
