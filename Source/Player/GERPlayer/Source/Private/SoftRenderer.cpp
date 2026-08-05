@@ -9,6 +9,21 @@ SoftRenderer::SoftRenderer(RendererInterface* InRSI) : _RSIPtr(InRSI)
 
 void SoftRenderer::OnInit()
 {
+	// GLContext가 준비된 직후 1회만 셰이더 컴파일 진행
+	OpenGLDevice& device = static_cast<OpenGLRSI&>(GetRenderer()).GetDevice();
+
+	std::string vsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/basic.vert");
+	std::string fsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/basic.frag");
+	std::string skinnedVsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/skinned.vert");
+	std::string depthFsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/depth.frag");
+
+	_StaticShader = device.CreateShaderProgram(vsSrc.c_str(), fsSrc.c_str());
+	_SkinnedShader = device.CreateShaderProgram(skinnedVsSrc.c_str(), fsSrc.c_str());
+	_StaticDepthShader = device.CreateShaderProgram(vsSrc.c_str(), depthFsSrc.c_str());
+	_SkinnedDepthShader = device.CreateShaderProgram(skinnedVsSrc.c_str(), depthFsSrc.c_str());
+
+	SetBackgroundColor(LinearColor(0.15f, 0.15f, 0.2f, 1.0f));
+
 	::MessageBox(nullptr, "Begin to Tick", "SoftRenderer Init Finished", MB_OK);
 }
 
@@ -156,8 +171,8 @@ void SoftRenderer::Update(float InDeltaSeconds)
 	static bool firstUpdate = true;
 	if (firstUpdate)
 	{
-		//camera.GetTransform().SetWorldPosition(Vector3(5.f, -200.f, 111.f));
-		//camera.GetTransform().SetWorldRotation(Rotator(-170.f, -10.f, -85.f));
+		camera.GetTransform().SetWorldPosition(Vector3(3.f, -195.f, 84.f));
+		camera.GetTransform().SetWorldRotation(Rotator(55.f, 125.f, -89.f));
 		firstUpdate = false;
 	}
 

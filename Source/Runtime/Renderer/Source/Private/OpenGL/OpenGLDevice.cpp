@@ -43,6 +43,22 @@ ShaderHandle OpenGLDevice::CreateShaderProgram(const char* InVsSrc, const char* 
     return program;
 }
 
+GPUBufferHandle OpenGLDevice::CreateDynamicVertexBuffer(size_t InMaxBytes)
+{
+    UINT32 vbo = 0;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, InMaxBytes, nullptr, GL_DYNAMIC_DRAW);
+
+    return vbo;
+}
+
+void OpenGLDevice::UpdateVertexBuffer(GPUBufferHandle InVBO, const void* InData, size_t InBytes)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, InVBO);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, InBytes, InData);
+}
+
 GPUMeshHandle OpenGLDevice::CreateMesh(const void* InVertexData, size_t InVertexBytes, const UINT32* InIndices, UINT32 InIndexCount)
 {
     GPUMeshHandle mesh;
@@ -118,6 +134,56 @@ GPUMeshHandle OpenGLDevice::CreateSkinnedMesh(const void* InVertexData, size_t I
     glBindVertexArray(0);
 
     return mesh;
+}
+
+GPUMeshHandle OpenGLDevice::CreateOverlayMesh(UINT32 InMaxQuads)
+{
+    GPUMeshHandle mesh;
+
+    // stb_easy_font 정점포맷(16Byte)에 맞는 동적 VBO
+    glGenVertexArrays(1, &mesh.VAO);
+    glBindVertexArray(mesh.VAO);
+
+    const size_t stride = 16;
+    mesh.VBO = CreateDynamicVertexBuffer((size_t)InMaxQuads * 4 * stride);
+
+    // 인덱스 패턴 고정하고 정점 내용만 변경(매 프레임 재사용)
+    std::vector<UINT32> indices;
+    indices.reserve((size_t)InMaxQuads * 6);
+    for (UINT32 q = 0; q < InMaxQuads; ++q)
+    {
+        UINT32 base = q * 4;
+        indices.push_back(base + 0);
+        indices.push_back(base + 1);
+        indices.push_back(base + 2);
+        indices.push_back(base + 0);
+        indices.push_back(base + 2);
+        indices.push_back(base + 3);
+    }
+    mesh.EBO = CreateIndexBuffer(indices.data(), indices.size());
+    mesh.IndexCount = (UINT32)indices.size();
+
+    // 0 : 위치, 1 : 색상
+    glBindBuffer(GL_ARRAY_BUFFER, mesh.VBO);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (GLsizei)stride, (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, (GLsizei)stride, (void*)12);
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(0);
+    return mesh;
+}
+
+void OpenGLDevice::SetDepthTest(bool InEnable)
+{
+    if (InEnable)
+    {
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
 }
 
 void OpenGLDevice::BindTexture(TextureHandle InTexture, UINT32 InSlot)

@@ -86,5 +86,7 @@
     <None Include="Shaders\basic.frag" />
     <None Include="Shaders\skinned.vert" />
     <None Include="Shaders\depth.frag" />
+    <None Include="Shaders\overlay.vert" />
+    <None Include="Shaders\overlay.frag" />
   </ItemGroup>
 </Project>

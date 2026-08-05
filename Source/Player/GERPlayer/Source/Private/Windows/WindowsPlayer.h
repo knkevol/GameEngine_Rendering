@@ -83,7 +83,7 @@ namespace WindowsPlayer
 		int WindowWidth = rect.right - rect.left + 1;
 		int WindowHeight = rect.bottom - rect.top + 1;
 
-		gHandle = ::CreateWindow(gClassName, gTitle, WS_OVERLAPPED | WS_SYSMENU | WS_MINIMIZEBOX,
+		gHandle = ::CreateWindow(gClassName, gTitle, WS_OVERLAPPEDWINDOW | WS_SYSMENU | WS_MINIMIZEBOX,
 			(GetSystemMetrics(SM_CXFULLSCREEN) - WindowWidth) / 2, (GetSystemMetrics(SM_CYFULLSCREEN) - WindowHeight) / 2, WindowWidth, WindowHeight,
 			NULL, NULL, gInstance, NULL);
 

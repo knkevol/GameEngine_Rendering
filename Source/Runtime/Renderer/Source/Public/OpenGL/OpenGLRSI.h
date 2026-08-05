@@ -49,5 +49,17 @@ namespace GER
         ScreenPoint _ScreenSize;
         WindowsGLContext _GLContext;
         OpenGLDevice _Device;
+
+        std::vector<std::string> _StaticTexts;
+        std::vector<std::string> _PermanentLogs;
+        std::vector<std::pair<std::size_t, std::string>> _TempLogs;
+
+        ShaderHandle _OverlayShader = 0;
+        GPUMeshHandle _OverlayMesh;
+        static constexpr UINT32 _MaxOverlayQuads = 4000;
+
+    private:
+        void DrawOverlayTexts();
+        
 	};
 }

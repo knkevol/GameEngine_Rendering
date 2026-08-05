@@ -16,7 +16,9 @@
 
 #include "OpenGL/OpenGLDevice.h"
 #include "OpenGL/OpenGLRSI.h"
-#include "glad.h"
+
+#include "Glad/glad.h"
+#include "Stb/stb_easy_font.h"
 
 #endif
 

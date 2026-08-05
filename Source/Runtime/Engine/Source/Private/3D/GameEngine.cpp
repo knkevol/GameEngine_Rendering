@@ -142,7 +142,7 @@ bool GameEngine::Init()
 	InitLogChannels();
 	RegisterGameObjectFactories();
 	LoadAsset();
-	LoadCube();
+	//LoadCube(); // Test
 
 	_IsInitialized = true;
 	return _IsInitialized;

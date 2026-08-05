@@ -62,7 +62,6 @@ public:
 	FORCEINLINE EngineInterface& GetGameEngine() { return static_cast<EngineInterface&>(_GameEngine); }
 	FORCEINLINE DDD::GameEngine& GetDirectGameEngine() { return _GameEngine; }
 
-	void RenderWorldGPU(OpenGLDevice& InDevice, ShaderHandle InStaticShader, ShaderHandle InSkinnedShader, ShaderHandle InStaticDepthShader, ShaderHandle InSkinnedDepthShader);
 private:
 	bool InitSubsystems();
 
@@ -91,6 +90,8 @@ private:
 
 	void RenderWorld();
 	void RenderUI();
+
+	void RenderWorldGPU();
 
 	// Drawing Modes
 	bool IsDepthBufferDrawing() const { return _CurrentDrawMode == DrawMode::DepthBuffer; }
@@ -149,4 +150,10 @@ private:
 
 	// 응용 프로그램 입력
 	SystemInputManager _SystemInputManager;
+
+	// GPU
+	ShaderHandle _StaticShader;
+	ShaderHandle _SkinnedShader;
+	ShaderHandle _StaticDepthShader;
+	ShaderHandle _SkinnedDepthShader;
 };

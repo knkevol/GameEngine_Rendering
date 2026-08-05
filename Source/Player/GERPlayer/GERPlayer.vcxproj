@@ -110,7 +110,7 @@
       </SDLCheck>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;PLATFORM_WINDOWS;Windows;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
       <ConformanceMode>Default</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Player\GERPlayer\Source;$(SolutionDir)Source\Player\GERPlayer\Source\Public;$(SolutionDir)Source\Player\GERPlayer\Source\Private\Windows;$(SolutionDir)Source\Runtime\Math\Source\Public;$(SolutionDir)Source\Runtime\ImportAsset\Source\Public;$(SolutionDir)Source\Runtime\ImportAsset\Source\Library\FBXSDK\include;$(SolutionDir)Source\Runtime\Engine\Source\Public;$(SolutionDir)Source\Runtime\Renderer\Source\Public;$(SolutionDir)Source\Runtime\Renderer\Source\Public\Windows;$(SolutionDir)Source\Runtime\Renderer\Source\ThirdParty\Glad;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Player\GERPlayer\Source;$(SolutionDir)Source\Player\GERPlayer\Source\Public;$(SolutionDir)Source\Player\GERPlayer\Source\Private\Windows;$(SolutionDir)Source\Runtime\Math\Source\Public;$(SolutionDir)Source\Runtime\ImportAsset\Source\Public;$(SolutionDir)Source\Runtime\ImportAsset\Source\Library\FBXSDK\include;$(SolutionDir)Source\Runtime\Engine\Source\Public;$(SolutionDir)Source\Runtime\Renderer\Source\Public;$(SolutionDir)Source\Runtime\Renderer\Source\Public\Windows;$(SolutionDir)Source\Runtime\Renderer\Source\ThirdParty;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <SupportJustMyCode>false</SupportJustMyCode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <UseFullPaths>false</UseFullPaths>

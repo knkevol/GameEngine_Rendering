@@ -9,16 +9,14 @@ using namespace GER::DDD;
 int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
 	ScreenPoint defScreenSize(800, 600);
-	SoftRenderer instance(new WindowsRSI());
+	//SoftRenderer instance(new WindowsRSI());
+	SoftRenderer instance(new OpenGLRSI());
 
-	WindowsGLContext glContext;
-
-	WindowsPlayer::gOnResizeFunc = [&instance, &glContext](const ScreenPoint& InNewScreenSize) {
+	WindowsPlayer::gOnResizeFunc = [&instance](const ScreenPoint& InNewScreenSize) {
 		if (InNewScreenSize.HasZero()) {
 			return;
 		}
 		instance.OnResize(InNewScreenSize);
-		glContext.OnResize(InNewScreenSize.X, InNewScreenSize.Y);
 	};
 
 	instance._PerformanceInitFunc = WindowsUtil::GetCyclesPerMilliSeconds;
@@ -31,30 +29,6 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		return -1;
 	}
 
-	if (!glContext.Init(WindowsPlayer::gHandle))
-	{
-		MessageBox(nullptr, "OpenGL Context Creation Fail", "Error", MB_ICONEXCLAMATION | MB_OK);
-		return -1;
-	}
-
-	//----------
-	OpenGLDevice glDevice;
-
-	std::string vsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/basic.vert");
-	std::string fsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/basic.frag");
-	ShaderHandle testShader = glDevice.CreateShaderProgram(vsSrc.c_str(), fsSrc.c_str());
-
-
-	std::string skinnedVsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/skinned.vert");
-	ShaderHandle skinnedShader = glDevice.CreateShaderProgram(skinnedVsSrc.c_str(), fsSrc.c_str());
-
-	std::string depthFsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/depth.frag");
-	ShaderHandle depthShader = glDevice.CreateShaderProgram(vsSrc.c_str(), depthFsSrc.c_str());
-	ShaderHandle skinnedDepthShader = glDevice.CreateShaderProgram(skinnedVsSrc.c_str(), depthFsSrc.c_str());
-
-
-	//---------
-
 	WindowsUtil::Show(WindowsPlayer::gHandle);
 	WindowsUtil::CenterWindow(WindowsPlayer::gHandle);
 
@@ -63,17 +37,8 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	
 	while (WindowsPlayer::Tick())
 	{
-		instance.OnTick();
-
-		glContext.Clear(0.15f, 0.15f, 0.2f, 1.0f);
+		instance.OnTick(); // Clear > Update > RenderWorldGPU > RenderUI > EndFrame
 		
-		if (instance.GetDirectGameEngine().IsInitialized())
-		{
-			instance.RenderWorldGPU(glDevice, testShader, skinnedShader, depthShader, skinnedDepthShader);
-
-		}
-		glContext.SwapBuffers();
-
 		float currentTime = instance.GetElapsedTime();
 		if (currentTime - previousTimer > updatePeriod)
 		{
@@ -83,7 +48,6 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		}
 	}
 
-	glContext.Shutdown();
 	instance.OnShutdown();
 	WindowsPlayer::Destroy();
 	return 0;

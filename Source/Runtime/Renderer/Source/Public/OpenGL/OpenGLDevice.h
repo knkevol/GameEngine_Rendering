@@ -25,12 +25,18 @@ namespace GER
 		// GLSL를 gpu가 실행가능한 형태로 컴파일 및 링크하여 결과 프로그램 ID를 리턴
 		ShaderHandle CreateShaderProgram(const char* InVsSrc, const char* InFsSrc);
 
+		GPUBufferHandle CreateDynamicVertexBuffer(size_t InMaxBytes);
+		void UpdateVertexBuffer(GPUBufferHandle InVBO, const void* InData, size_t InBytes);
+
 		// VBO, EBO, VAO를 한번에 처리하는 함수
 		GPUMeshHandle CreateMesh(const void* InVertexData, size_t InVertexBytes, const UINT32* InIndices, UINT32 InIndexCount);
 		// Texture
 		TextureHandle CreateTexture(const void* InPixelData, UINT32 InWidth, UINT32 InHeight);
 		// SkinnedMesh
 		GPUMeshHandle CreateSkinnedMesh(const void* InVertexData, size_t InVertexBytes, const UINT32* InIndices, UINT32 InIndexCount);
+
+		GPUMeshHandle CreateOverlayMesh(UINT32 InMaxQuads);
+		void SetDepthTest(bool InEnable);
 
 		// 셰이더 지정 (한번에 한 셰이더만 활성화 가능)
 		void UseShader(ShaderHandle InShader);

@@ -19,13 +19,13 @@ void SoftRenderer::LoadScene()
 	goPlayer.SetMesh(GameEngine::CharacterMesh);
 	goPlayer.SetColor(LinearColor::White);
 	goPlayer.GetTransform().SetWorldScale(Vector3::One * playerScale);
-
+	
 	// Making Cube
-	GameObject& goCube = g.CreateNewGameObject(SimpleCube);
-	goCube.SetMesh(GameEngine::CubeMesh);
-	goCube.SetColor(LinearColor::White);
-	goCube.GetTransform().SetWorldPosition(Vector3(0.0f, 0.0f, 0.0f));
-	goCube.GetTransform().SetWorldScale(Vector3::One * 30.0f);
+	//GameObject& goCube = g.CreateNewGameObject(SimpleCube);
+	//goCube.SetMesh(GameEngine::CubeMesh);
+	//goCube.SetColor(LinearColor::White);
+	//goCube.GetTransform().SetWorldPosition(Vector3(0.0f, 0.0f, 0.0f));
+	//goCube.GetTransform().SetWorldScale(Vector3::One * 30.0f);
 
 	// Making Camera
 	GameObject& goCameraTarget = g.CreateNewGameObject(MainCameraTarget);
@@ -112,7 +112,8 @@ void SoftRenderer::LateUpdate(float InDeltaSeconds)
 void SoftRenderer::Render()
 {
 
-	RenderWorld();
+	//RenderWorld();
+	RenderWorldGPU();
 	RenderUI();
 
 }
@@ -240,8 +241,15 @@ void SoftRenderer::RenderWorld()
 	r.PushStatisticText("Camera Rotation : " + mainCamera.GetTransform().GetLocalRotation().ToString());
 }
 
-void SoftRenderer::RenderWorldGPU(OpenGLDevice& InDevice, ShaderHandle InStaticShader, ShaderHandle InSkinnedShader, ShaderHandle InStaticDepthShader, ShaderHandle InSkinnedDepthShader)
+void SoftRenderer::RenderWorldGPU()
 {
+	OpenGLDevice& InDevice = static_cast<OpenGLRSI&>(GetRenderer()).GetDevice();
+	ShaderHandle InStaticShader = _StaticShader;
+	ShaderHandle InSkinnedShader = _SkinnedShader;
+	ShaderHandle InStaticDepthShader = _StaticDepthShader;
+	ShaderHandle InSkinnedDepthShader = _SkinnedDepthShader;
+
+	auto& r = GetRenderer();
 	GameEngine& g = GetDirectGameEngine();
 	const CameraObject& mainCamera = g.GetMainCamera();
 	const Matrix4x4 pvMatrix = mainCamera.GetPerspectiveViewMatrix();
@@ -374,6 +382,9 @@ void SoftRenderer::RenderWorldGPU(OpenGLDevice& InDevice, ShaderHandle InStaticS
 	{
 		InDevice.SetPolygonMode(false);
 	}
+
+	r.PushStatisticText("Camera Position : " + mainCamera.GetTransform().GetWorldTransform().GetPosition().ToString());
+	r.PushStatisticText("Camera Rotation : " + mainCamera.GetTransform().GetLocalRotation().ToString());
 }
 
 void SoftRenderer::DrawMesh3D(const DDD::Mesh& InMesh, const Matrix4x4& InMatrix, const LinearColor& InColor)
