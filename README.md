@@ -1,6 +1,6 @@
 # 🎮 Rendering Engine Project
 
-### GDI 기반 Software Rasterizer로 밑바닥부터 구현한 3D 스켈레탈 애니메이션 엔진
+### GDI 기반 Software Rasterizer 3D 스켈레탈 애니메이션 엔진
 
 <p align="left">
   <img src="https://img.shields.io/badge/C++-17-00599C?logo=cplusplus&logoColor=white" />
