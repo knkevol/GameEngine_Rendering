@@ -79,7 +79,7 @@ void SoftRenderer::LateUpdate(float InDeltaSeconds)
 		TargetFrame++;
 	}
 
-	if (TargetFrame >= 20)
+	if (TargetFrame >= 21)
 	{
 		TargetFrame = 0;
 	}
@@ -92,14 +92,6 @@ void SoftRenderer::LateUpdate(float InDeltaSeconds)
 
 			std::string name = animBN[idx];
 
-			bool isFinger = (name.find("index") != std::string::npos ||
-				name.find("middle") != std::string::npos ||
-				name.find("pinky") != std::string::npos ||
-				name.find("ring") != std::string::npos ||
-				name.find("thumb") != std::string::npos);
-
-			if (isFinger) continue;
-
 			TargetBone.GetTransform().SetLocalPosition(animTran[idx][TargetFrame]);
 			TargetBone.GetTransform().SetLocalRotation(animQuat[idx][TargetFrame]);
 
@@ -111,11 +103,9 @@ void SoftRenderer::LateUpdate(float InDeltaSeconds)
 
 void SoftRenderer::Render()
 {
-
 	//RenderWorld();
 	RenderWorldGPU();
 	RenderUI();
-
 }
 
 void SoftRenderer::RenderWorld()
