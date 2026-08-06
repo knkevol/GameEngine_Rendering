@@ -1,5 +1,5 @@
 # 🎮 *Rendering Engine Project*
-<img width="300" height="500" alt="image" src="https://github.com/user-attachments/assets/3b0fd3ad-01ad-40a7-9c09-5386fb72977f" /> 
+<img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/3b0fd3ad-01ad-40a7-9c09-5386fb72977f" /> 
 
 본 프로젝트는 이득우의 게임수학 내용을 기반으로, 모듈화된 설계를 중심으로 발전시킨 엔진 프로젝트입니다.
 
@@ -182,9 +182,9 @@ skinMatrices[boneIdx] * position
 | Version | FPS |
 |---|---|
 | Before Optimization | 0.36 FPS |
-| After Optimization | 0.71 FPS |
+| After Optimization | 0.61 FPS |
 
-- 약 97% 성능 향상
+- 약 69% 성능 향상
 - CPU 기반 Software Skinning 병목 감소
 - Runtime Skinning 연산 비용 최적화
 
