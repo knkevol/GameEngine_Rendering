@@ -14,16 +14,17 @@
 
 그래픽스 API를 전혀 사용하지 않고, **Win32 GDI 위에서 좌표 변환 · 클리핑 · 래스터라이즈 · 스키닝까지 전 파이프라인을 CPU 코드로 직접 구현**한 렌더링 엔진입니다.
 
-"이득우의 게임수학" 도서를 기반으로 시작해, FBX SDK 연동과 모듈 분리 설계로 확장했습니다.
+"이득우의 게임수학" 도서를 기반으로 2D 렌더링 엔진에서 시작해, FBX SDK 연동과 모듈 분리 설계로 확장했습니다.
 
-> 왜 소프트웨어 렌더러인가? — GPU 파이프라인의 좌표 변환, 클리핑, 래스터라이즈, 스키닝 연산을 **한 줄 한 줄 직접 구현하며 그래픽스 파이프라인의 본질을 검증**하기 위한 프로젝트입니다.
+<img width="790" height="620" alt="Image" src="https://github.com/user-attachments/assets/8bc2ad05-1f00-447b-9872-91d772e3ba50" />
 
-
+<br />
+<br />
 <br />
 
 ## ✨ Key Features
 
-| | |
+| 항목 | 설명 |
 |---|---|
 |  **No Graphics API** | D3D/OpenGL 없이 Win32 GDI 프레임버퍼만으로 3D 파이프라인 전체를 CPU에서 구현 |
 |  **Skeletal Animation** | Bone Hierarchy + Skinning Animation, FBX SDK로 애셋 파싱 |
@@ -40,10 +41,10 @@
 
 ```mermaid
 graph TD
-    Player["🎮 GERPlayer<br/>WindowsApp / Loop / Scene 제어"] --> Engine
-    Engine["🧠 Engine<br/>Camera · SkeletalMesh · World/View/Proj 계산"] --> Renderer
+    Player["🎮 GERPlayer<br/>WindowsApp·Loop·Scene"] --> Engine
+    Engine["🧠 Engine<br/>Camera · SkeletalMesh<br/> World/View/Proj 계산"] --> Renderer
     Engine --> ImportAsset
-    Renderer["🖼️ Renderer<br/>Win32 GDI Rasterizer + Clipping"] --> Math
+    Renderer["🖼️ Renderer<br/>Win32 GDI Rasterizer<br/>Clipping"] --> Math
     ImportAsset["📦 ImportAsset<br/>FBX Mesh/Skeleton Parser"] --> Math
     Math["➗ Math<br/>Vector · Matrix · Quaternion · Shapes"]
 
@@ -56,11 +57,11 @@ graph TD
 
 | 모듈 | 핵심 책임 | 주요 구성 요소 |
 |---|---|---|
-| **1️⃣ Engine** | Skeletal 계층/Weight 행렬 계산, SRT → World/Local 행렬, Camera View/Projection 계산 | `CameraObject`, `SkeletalMeshObject` |
-| **2️⃣ Math** | 위치·회전·크기·형태를 표현하는 엔진 최하단 기초 라이브러리 | `Vector(2/3/4)`, `Matrix(2x2/3x3/4x4)`, `Quaternion`, `Rotator`, `Box/Sphere/Plane/Frustum` |
-| **3️⃣ Renderer** | Win32 GDI 프레임버퍼 구축, 클리핑·투영을 CPU 레벨에서 처리 | Rasterizer, Sutherland–Hodgman Clipper |
-| **4️⃣ ImportAsset** | FBX Node 트리 순회로 Mesh(Vertex/Index/UV) + Bone 계층/Transform 파싱 | FBX Importer |
-| **5️⃣ GERPlayer** | 프로세스/창 초기화, 엔진 생명주기(Loop), Scene 관리 | WinMain, EngineLoop |
+| **1️⃣ &nbsp;Engine** | Skeletal 계층/Weight 행렬 계산, SRT → World/Local 행렬, Camera View/Projection 계산 | `CameraObject`, `SkeletalMeshObject` |
+| **2️⃣ &nbsp;Math** | 위치·회전·크기·형태를 표현하는 엔진 최하단 기초 라이브러리 | `Vector(2/3/4)`, `Matrix(2x2/3x3/4x4)`, `Quaternion`, `Rotator`, `Box/Sphere/Plane/Frustum` |
+| **3️⃣ &nbsp;Renderer** | Win32 GDI 프레임버퍼 구축, 클리핑·투영을 CPU 레벨에서 처리 | Rasterizer, Sutherland–Hodgman Clipper |
+| **4️⃣&nbsp;ImportAsset** | FBX Node 트리 순회로 Mesh(Vertex/Index/UV) + Bone 계층/Transform 파싱 | FBX Importer |
+| **5️⃣ &nbsp;GERPlayer** | 프로세스/창 초기화, 엔진 생명주기(Loop), Scene 관리 | WinMain, EngineLoop |
 
 <br />
 
