@@ -32,7 +32,7 @@ struct SkeletonInfo
 			}
 		}
 
-		//assert(false);
+		assert(false);
 		return BoneInfoVector[0];
 	}
 };

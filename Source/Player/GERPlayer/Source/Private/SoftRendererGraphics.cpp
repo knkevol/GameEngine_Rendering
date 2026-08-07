@@ -79,7 +79,7 @@ void SoftRenderer::LateUpdate(float InDeltaSeconds)
 		TargetFrame++;
 	}
 
-	if (TargetFrame >= 21)
+	if (TargetFrame >= 49)
 	{
 		TargetFrame = 0;
 	}
