@@ -22,8 +22,9 @@ void Mesh::UploadToGPU(OpenGLDevice& InDevice)
 		const Vector3& pos = _Vertices[i];
 		LinearColor color = HasColor() ? _Colors[i] : LinearColor::White;
 		Vector2 uv = HasUV() ? _UVs[i] : Vector2::Zero;
+		Vector3 normal = HasNormal() ? _Normals[i] : Vector3::UnitZ;
 
-		gpuVertices.push_back(Vertex3D(Vector4(pos.X, pos.Y, pos.Z, 1.0f), color, uv));
+		gpuVertices.push_back(Vertex3D(Vector4(pos.X, pos.Y, pos.Z, 1.0f), color, uv, normal));
 	}
 
 	std::vector<UINT32> gpuIndices;

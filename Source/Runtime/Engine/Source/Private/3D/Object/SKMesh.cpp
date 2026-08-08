@@ -20,6 +20,7 @@ void SKMesh::UploadToGPU(OpenGLDevice& InDevice)
 		vert.Position = Vector4(_Vertices[i].X, _Vertices[i].Y, _Vertices[i].Z, 1.0f);
 		vert.Color = HasColor() ? _Colors[i] : LinearColor::White;
 		vert.UV = HasUV() ? _UVs[i] : Vector2::Zero;
+		vert.Normal = HasNormal() ? _Normals[i] : Vector3::UnitZ;
 
 		const BoneWeight4& fw = _FixedWeights[i];
 		for (int k = 0; k < 4; ++k)

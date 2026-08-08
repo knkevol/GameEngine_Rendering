@@ -246,12 +246,13 @@ void GameEngine::LoadAsset()
 	auto& v = CharacterMesh.GetVertices();
 	auto& i = CharacterMesh.GetIndices();
 	auto& uv = CharacterMesh.GetUVs();
+	auto& n = CharacterMesh.GetNormals();
 
 	SkeletonInfo CharacterSkeleton;
 	std::vector<std::vector<std::pair<std::string, float>>> WeightInfo;
 
 	std::string TexturePath;
-	TestLoader.LoadCharacterFBX("Quinn", OUT v, OUT i, OUT uv, OUT TexturePath, OUT CharacterSkeleton, OUT WeightInfo);
+	TestLoader.LoadCharacterFBX("Quinn", OUT v, OUT i, OUT uv, OUT n, OUT TexturePath, OUT CharacterSkeleton, OUT WeightInfo);
 
 	Texture& CharacterTexture = CreateTexture(GameEngine::CharacterTexture);
 	CharacterTexture.LoadFromPath(TexturePath);

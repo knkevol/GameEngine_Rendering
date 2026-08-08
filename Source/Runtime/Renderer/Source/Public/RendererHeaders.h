@@ -3,6 +3,8 @@
 #include <functional>
 
 #include "3D/Vertex.h"
+#include "3D/Material.h"
+#include "3D/Light.h"
 #include "3D/Shader.h"
 #include "3D/PerspectiveTest.h"
 

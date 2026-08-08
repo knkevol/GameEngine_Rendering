@@ -86,7 +86,7 @@ private:
 	void DrawMesh3D(const class DDD::Mesh& InMesh, const Matrix4x4& InMatrix, const LinearColor& InColor);
 	void DrawTriangle3D(std::vector<DDD::Vertex3D>& InVertices, const LinearColor& InColor, FillMode InFillMode);
 
-	void DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, DDD::SKMesh& InSKMesh, const DDD::TransformComponent& InTransform, const Matrix4x4 InPVM);
+	void DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, DDD::SKMesh& InSKMesh, const DDD::TransformComponent& InTransform);
 
 	void RenderWorld();
 	void RenderUI();
@@ -100,6 +100,8 @@ private:
 	DrawMode GetDrawMode() const { return _CurrentDrawMode; }
 	void SetDrawMode(DrawMode InDrawMode) { _CurrentDrawMode = InDrawMode; }
 	DrawMode _CurrentDrawMode = DrawMode::Normal;
+
+	void SetupDefaultLights();
 
 	// Log
 	void UpdateLogs();
@@ -156,4 +158,9 @@ private:
 	ShaderHandle _SkinnedShader;
 	ShaderHandle _StaticDepthShader;
 	ShaderHandle _SkinnedDepthShader;
+
+	// UBO
+	GPUBufferHandle _CameraUBO;
+	GPUBufferHandle _LightUBO;
+	LightUBOData _LightData;
 };

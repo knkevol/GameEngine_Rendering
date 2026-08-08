@@ -244,6 +244,19 @@ void SoftRenderer::RenderWorldGPU()
 	const CameraObject& mainCamera = g.GetMainCamera();
 	const Matrix4x4 pvMatrix = mainCamera.GetPerspectiveViewMatrix();
 
+	// 프레임당 CameraUBO 갱신
+	CameraUBOData cameraData;
+	cameraData.View = mainCamera.GetViewMatrix();
+	cameraData.Projection = mainCamera.GetPerspectiveMatrix();
+	cameraData.ViewPosition = Vector4(mainCamera.GetTransform().GetWorldPosition(), 1.f);
+	InDevice.UpdateUniformBuffer(_CameraUBO, &cameraData, sizeof(CameraUBOData));
+
+	// 스팟을 카메라에 맞춰 매 프레임 갱신
+	Vector3 camForward = mainCamera.GetTransform().GetLocalZ() * -1.f;
+	_LightData.SpotLight.Position = Vector4(mainCamera.GetTransform().GetWorldPosition(), 1.f);
+	_LightData.SpotLight.Dirention = Vector4(camForward, 0.f);
+	InDevice.UpdateUniformBuffer(_LightUBO, &_LightData, sizeof(LightUBOData));
+
 	bool bLineMode = IsWireframeDrawing() || IsOnlyBoneDrawing();
 	InDevice.SetPolygonMode(bLineMode);
 
@@ -281,7 +294,7 @@ void SoftRenderer::RenderWorldGPU()
 		{
 			if (mesh.IsSKMesh())
 			{
-				DrawBonesGPU(InDevice, InStaticShader, static_cast<SKMesh&>(mesh), transform, pvMatrix);
+				DrawBonesGPU(InDevice, InStaticShader, static_cast<SKMesh&>(mesh), transform);
 			}
 			continue;
 		}
@@ -300,8 +313,14 @@ void SoftRenderer::RenderWorldGPU()
 
 			// 셰이더 전환 + 본 행렬 업로드
 			InDevice.UseShader(shader);
-			InDevice.SetUniformMat4(shader, "uMVP", finalMatrix);
+			InDevice.SetUniformMat4(shader, "uModel", transform.GetWorldMatrix());
 			InDevice.SetUniformMat4Array(shader, "uBoneMatrices", skm.GetSkinMatrices());
+
+			// Material 바인딩
+			const Material& mat = skm.GetMaterial();
+			InDevice.SetUniformColor(shader, "uMaterialDiffuse", mat.Diffuse);
+			InDevice.SetUniformColor(shader, "uMaterialSpecular", mat.Specular);
+			InDevice.SetUniformFloat(shader, "uMaterialShininess", mat.Shininess);
 
 			if (bDepthMode)
 			{
@@ -335,7 +354,12 @@ void SoftRenderer::RenderWorldGPU()
 
 			ShaderHandle shader = bDepthMode ? InStaticDepthShader : InStaticShader;
 			InDevice.UseShader(shader);
-			InDevice.SetUniformMat4(shader, "uMVP", finalMatrix);
+			InDevice.SetUniformMat4(shader, "uModel", transform.GetWorldMatrix());
+
+			const Material& mat = mesh.GetMaterial();
+			InDevice.SetUniformColor(shader, "uMaterialDiffuse", mat.Diffuse);
+			InDevice.SetUniformColor(shader, "uMaterialSpecular", mat.Specular);
+			InDevice.SetUniformFloat(shader, "uMaterialShininess", mat.Shininess);
 
 			if (bDepthMode)
 			{
@@ -344,15 +368,6 @@ void SoftRenderer::RenderWorldGPU()
 			}
 			else if (gameObject.GetMeshKey() == GameEngine::CubeMesh)
 			{
-				//Texture& baseTexture = g.GetTexture(GameEngine::BaseTexture);
-				//if (!baseTexture.IsUploadedToGPU())
-				//{
-				//	baseTexture.UploadToGPU(InDevice);
-				//}
-				//InDevice.BindTexture(baseTexture.GetGPUHandle(), 0);
-				//InDevice.SetUniformInt(shader, "uTexture", 0);
-				//InDevice.SetUniformInt(shader, "uUseTexture", 1);
-				//InDevice.SetUniformColor(shader, "uColor", LinearColor::White);
 				InDevice.SetUniformInt(shader, "uUseTexture", 0);
 				InDevice.SetUniformColor(shader, "uColor", LinearColor::Blue);
 			}
@@ -620,7 +635,7 @@ void SoftRenderer::DrawTriangle3D(std::vector<DDD::Vertex3D>& InVertices, const 
 	}
 }
 
-void SoftRenderer::DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, DDD::SKMesh& InSKMesh, const DDD::TransformComponent& InTransform, const Matrix4x4 InPVM)
+void SoftRenderer::DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, DDD::SKMesh& InSKMesh, const DDD::TransformComponent& InTransform)
 {
 	// 최초 1회 GPU 업로드
 	GameEngine& g = GetDirectGameEngine();
@@ -632,6 +647,12 @@ void SoftRenderer::DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, D
 
 	InDevice.UseShader(InShader);
 	InDevice.SetUniformInt(InShader, "uUseTexture", 0);
+
+
+	// 화살표는 Normal이 없어서 기본값으로 채움
+	InDevice.SetUniformColor(InShader, "uMaterialDiffuse", LinearColor::White);
+	InDevice.SetUniformColor(InShader, "uMaterialSpecular", LinearColor(0.5f, 0.5f, 0.5f, 1.f));
+	InDevice.SetUniformFloat(InShader, "uMaterialShininess", 32.f);
 
 	// 본의 쌍마다 화살표를 하나씩 배치하여 드로우
 	for (const auto& b : InSKMesh.GetBones())
@@ -650,9 +671,8 @@ void SoftRenderer::DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, D
 
 		Vector3 boneVector = wt2.GetPosition() - wt1.GetPosition();
 		Transform tboneObject(wt1.GetPosition(), Quaternion(boneVector), Vector3(10.f, 10.f, boneVector.Size()));
-		Matrix4x4 boneMatrix = InPVM * tboneObject.GetMatrix();
-
-		InDevice.SetUniformMat4(InShader, "uMVP", boneMatrix);
+		
+		InDevice.SetUniformMat4(InShader, "uModel", tboneObject.GetMatrix());
 		InDevice.SetUniformColor(InShader, "uColor", _BoneWireframeColor);
 
 		InDevice.BindMesh(boneMesh.GetGPUHandle());
@@ -667,6 +687,36 @@ void SoftRenderer::RenderUI()
 
 	r.PushStatisticText("ElapsedTime : " + std::to_string(_ElapsedTime));
 	UpdateLogs();
+}
+
+void SoftRenderer::SetupDefaultLights()
+{
+	GameEngine& g = GetDirectGameEngine();
+	const CameraObject& mainCamera = g.GetMainCamera();
+	Vector3 camForward = mainCamera.GetTransform().GetLocalZ() * -1.f;
+	// 자연광
+	_LightData.DirLight.Direction = Vector4(camForward, 0.f);
+	_LightData.DirLight.Color = Vector4(1.0f, 0.95f, 0.9f, 0.6f);
+
+	// 조명
+	_LightData.PointLights[0].Position = Vector4(150.f, 150.f, 100.f, 1.f);
+	_LightData.PointLights[0].Color = Vector4(1.0f, 0.6f, 0.3f, 1.0f);
+	_LightData.PointLights[0].Attenuation = Vector4(1.0f, 0.0045f, 0.000075f, 0.f);
+
+	_LightData.PointLights[1].Position = Vector4(-120.f, 80.f, -80.f, 1.f);
+	_LightData.PointLights[1].Color = Vector4(0.3f, 0.5f, 1.0f, 0.8f);
+	_LightData.PointLights[1].Attenuation = Vector4(1.0f, 0.007f, 0.0002f, 0.f);
+
+	_LightData.PointLightCount = 2;
+
+	// 손전등
+	_LightData.SpotLight.Color = Vector4(1.0f, 1.0f, 1.0f, 1.2f);
+	_LightData.SpotLight.Attenuation = Vector4(1.0f, 0.0045f, 0.000075f, 0.f);
+	_LightData.SpotLight.CutoffAngles = Vector4(cosf(Math::Deg2Rad(12.5f)), cosf(Math::Deg2Rad(17.5f)), 0.f, 0.f);
+
+	// 초기값 gpu 업로드
+	OpenGLDevice& device = static_cast<OpenGLRSI&>(GetRenderer()).GetDevice();
+	device.UpdateUniformBuffer(_LightUBO, &_LightData, sizeof(LightUBOData));
 }
 
 void SoftRenderer::UpdateLogs()

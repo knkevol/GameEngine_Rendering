@@ -148,6 +148,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Precompiled.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Source\Private\3D\Material.cpp" />
     <ClCompile Include="Source\Private\3D\PerspectiveTest.cpp" />
     <ClCompile Include="Source\Private\3D\Shader.cpp" />
     <ClCompile Include="Source\Private\3D\Vertex.cpp" />
@@ -162,6 +163,8 @@
     <ClInclude Include="Source\Precompiled.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Source\Public\3D\Light.h" />
+    <ClInclude Include="Source\Public\3D\Material.h" />
     <ClInclude Include="Source\Public\3D\PerspectiveTest.h" />
     <ClInclude Include="Source\Public\3D\Shader.h" />
     <ClInclude Include="Source\Public\3D\Vertex.h" />

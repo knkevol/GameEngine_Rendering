@@ -20,7 +20,7 @@ bool FBXLoader::IsInitialized() const
 	return _IsInitialized;
 }
 
-void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<Vector3>& Vertices, OUT std::vector<size_t>& Indices, OUT std::vector<Vector2>& Uvs, OUT std::string& TexturePath, OUT SkeletonInfo& InSkeletonInfo, OUT std::vector<std::vector<std::pair<std::string, float>>>& InWeightInfo)
+void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<Vector3>& Vertices, OUT std::vector<size_t>& Indices, OUT std::vector<Vector2>& Uvs, OUT std::vector<Vector3>& Normals, OUT std::string& TexturePath, OUT SkeletonInfo& InSkeletonInfo, OUT std::vector<std::vector<std::pair<std::string, float>>>& InWeightInfo)
 {
 	assert(_FbxManager);
 	
@@ -95,7 +95,7 @@ void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<V
 
 				if (i == 1)
 				{
-					LoadMesh(childNode, OUT MeshVertexIndex, OUT Vertices, OUT Indices, OUT Uvs, OUT InSkeletonInfo, OUT InWeightInfo);
+					LoadMesh(childNode, OUT MeshVertexIndex, OUT Vertices, OUT Indices, OUT Uvs, OUT Normals, OUT InSkeletonInfo, OUT InWeightInfo);
 				}
 			}
 		}
@@ -103,7 +103,7 @@ void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<V
 
 }
 
-void FBXLoader::LoadMesh(FbxNode* InNode, OUT unsigned int& StartVIndex, OUT std::vector<Vector3>& Vertices, OUT std::vector<size_t>& Indices, OUT std::vector<Vector2>& Uvs, OUT SkeletonInfo& InSkeletonInfo, OUT std::vector<std::vector<std::pair<std::string, float>>>& InWeightInfo)
+void FBXLoader::LoadMesh(FbxNode* InNode, OUT unsigned int& StartVIndex, OUT std::vector<Vector3>& Vertices, OUT std::vector<size_t>& Indices, OUT std::vector<Vector2>& Uvs, OUT std::vector<Vector3>& Normals, OUT SkeletonInfo& InSkeletonInfo, OUT std::vector<std::vector<std::pair<std::string, float>>>& InWeightInfo)
 {
 	char buffer[50];
 	sprintf(buffer, "%s - LoadMesh Called \n", InNode->GetName());
@@ -153,6 +153,13 @@ void FBXLoader::LoadMesh(FbxNode* InNode, OUT unsigned int& StartVIndex, OUT std
 			Vector2 VertexUV;
 			VertexUV = ReadUV(ConvertedMesh, vi, ConvertedMesh->GetTextureUVIndex(p, v));
 			Uvs.push_back(VertexUV);
+
+			FbxVector4 vertexNormal;
+			ConvertedMesh->GetPolygonVertexNormal(p, v, vertexNormal);
+			Normals.push_back(GER::Vector3(static_cast<float>(vertexNormal.mData[0]),
+				static_cast<float>(vertexNormal.mData[1]),
+				static_cast<float>(vertexNormal.mData[2])));
+
 			VertexCount++;
 		}
 	}

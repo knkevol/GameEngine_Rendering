@@ -38,6 +38,13 @@ namespace GER
 		GPUMeshHandle CreateOverlayMesh(UINT32 InMaxQuads);
 		void SetDepthTest(bool InEnable);
 
+		// 셰이더를 바인딩 포인트에 연결하면 값 공유 가능
+		GPUBufferHandle CreateUniformBuffer(size_t InBytes, UINT32 InBindingPoint);
+		// UBO 내용 갱신
+		void UpdateUniformBuffer(GPUBufferHandle InUBO, const void* InData, size_t InBytes);
+		// named uniform block을 특정 바인딩 포인트에 연결
+		void BindUniformBlock(ShaderHandle InShader, const char* InBlockName, UINT32 InBindingPoint);
+
 		// 셰이더 지정 (한번에 한 셰이더만 활성화 가능)
 		void UseShader(ShaderHandle InShader);
 		// 셰이더 안 uniform 변수에 cpu쪽 marix값을 채워 넣음.

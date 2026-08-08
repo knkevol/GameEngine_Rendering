@@ -8,6 +8,8 @@
 // Renderer
 #include "OpenGL/OpenGLDevice.h"
 #include "3D/Vertex.h"
+#include "3D/Material.h"
+#include "3D/Light.h"
 
 #include "3D/GameLog.h"
 #include "InputManager.h"

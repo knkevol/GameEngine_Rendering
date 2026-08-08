@@ -22,6 +22,20 @@ void SoftRenderer::OnInit()
 	_StaticDepthShader = device.CreateShaderProgram(vsSrc.c_str(), depthFsSrc.c_str());
 	_SkinnedDepthShader = device.CreateShaderProgram(skinnedVsSrc.c_str(), depthFsSrc.c_str());
 
+	// binding point 0 = camera, 1 = light
+	_CameraUBO = device.CreateUniformBuffer(sizeof(CameraUBOData), 0);
+	_LightUBO = device.CreateUniformBuffer(sizeof(LightUBOData), 1);
+
+	device.BindUniformBlock(_StaticShader, "CameraBlock", 0);
+	device.BindUniformBlock(_SkinnedShader, "CameraBlock", 0);
+	device.BindUniformBlock(_StaticDepthShader, "CameraBlock", 0);
+	device.BindUniformBlock(_SkinnedDepthShader, "CameraBlock", 0);
+
+	device.BindUniformBlock(_StaticShader, "LightBlock", 1);
+	device.BindUniformBlock(_SkinnedShader, "LightBlock", 1);
+
+	SetupDefaultLights();
+
 	SetBackgroundColor(LinearColor(0.15f, 0.15f, 0.2f, 1.0f));
 
 	::MessageBox(nullptr, "Begin to Tick", "SoftRenderer Init Finished", MB_OK);

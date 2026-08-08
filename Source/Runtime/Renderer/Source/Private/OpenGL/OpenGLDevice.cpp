@@ -79,6 +79,9 @@ GPUMeshHandle OpenGLDevice::CreateMesh(const void* InVertexData, size_t InVertex
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (void*)offsetof(Vertex3D, UV));
     glEnableVertexAttribArray(2);
 
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (void*)offsetof(Vertex3D, Normal));
+    glEnableVertexAttribArray(3);
+
     glBindVertexArray(0); // VAO 편집모드 종료
 
     return mesh;
@@ -116,20 +119,23 @@ GPUMeshHandle OpenGLDevice::CreateSkinnedMesh(const void* InVertexData, size_t I
     mesh.EBO = CreateIndexBuffer(InIndices, InIndexCount);
     mesh.IndexCount = InIndexCount;
 
-    // 3) attribute 0~2: 위치/색/UV
+    // attribute 0~2: 위치/색/UV
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, Position));
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, Color));
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, UV));
     glEnableVertexAttribArray(2);
-    // 4) attribute 3: 본 인덱스 — 정수는 반드시 'I' 버전(glVertexAttribIPointer)을 써야 0~1로 정규화되지 않음
+    // attribute 3: 본 인덱스 — 정수는 반드시 'I' 버전(glVertexAttribIPointer)을 써야 0~1로 정규화되지 않음
     glVertexAttribIPointer(3, 4, GL_INT, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, BoneIndices));
     glEnableVertexAttribArray(3);
-    // 5) attribute 4: 본 가중치
+    // attribute 4: 본 가중치
     glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, BoneWeights));
     glEnableVertexAttribArray(4);
-    
+
+    // 5 : 노멀
+    glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, Normal));
+    glEnableVertexAttribArray(5);    
 
     glBindVertexArray(0);
 
@@ -183,6 +189,35 @@ void OpenGLDevice::SetDepthTest(bool InEnable)
     else
     {
         glDisable(GL_DEPTH_TEST);
+    }
+}
+
+GPUBufferHandle OpenGLDevice::CreateUniformBuffer(size_t InBytes, UINT32 InBindingPoint)
+{
+    UINT32 ubo = 0;
+    glGenBuffers(1, &ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+    glBufferData(GL_UNIFORM_BUFFER, InBytes, nullptr, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    glBindBufferBase(GL_UNIFORM_BUFFER, InBindingPoint, ubo);
+
+    return ubo;
+}
+
+void OpenGLDevice::UpdateUniformBuffer(GPUBufferHandle InUBO, const void* InData, size_t InBytes)
+{
+    glBindBuffer(GL_UNIFORM_BUFFER, InUBO);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, InBytes, InData); // 계속 생성하지 않고 갱신
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void OpenGLDevice::BindUniformBlock(ShaderHandle InShader, const char* InBlockName, UINT32 InBindingPoint)
+{
+    UINT32 blockIndex = glGetUniformBlockIndex(InShader, InBlockName);
+    if (blockIndex != GL_INVALID_INDEX)
+    {
+        glUniformBlockBinding(InShader, blockIndex, InBindingPoint);
     }
 }
 
