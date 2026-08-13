@@ -20,7 +20,7 @@ bool FBXLoader::IsInitialized() const
 	return _IsInitialized;
 }
 
-void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<Vector3>& Vertices, OUT std::vector<size_t>& Indices, OUT std::vector<Vector2>& Uvs, OUT std::vector<Vector3>& Normals, OUT std::string& TexturePath, OUT SkeletonInfo& InSkeletonInfo, OUT std::vector<std::vector<std::pair<std::string, float>>>& InWeightInfo)
+void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<Vector3>& Vertices, OUT std::vector<size_t>& Indices, OUT std::vector<Vector2>& Uvs, OUT std::vector<Vector3>& Normals, OUT std::vector<Vector3>& Tangents, OUT std::string& TexturePath, OUT SkeletonInfo& InSkeletonInfo, OUT std::vector<std::vector<std::pair<std::string, float>>>& InWeightInfo)
 {
 	assert(_FbxManager);
 	
@@ -95,7 +95,7 @@ void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<V
 
 				if (i == 1)
 				{
-					LoadMesh(childNode, OUT MeshVertexIndex, OUT Vertices, OUT Indices, OUT Uvs, OUT Normals, OUT InSkeletonInfo, OUT InWeightInfo);
+					LoadMesh(childNode, OUT MeshVertexIndex, OUT Vertices, OUT Indices, OUT Uvs, OUT Normals, OUT Tangents, OUT InSkeletonInfo, OUT InWeightInfo);
 				}
 			}
 		}
@@ -103,7 +103,7 @@ void FBXLoader::LoadCharacterFBX(const std::string& AssetName, OUT std::vector<V
 
 }
 
-void FBXLoader::LoadMesh(FbxNode* InNode, OUT unsigned int& StartVIndex, OUT std::vector<Vector3>& Vertices, OUT std::vector<size_t>& Indices, OUT std::vector<Vector2>& Uvs, OUT std::vector<Vector3>& Normals, OUT SkeletonInfo& InSkeletonInfo, OUT std::vector<std::vector<std::pair<std::string, float>>>& InWeightInfo)
+void FBXLoader::LoadMesh(FbxNode* InNode, OUT unsigned int& StartVIndex, OUT std::vector<Vector3>& Vertices, OUT std::vector<size_t>& Indices, OUT std::vector<Vector2>& Uvs, OUT std::vector<Vector3>& Normals, OUT std::vector<Vector3>& Tangents, OUT SkeletonInfo& InSkeletonInfo, OUT std::vector<std::vector<std::pair<std::string, float>>>& InWeightInfo)
 {
 	char buffer[50];
 	sprintf(buffer, "%s - LoadMesh Called \n", InNode->GetName());
@@ -117,6 +117,7 @@ void FBXLoader::LoadMesh(FbxNode* InNode, OUT unsigned int& StartVIndex, OUT std
 
 	FbxNode* ConvertedNode = ConvertedAttribute->GetNode();
 	FbxMesh* ConvertedMesh = ConvertedNode->GetMesh();
+	ConvertedMesh->GenerateTangentsData(0, true);
 
 	// Read Vertices and Indices
 	unsigned int PointCount = ConvertedMesh->GetControlPointsCount();
@@ -156,9 +157,9 @@ void FBXLoader::LoadMesh(FbxNode* InNode, OUT unsigned int& StartVIndex, OUT std
 
 			FbxVector4 vertexNormal;
 			ConvertedMesh->GetPolygonVertexNormal(p, v, vertexNormal);
-			Normals.push_back(GER::Vector3(static_cast<float>(vertexNormal.mData[0]),
-				static_cast<float>(vertexNormal.mData[1]),
-				static_cast<float>(vertexNormal.mData[2])));
+			Normals.push_back(GER::Vector3(static_cast<float>(vertexNormal.mData[0]), static_cast<float>(vertexNormal.mData[1]), static_cast<float>(vertexNormal.mData[2])));
+			int PolygonVertexCounter = ConvertedMesh->GetPolygonVertexIndex(p) + v;
+			Tangents.push_back(ReadTangent(ConvertedMesh, vi, PolygonVertexCounter));
 
 			VertexCount++;
 		}
@@ -432,6 +433,34 @@ Vector2 FBXLoader::ReadUV(FbxMesh* InMesh, int ControllPointIndex, int VertexCou
 	Result.X = static_cast<float>(vertexUV->GetDirectArray().GetAt(idx).mData[0]);
 	Result.Y = static_cast<float>(vertexUV->GetDirectArray().GetAt(idx).mData[1]);
 	return Result;
+}
+
+Vector3 FBXLoader::ReadTangent(FbxMesh* InMesh, int ControllPointIndex, int VertexCounter)
+{
+	FbxGeometryElementTangent* vertexTangent = InMesh->GetElementTangent(0);
+	if (vertexTangent == nullptr)
+	{
+		return Vector3::UnitX;
+	}
+
+	int idx = -1;
+	switch (vertexTangent->GetMappingMode())
+	{
+		case FbxGeometryElement::eByControlPoint:
+			idx = (vertexTangent->GetReferenceMode() == FbxGeometryElement::eDirect)
+				? ControllPointIndex : vertexTangent->GetIndexArray().GetAt(ControllPointIndex);
+			break;
+		case FbxGeometryElement::eByPolygonVertex:
+			idx = (vertexTangent->GetReferenceMode() == FbxGeometryElement::eDirect)
+				? VertexCounter : vertexTangent->GetIndexArray().GetAt(VertexCounter);
+			break;
+		default:
+			assert(false);
+	}
+
+	assert(idx >= 0);
+	auto v = vertexTangent->GetDirectArray().GetAt(VertexCounter);
+	return Vector3(static_cast<float>(v.mData[0]), static_cast<float>(v.mData[1]), static_cast<float>(v.mData[2]));
 }
 
 

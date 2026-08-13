@@ -69,6 +69,9 @@
     <ClCompile Include="Source\Private\3D\GameLog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Private\3D\Object\Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Public\3D\GameEngine.h">
@@ -189,6 +192,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Public\3D\Resources\Resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Public\3D\Object\Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

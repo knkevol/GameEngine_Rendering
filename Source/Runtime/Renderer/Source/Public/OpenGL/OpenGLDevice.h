@@ -32,11 +32,18 @@ namespace GER
 		GPUMeshHandle CreateMesh(const void* InVertexData, size_t InVertexBytes, const UINT32* InIndices, UINT32 InIndexCount);
 		// Texture
 		TextureHandle CreateTexture(const void* InPixelData, UINT32 InWidth, UINT32 InHeight);
+		// Skybox용 큐브맵텍스처
+		TextureHandle CreateCubemapTexture(const std::vector<const void*>& InFacePixelData, UINT32 InWidth, UINT32 InHeight);
 		// SkinnedMesh
 		GPUMeshHandle CreateSkinnedMesh(const void* InVertexData, size_t InVertexBytes, const UINT32* InIndices, UINT32 InIndexCount);
 
 		GPUMeshHandle CreateOverlayMesh(UINT32 InMaxQuads);
+		// SkyBox용 메쉬
+		GPUMeshHandle CreateSkyboxMesh();
+
 		void SetDepthTest(bool InEnable);
+		// Skybox용
+		void SetDepthFunc(bool InLessEqual);
 
 		// 셰이더를 바인딩 포인트에 연결하면 값 공유 가능
 		GPUBufferHandle CreateUniformBuffer(size_t InBytes, UINT32 InBindingPoint);
@@ -62,6 +69,7 @@ namespace GER
 		void DrawIndexed(UINT32 InIndexCount);
 
 		void BindTexture(TextureHandle InTexture, UINT32 InSlot);
+		void BindCubemapTexture(TextureHandle InTexture, UINT32 InSlot);
 
 	private:
 		bool CheckShaderCompile(UINT32 InShader, const char* InStageName);

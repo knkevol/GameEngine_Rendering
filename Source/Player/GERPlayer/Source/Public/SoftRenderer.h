@@ -87,6 +87,7 @@ private:
 	void DrawTriangle3D(std::vector<DDD::Vertex3D>& InVertices, const LinearColor& InColor, FillMode InFillMode);
 
 	void DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, DDD::SKMesh& InSKMesh, const DDD::TransformComponent& InTransform);
+	void DrawSkybox(OpenGLDevice& InDevice);
 
 	void RenderWorld();
 	void RenderUI();
@@ -100,6 +101,11 @@ private:
 	DrawMode GetDrawMode() const { return _CurrentDrawMode; }
 	void SetDrawMode(DrawMode InDrawMode) { _CurrentDrawMode = InDrawMode; }
 	DrawMode _CurrentDrawMode = DrawMode::Normal;
+
+	// »Ø∞Ê∏  ≈‰±€
+	bool IsEnvReflectionEnabled() const { return _bEnableEnvReflection; }
+	void SetEnvReflectionEnabled(bool IsEnabled) { _bEnableEnvReflection = IsEnabled; }
+	bool _bEnableEnvReflection = true;
 
 	void SetupDefaultLights();
 
@@ -158,6 +164,11 @@ private:
 	ShaderHandle _SkinnedShader;
 	ShaderHandle _StaticDepthShader;
 	ShaderHandle _SkinnedDepthShader;
+	ShaderHandle _SkyboxShader;
+
+	// Skybox
+	GPUMeshHandle _SkyboxMesh;
+	Skybox _Skybox;
 
 	// UBO
 	GPUBufferHandle _CameraUBO;

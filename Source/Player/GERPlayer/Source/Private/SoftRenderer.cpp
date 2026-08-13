@@ -34,6 +34,16 @@ void SoftRenderer::OnInit()
 	device.BindUniformBlock(_StaticShader, "LightBlock", 1);
 	device.BindUniformBlock(_SkinnedShader, "LightBlock", 1);
 
+	std::string skyboxVsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/skybox.vert");
+	std::string skyboxFsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/skybox.frag");
+	_SkyboxShader = device.CreateShaderProgram(skyboxVsSrc.c_str(), skyboxFsSrc.c_str());
+	device.BindUniformBlock(_SkyboxShader, "CameraBlock", 0);
+
+	_SkyboxMesh = device.CreateSkyboxMesh();
+
+	_Skybox.LoadFromFolder("Asset/Skybox/Sky");
+	_Skybox.UploadToGPU(device);
+
 	SetupDefaultLights();
 
 	SetBackgroundColor(LinearColor(0.15f, 0.15f, 0.2f, 1.0f));
@@ -164,9 +174,10 @@ void SoftRenderer::PreUpdate()
 	if (sinput.IsReleased(SystemInputButton::F1)) { SetDrawMode(DrawMode::Normal); }
 	if (sinput.IsReleased(SystemInputButton::F2)) { SetDrawMode(DrawMode::Wireframe); }
 	if (sinput.IsReleased(SystemInputButton::F3)) { SetDrawMode(DrawMode::OnlyBone); }
-	if (sinput.IsReleased(SystemInputButton::F7)) { TestPermLog(); }
 	if (sinput.IsReleased(SystemInputButton::F4)) { TestTempLog(); }
 	if (sinput.IsReleased(SystemInputButton::F5)) { SetDrawMode(DrawMode::DepthBuffer); } // GPU
+	if (sinput.IsReleased(SystemInputButton::F6)) { SetEnvReflectionEnabled(!IsEnvReflectionEnabled()); }
+	if (sinput.IsReleased(SystemInputButton::F7)) { TestPermLog(); }
 	if (sinput.IsReleased(SystemInputButton::F9)) { TestFunc(); }
 }
 

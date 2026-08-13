@@ -7,6 +7,7 @@ layout(location = 2) in vec2 aUV;
 layout(location = 3) in ivec4 aBoneIndices;
 layout(location = 4) in vec4 aBoneWeights;
 layout(location = 5) in vec3 aNormal;
+layout(location = 6) in vec3 aTangent;
 
 layout(std140) uniform CameraBlock
 {
@@ -22,6 +23,7 @@ out vec4 vColor;
 out vec2 vUV;
 out vec3 vWorldPos;
 out vec3 vWorldNormal;
+out vec3 vTangent;
 
 void main()
 {
@@ -36,7 +38,7 @@ void main()
     vUV = aUV;
     vWorldPos = worldPos.xyz;
 
-    // 
     mat3 skinNormalMatrix = mat3(transpose(inverse(uModel * skinMatrix)));
     vWorldNormal = normalize(skinNormalMatrix * aNormal);
+    vTangent = normalize(mat3(uModel * skinMatrix) * aTangent);
 }

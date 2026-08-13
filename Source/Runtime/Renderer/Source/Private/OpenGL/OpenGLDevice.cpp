@@ -82,6 +82,9 @@ GPUMeshHandle OpenGLDevice::CreateMesh(const void* InVertexData, size_t InVertex
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (void*)offsetof(Vertex3D, Normal));
     glEnableVertexAttribArray(3);
 
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (void*)offsetof(Vertex3D, Tangent));
+    glEnableVertexAttribArray(4);
+
     glBindVertexArray(0); // VAO 편집모드 종료
 
     return mesh;
@@ -102,6 +105,29 @@ TextureHandle OpenGLDevice::CreateTexture(const void* InPixelData, UINT32 InWidt
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    return texture;
+}
+
+TextureHandle OpenGLDevice::CreateCubemapTexture(const std::vector<const void*>& InFacePixelData, UINT32 InWidth, UINT32 InHeight)
+{
+    UINT32 texture = 0;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+
+    // Image Upload
+    for (UINT32 face = 0; face < 6; ++face)
+    {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_RGBA32F, InWidth, InHeight, 0, GL_RGBA, GL_FLOAT, InFacePixelData[face]);
+    }
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
     return texture;
 }
@@ -136,6 +162,9 @@ GPUMeshHandle OpenGLDevice::CreateSkinnedMesh(const void* InVertexData, size_t I
     // 5 : 노멀
     glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, Normal));
     glEnableVertexAttribArray(5);    
+
+    glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, sizeof(SkinnedVertex3D), (void*)offsetof(SkinnedVertex3D, Tangent));
+    glEnableVertexAttribArray(6);
 
     glBindVertexArray(0);
 
@@ -180,6 +209,43 @@ GPUMeshHandle OpenGLDevice::CreateOverlayMesh(UINT32 InMaxQuads)
     return mesh;
 }
 
+GPUMeshHandle OpenGLDevice::CreateSkyboxMesh()
+{
+    static const float vertices[] = {
+       -1.f, -1.f, -1.f, // 0
+        1.f, -1.f, -1.f, // 1
+        1.f,  1.f, -1.f, // 2
+       -1.f,  1.f, -1.f, // 3
+       -1.f, -1.f,  1.f, // 4
+        1.f, -1.f,  1.f, // 5
+        1.f,  1.f,  1.f, // 6
+       -1.f,  1.f,  1.f, // 7
+    };
+
+    static const UINT32 indices[] = {
+        0, 1, 2,  2, 3, 0, // Back   (z = -1)
+        5, 4, 7,  7, 6, 5, // Front  (z = +1)
+        4, 0, 3,  3, 7, 4, // Left   (x = -1)
+        1, 5, 6,  6, 2, 1, // Right  (x = +1)
+        4, 5, 1,  1, 0, 4, // Bottom (y = -1)
+        3, 2, 6,  6, 7, 3, // Top    (y = +1)
+    };
+
+    GPUMeshHandle mesh;
+    glGenVertexArrays(1, &mesh.VAO);
+    glBindVertexArray(mesh.VAO);
+
+    mesh.VBO = CreateVertexBuffer(vertices, sizeof(vertices));
+    mesh.EBO = CreateIndexBuffer(indices, 36);
+    mesh.IndexCount = 36;
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glBindVertexArray(0);
+    return mesh;
+}
+
 void OpenGLDevice::SetDepthTest(bool InEnable)
 {
     if (InEnable)
@@ -190,6 +256,11 @@ void OpenGLDevice::SetDepthTest(bool InEnable)
     {
         glDisable(GL_DEPTH_TEST);
     }
+}
+
+void OpenGLDevice::SetDepthFunc(bool InLessEqual)
+{
+    glDepthFunc(InLessEqual ? GL_LEQUAL : GL_LESS);
 }
 
 GPUBufferHandle OpenGLDevice::CreateUniformBuffer(size_t InBytes, UINT32 InBindingPoint)
@@ -225,6 +296,12 @@ void OpenGLDevice::BindTexture(TextureHandle InTexture, UINT32 InSlot)
 {
     glActiveTexture(GL_TEXTURE0 + InSlot);
     glBindTexture(GL_TEXTURE_2D, InTexture);
+}
+
+void OpenGLDevice::BindCubemapTexture(TextureHandle InTexture, UINT32 InSlot)
+{
+    glActiveTexture(GL_TEXTURE0 + InSlot);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, InTexture);
 }
 
 void OpenGLDevice::UseShader(ShaderHandle InShader)

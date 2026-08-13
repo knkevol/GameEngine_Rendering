@@ -17,6 +17,7 @@ public:
 	FORCEINLINE bool HasColor() const { return _Colors.size() > 0; }
 	FORCEINLINE bool HasUV() const { return _UVs.size() > 0; }
 	FORCEINLINE bool HasNormal() const { return _Normals.size() > 0; }
+	FORCEINLINE bool HasTangent() const { return _Tangents.size() > 0; }
 	std::vector<Vector3>& GetVertices() { return _Vertices; }
 	const std::vector<Vector3>& GetVertices() const { return _Vertices; }
 	std::vector<size_t>& GetIndices() { return _Indices; }
@@ -27,6 +28,9 @@ public:
 	const std::vector<Vector2>& GetUVs() const { return _UVs; }
 	std::vector<Vector3>& GetNormals() { return _Normals; }
 	const std::vector<Vector3>& GetNormals() const { return _Normals; }
+	std::vector<Vector3>& GetTangents() { return _Tangents; }
+	const std::vector<Vector3>& GetTangents() const { return _Tangents; }
+
 
 	Material& GetMaterial() { return _Material; }
 	const Material& GetMaterial() const { return _Material; }
@@ -44,6 +48,7 @@ public:
 protected:
 	std::vector<Vector3> _Vertices;
 	std::vector<Vector3> _Normals;
+	std::vector<Vector3> _Tangents;
 	std::vector<size_t> _Indices;
 	std::vector<LinearColor> _Colors;
 	std::vector<Vector2> _UVs;

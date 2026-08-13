@@ -335,10 +335,38 @@ void SoftRenderer::RenderWorldGPU()
 				{
 					characterTexture.UploadToGPU(InDevice);
 				}
+
 				InDevice.BindTexture(characterTexture.GetGPUHandle(), 0);
 				InDevice.SetUniformInt(shader, "uTexture", 0);
 				InDevice.SetUniformInt(shader, "uUseTexture", 1);
 				InDevice.SetUniformColor(shader, "uColor", LinearColor::White);
+
+				// 0=uTexture, 1=uNormalMap, 2=uMRAMap
+				InDevice.BindCubemapTexture(_Skybox.GetGPUHandle(), 3);
+				InDevice.SetUniformInt(shader, "uSkybox", 3);
+				InDevice.SetUniformInt(shader, "uUseEnvReflection", IsEnvReflectionEnabled() ? 1 : 0);
+
+				if (characterTexture.HasNormalMap())
+				{
+					InDevice.BindTexture(characterTexture.GetNormalGPUHandle(), 1);
+					InDevice.SetUniformInt(shader, "uNormalMap", 1);
+					InDevice.SetUniformInt(shader, "uUseNormalMap", 1);
+				}
+				else
+				{
+					InDevice.SetUniformInt(shader, "uUseNormalMap", 0);
+				}
+
+				if (characterTexture.HasMRAMap())
+				{
+					InDevice.BindTexture(characterTexture.GetMRAGPUHandle(), 2);
+					InDevice.SetUniformInt(shader, "uMRAMap", 2);
+					InDevice.SetUniformInt(shader, "uUseMRAMap", 1);
+				}
+				else
+				{
+					InDevice.SetUniformInt(shader, "uUseMRAMap", 0);
+				}
 			}
 
 			// 드로우
@@ -370,16 +398,29 @@ void SoftRenderer::RenderWorldGPU()
 			{
 				InDevice.SetUniformInt(shader, "uUseTexture", 0);
 				InDevice.SetUniformColor(shader, "uColor", LinearColor::Blue);
+
+				InDevice.BindCubemapTexture(_Skybox.GetGPUHandle(), 3);
+				InDevice.SetUniformInt(shader, "uSkybox", 3);
+				InDevice.SetUniformInt(shader, "uUseEnvReflection", 0);
 			}
 			else
 			{
 				InDevice.SetUniformInt(shader, "uUseTexture", 0);
 				InDevice.SetUniformColor(shader, "uColor", LinearColor::White);
+
+				InDevice.BindCubemapTexture(_Skybox.GetGPUHandle(), 3);
+				InDevice.SetUniformInt(shader, "uSkybox", 3);
+				InDevice.SetUniformInt(shader, "uUseEnvReflection", 0);
 			}
 
 			InDevice.BindMesh(mesh.GetGPUHandle());
 			InDevice.DrawIndexed((UINT32)mesh.GetIndices().size());
 		}		
+	}
+
+	if (!bLineMode && !IsDepthBufferDrawing())
+	{
+		DrawSkybox(InDevice);
 	}
 
 	// 다음 프레임에 영향 미치지 않도록
@@ -648,6 +689,9 @@ void SoftRenderer::DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, D
 	InDevice.UseShader(InShader);
 	InDevice.SetUniformInt(InShader, "uUseTexture", 0);
 
+	InDevice.BindCubemapTexture(_Skybox.GetGPUHandle(), 3);
+	InDevice.SetUniformInt(InShader, "uSkybox", 3);
+	InDevice.SetUniformInt(InShader, "uUseEnvReflection", 0);
 
 	// 화살표는 Normal이 없어서 기본값으로 채움
 	InDevice.SetUniformColor(InShader, "uMaterialDiffuse", LinearColor::White);
@@ -678,6 +722,25 @@ void SoftRenderer::DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, D
 		InDevice.BindMesh(boneMesh.GetGPUHandle());
 		InDevice.DrawIndexed((UINT32)boneMesh.GetIndices().size());
 	}
+}
+
+void SoftRenderer::DrawSkybox(OpenGLDevice& InDevice)
+{
+	if (!_Skybox.IsUploadToGPU())
+	{
+		_Skybox.UploadToGPU(InDevice);
+	}
+
+	InDevice.UseShader(_SkyboxShader);
+	InDevice.SetDepthFunc(true);
+	
+	InDevice.BindCubemapTexture(_Skybox.GetGPUHandle(), 0);
+	InDevice.SetUniformInt(_SkyboxShader, "uSkybox", 0);
+	
+	InDevice.BindMesh(_SkyboxMesh);
+	InDevice.DrawIndexed(_SkyboxMesh.IndexCount);
+
+	InDevice.SetDepthFunc(false);
 }
 
 void SoftRenderer::RenderUI()

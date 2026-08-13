@@ -97,5 +97,7 @@
     <None Include="Shaders\depth.frag" />
     <None Include="Shaders\overlay.vert" />
     <None Include="Shaders\overlay.frag" />
+    <None Include="Shaders\skybox.vert" />
+    <None Include="Shaders\skybox.frag" />
   </ItemGroup>
 </Project>

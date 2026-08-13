@@ -16,6 +16,7 @@
 #include "EngineInterface.h"
 
 #include "3D/Object/Texture.h"
+#include "3D/Object/Skybox.h"
 
 
 

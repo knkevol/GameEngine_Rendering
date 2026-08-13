@@ -164,6 +164,7 @@
     <ClCompile Include="Source\Private\3D\Object\GameObjectFactory.cpp" />
     <ClCompile Include="Source\Private\3D\Object\Mesh.cpp" />
     <ClCompile Include="Source\Private\3D\Object\SKMesh.cpp" />
+    <ClCompile Include="Source\Private\3D\Object\Skybox.cpp" />
     <ClCompile Include="Source\Private\3D\Object\Texture.cpp" />
     <ClCompile Include="Source\Private\InputManager.cpp" />
     <ClCompile Include="Source\ThirdParty\Stb\stb_vorbis.c" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Source\Public\3D\Object\GameObjcet.h" />
     <ClInclude Include="Source\Public\3D\Object\Mesh.h" />
     <ClInclude Include="Source\Public\3D\Object\SKMesh.h" />
+    <ClInclude Include="Source\Public\3D\Object\Skybox.h" />
     <ClInclude Include="Source\Public\3D\Object\Texture.h" />
     <ClInclude Include="Source\Public\3D\Resources\Resources.h" />
     <ClInclude Include="Source\Public\EngineHeaders.h" />

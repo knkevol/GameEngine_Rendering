@@ -39,6 +39,7 @@ public:
 	LinearColor Color;
 	Vector2 UV;
 	Vector3 Normal; // 라이팅 계산용 버텍스 노멀 ( 모델 공간 )
+	Vector3 Tangent;
 };
 
 struct SkinnedVertex3D
@@ -48,7 +49,8 @@ struct SkinnedVertex3D
 	Vector2 UV;
 	UINT32 BoneIndices[4] = { 0, 0, 0, 0 }; // 정점에 영향을 주는 본 4개 인덱스
 	float BoneWeights[4] = { 0.f, 0.f, 0.f, 0.f };
-	Vector3 Normal; // ( 바인드포즈 )
+	Vector3 Normal;
+	Vector3 Tangent;
 };
 
 }

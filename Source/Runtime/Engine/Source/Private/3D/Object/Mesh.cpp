@@ -23,8 +23,11 @@ void Mesh::UploadToGPU(OpenGLDevice& InDevice)
 		LinearColor color = HasColor() ? _Colors[i] : LinearColor::White;
 		Vector2 uv = HasUV() ? _UVs[i] : Vector2::Zero;
 		Vector3 normal = HasNormal() ? _Normals[i] : Vector3::UnitZ;
+		Vector3 tangent = HasTangent() ? _Tangents[i] : Vector3::UnitX;
 
-		gpuVertices.push_back(Vertex3D(Vector4(pos.X, pos.Y, pos.Z, 1.0f), color, uv, normal));
+		Vertex3D v(Vector4(pos.X, pos.Y, pos.Z, 1.0f), color, uv, normal);
+		v.Tangent = tangent;
+		gpuVertices.push_back(v);
 	}
 
 	std::vector<UINT32> gpuIndices;
