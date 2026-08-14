@@ -76,11 +76,24 @@ float CalcShadow(vec4 InLightSpacePos)
         return 0.0;
     }
 
-    float closetDepth = texture(uShadowMap, projCoords.xy).r;
     float currentDepth = projCoords.z;
-
     float bias = 0.005; // shadow acne ¹æÁö
-    return currentDepth - bias > closetDepth ? 1.0 : 0.0;
+
+    vec2 texelSize = 1.0 / textureSize(uShadowMap, 0);
+
+    float shadow = 0.0;
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float neighborDepth = texture(uShadowMap, projCoords.xy + vec2(x, y) * texelSize).r;
+            shadow += currentDepth - bias > neighborDepth ? 1.0 : 0.0;
+        }
+    }
+
+    shadow /= 9.0;
+
+    return shadow;
 }
 
 void main()
