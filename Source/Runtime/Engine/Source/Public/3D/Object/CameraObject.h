@@ -36,6 +36,7 @@ public:
 	FORCEINLINE Matrix4x4 GetViewMatrix() const;
 	FORCEINLINE Matrix4x4 GetViewMatrixRotationOnly() const;
 	FORCEINLINE Matrix4x4 GetPerspectiveMatrix() const;
+	FORCEINLINE Matrix4x4 GetOrthorgraphicMatrix(float InHalfWidth, float InHalfHeight, float InNearZ, float InFarZ) const;
 	FORCEINLINE Matrix4x4 GetPerspectiveViewMatrix() const;
 
 private:
@@ -97,6 +98,18 @@ FORCEINLINE Matrix4x4 CameraObject::GetPerspectiveMatrix() const
 		Vector4::UnitY * d,
 		Vector4(0.f, 0.f, k, -1.f),
 		Vector4(0.f, 0.f, l, 0.f));
+}
+
+FORCEINLINE Matrix4x4 CameraObject::GetOrthorgraphicMatrix(float InHalfWidth, float InHalfHeight, float InNearZ, float InFarZ) const
+{
+	float invNF = 1.f / (InNearZ - InFarZ);
+
+	return Matrix4x4(
+		Vector4::UnitX * (1.f / InHalfWidth),
+		Vector4::UnitY * (1.f / InHalfHeight),
+		Vector4(0.f, 0.f, 2.f * invNF, 0.f),
+		Vector4(0.f, 0.f, (InFarZ + InNearZ) * invNF, 1.f)
+	);
 }
 
 FORCEINLINE Matrix4x4 CameraObject::GetPerspectiveViewMatrix() const

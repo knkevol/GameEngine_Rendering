@@ -6,6 +6,7 @@ in vec2 vUV;
 in vec3 vWorldPos;
 in vec3 vWorldNormal;
 in vec3 vTangent;
+in vec4 vLightSpacePos;
 
 uniform sampler2D uTexture;
 uniform bool uUseTexture;
@@ -20,6 +21,7 @@ uniform sampler2D uMRAMap;
 uniform bool uUseMRAMap;
 uniform samplerCube uSkybox;
 uniform bool uUseEnvReflection; // 반사효과 토글
+uniform sampler2D uShadowMap;
 
 struct PointLight
 {
@@ -63,6 +65,24 @@ vec3 CalcBlinnPhong(vec3 InLightDir, vec3 InLightColor, float InIntensity, vec3 
     return diffuse + specular;
 }
 
+float CalcShadow(vec4 InLightSpacePos)
+{
+    // 직교 투영 
+    vec3 projCoords = InLightSpacePos.xyz / InLightSpacePos.w;
+    projCoords = projCoords * 0.5 + 0.5;
+
+    if(projCoords.z > 1.0)
+    {
+        return 0.0;
+    }
+
+    float closetDepth = texture(uShadowMap, projCoords.xy).r;
+    float currentDepth = projCoords.z;
+
+    float bias = 0.005; // shadow acne 방지
+    return currentDepth - bias > closetDepth ? 1.0 : 0.0;
+}
+
 void main()
 {
     vec4 baseColor = uUseTexture ? texture(uTexture, vec2(vUV.x, 1.0 - vUV.y)) * vColor : vColor;
@@ -85,6 +105,11 @@ void main()
         normal = normalize(TBN * tangentNormal);
     }
 
+    if(!gl_FrontFacing)
+    {
+        normal = -normal;
+    }
+
     float ao = 1.0;
     float metallic = 0.0;
     if(uUseMRAMap)
@@ -103,8 +128,9 @@ void main()
 
     // Directional Light
     {
+        float shadow = CalcShadow(vLightSpacePos);
         vec3 lightDir = normalize(-uDirLightDirection.xyz);
-        result += CalcBlinnPhong(lightDir, uDirLightColor.rgb, uDirLightColor.a, normal, viewDir, diffuseColor, specularColor, shininess);
+        result += (1.0 - shadow) * CalcBlinnPhong(lightDir, uDirLightColor.rgb, uDirLightColor.a, normal, viewDir, diffuseColor, specularColor, shininess);
     }
 
     // Point Lights

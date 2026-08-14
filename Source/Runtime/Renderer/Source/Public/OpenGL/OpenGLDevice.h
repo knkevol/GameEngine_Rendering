@@ -6,6 +6,7 @@ namespace GER
 	using GPUBufferHandle = UINT32;
 	using ShaderHandle = UINT32;
 	using TextureHandle = UINT32;
+	using FramebufferHandle = UINT32;
 
 	struct GPUMeshHandle
 	{
@@ -13,6 +14,14 @@ namespace GER
 		UINT32 VBO = 0;
 		UINT32 EBO = 0;
 		UINT32 IndexCount = 0;
+	};
+
+	struct ShadowMapHandle
+	{
+		FramebufferHandle FBO = 0;
+		TextureHandle DepthTexture = 0;
+		UINT32 Width = 0;
+		UINT32 Height = 0;
 	};
 
 	class OpenGLDevice
@@ -32,14 +41,19 @@ namespace GER
 		GPUMeshHandle CreateMesh(const void* InVertexData, size_t InVertexBytes, const UINT32* InIndices, UINT32 InIndexCount);
 		// Texture
 		TextureHandle CreateTexture(const void* InPixelData, UINT32 InWidth, UINT32 InHeight);
-		// Skybox용 큐브맵텍스처
+		// Skybox
 		TextureHandle CreateCubemapTexture(const std::vector<const void*>& InFacePixelData, UINT32 InWidth, UINT32 InHeight);
+		GPUMeshHandle CreateSkyboxMesh();
 		// SkinnedMesh
 		GPUMeshHandle CreateSkinnedMesh(const void* InVertexData, size_t InVertexBytes, const UINT32* InIndices, UINT32 InIndexCount);
-
+		
 		GPUMeshHandle CreateOverlayMesh(UINT32 InMaxQuads);
-		// SkyBox용 메쉬
-		GPUMeshHandle CreateSkyboxMesh();
+		
+		// ShadowMap
+		ShadowMapHandle CreateShadowMap(UINT32 InWidth, UINT32 InHeight);
+		void BeginShadowPass(const ShadowMapHandle& InShadowMap);
+		void EndShadowPass(UINT32 InScreenWidth, UINT32 InScreenHeight);
+		void BindShadowMapTexture(const ShadowMapHandle& InShadowMap, UINT32 InSlot);
 
 		void SetDepthTest(bool InEnable);
 		// Skybox용

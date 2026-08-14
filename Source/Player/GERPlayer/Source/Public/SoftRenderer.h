@@ -89,6 +89,9 @@ private:
 	void DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, DDD::SKMesh& InSKMesh, const DDD::TransformComponent& InTransform);
 	void DrawSkybox(OpenGLDevice& InDevice);
 
+	void RenderShadowPass(OpenGLDevice& InDevice);
+	Matrix4x4 GetLightSpaceMatrix() const;
+
 	void RenderWorld();
 	void RenderUI();
 
@@ -169,6 +172,13 @@ private:
 	// Skybox
 	GPUMeshHandle _SkyboxMesh;
 	Skybox _Skybox;
+
+	// ShadowMap
+	ShaderHandle _ShadowDepthStaticShader;
+	ShaderHandle _ShadowDepthSkinnedShader;
+	ShadowMapHandle _ShadowMap;
+	Matrix4x4 _LightSpaceMatrix;
+	static constexpr UINT32 ShadowMapResolution = 2048;
 
 	// UBO
 	GPUBufferHandle _CameraUBO;

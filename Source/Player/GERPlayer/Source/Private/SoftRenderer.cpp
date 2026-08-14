@@ -44,6 +44,15 @@ void SoftRenderer::OnInit()
 	_Skybox.LoadFromFolder("Asset/Skybox/Sky");
 	_Skybox.UploadToGPU(device);
 
+	std::string shadowVsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/shadow_depth.vert");
+	std::string shadowSkinnedVsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/shadow_depth_skinned.vert");
+	std::string shadowFsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/shadow_depth.frag");
+
+	_ShadowDepthStaticShader = device.CreateShaderProgram(shadowVsSrc.c_str(), shadowFsSrc.c_str());
+	_ShadowDepthSkinnedShader = device.CreateShaderProgram(shadowSkinnedVsSrc.c_str(), shadowFsSrc.c_str());
+
+	_ShadowMap = device.CreateShadowMap(ShadowMapResolution, ShadowMapResolution);
+
 	SetupDefaultLights();
 
 	SetBackgroundColor(LinearColor(0.15f, 0.15f, 0.2f, 1.0f));

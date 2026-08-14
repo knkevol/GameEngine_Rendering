@@ -14,18 +14,19 @@ layout(std140) uniform CameraBlock
 };
 
 uniform mat4 uModel;
+uniform mat4 uLightSpaceMatrix;
 
 out vec4 vColor;
 out vec2 vUV;
 out vec3 vWorldPos;
 out vec3 vWorldNormal;
 out vec3 vTangent;
+out vec4 vLightSpacePos;
 
 void main()
 {
     vec4 worldPos = uModel * aPosition;
-    //gl_Position = uMVP * aPosition;   // CPU의 "InMatrix * v.Position"과 동일한 연산
-    gl_Position = uProjection * uView * worldPos;
+    gl_Position = uProjection * uView * worldPos; // = MVP
 
     vColor = aColor;
     vUV = aUV;
@@ -33,6 +34,7 @@ void main()
 
     // 이동 영향 X, 비균일 스케일은 그냥 곱할 시 왜곡되어 역전치 행렬로 변환
     vWorldNormal = normalize(mat3(transpose(inverse(uModel))) * aNormal);
-
     vTangent = normalize(mat3(uModel) * aTangent);
+
+    vLightSpacePos = uLightSpaceMatrix * worldPos;
 }

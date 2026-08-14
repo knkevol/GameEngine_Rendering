@@ -51,7 +51,7 @@ bool GameEngine::Init()
 	InitLogChannels();
 	RegisterGameObjectFactories();
 	LoadAsset();
-	//LoadCube(); // Test
+	LoadCube(); // Test
 
 	_IsInitialized = true;
 	return _IsInitialized;
@@ -213,6 +213,7 @@ void GameEngine::LoadCube()
 	auto& v = SimpleCubeMesh.GetVertices();
 	auto& i = SimpleCubeMesh.GetIndices();
 	auto& uv = SimpleCubeMesh.GetUVs();
+	auto& n = SimpleCubeMesh.GetNormals();
 
 	int PointSize = cubeMeshPositions.size();
 
@@ -220,6 +221,7 @@ void GameEngine::LoadCube()
 	{
 		v.push_back(cubeMeshPositions[p]);
 		uv.push_back(cubeMeshUVs[p]);
+		n.push_back(cubeMeshNormals[p]);
 	}
 
 	int IndexSize = cubeMeshIndice.size();

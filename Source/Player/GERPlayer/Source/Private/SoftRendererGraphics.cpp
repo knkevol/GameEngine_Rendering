@@ -21,11 +21,11 @@ void SoftRenderer::LoadScene()
 	goPlayer.GetTransform().SetWorldScale(Vector3::One * playerScale);
 	
 	// Making Cube
-	//GameObject& goCube = g.CreateNewGameObject(SimpleCube);
-	//goCube.SetMesh(GameEngine::CubeMesh);
-	//goCube.SetColor(LinearColor::White);
-	//goCube.GetTransform().SetWorldPosition(Vector3(0.0f, 0.0f, 0.0f));
-	//goCube.GetTransform().SetWorldScale(Vector3::One * 30.0f);
+	GameObject& goCube = g.CreateNewGameObject(SimpleCube);
+	goCube.SetMesh(GameEngine::CubeMesh);
+	goCube.SetColor(LinearColor::White);
+	goCube.GetTransform().SetWorldPosition(Vector3(0.f, -10.f, 0.f));
+	goCube.GetTransform().SetWorldScale(Vector3(200.f, 200.f, 1.f));
 
 	// Making Camera
 	GameObject& goCameraTarget = g.CreateNewGameObject(MainCameraTarget);
@@ -234,6 +234,9 @@ void SoftRenderer::RenderWorld()
 void SoftRenderer::RenderWorldGPU()
 {
 	OpenGLDevice& InDevice = static_cast<OpenGLRSI&>(GetRenderer()).GetDevice();
+
+	RenderShadowPass(InDevice);
+
 	ShaderHandle InStaticShader = _StaticShader;
 	ShaderHandle InSkinnedShader = _SkinnedShader;
 	ShaderHandle InStaticDepthShader = _StaticDepthShader;
@@ -252,7 +255,7 @@ void SoftRenderer::RenderWorldGPU()
 	InDevice.UpdateUniformBuffer(_CameraUBO, &cameraData, sizeof(CameraUBOData));
 
 	// 스팟을 카메라에 맞춰 매 프레임 갱신
-	Vector3 camForward = mainCamera.GetTransform().GetLocalZ() * -1.f;
+	Vector3 camForward = mainCamera.GetTransform().GetLocalZ();
 	_LightData.SpotLight.Position = Vector4(mainCamera.GetTransform().GetWorldPosition(), 1.f);
 	_LightData.SpotLight.Dirention = Vector4(camForward, 0.f);
 	InDevice.UpdateUniformBuffer(_LightUBO, &_LightData, sizeof(LightUBOData));
@@ -346,6 +349,10 @@ void SoftRenderer::RenderWorldGPU()
 				InDevice.SetUniformInt(shader, "uSkybox", 3);
 				InDevice.SetUniformInt(shader, "uUseEnvReflection", IsEnvReflectionEnabled() ? 1 : 0);
 
+				InDevice.BindShadowMapTexture(_ShadowMap, 4);
+				InDevice.SetUniformInt(shader, "uShadowMap", 4);
+				InDevice.SetUniformMat4(shader, "uLightSpaceMatrix", _LightSpaceMatrix);
+
 				if (characterTexture.HasNormalMap())
 				{
 					InDevice.BindTexture(characterTexture.GetNormalGPUHandle(), 1);
@@ -402,6 +409,10 @@ void SoftRenderer::RenderWorldGPU()
 				InDevice.BindCubemapTexture(_Skybox.GetGPUHandle(), 3);
 				InDevice.SetUniformInt(shader, "uSkybox", 3);
 				InDevice.SetUniformInt(shader, "uUseEnvReflection", 0);
+
+				InDevice.BindShadowMapTexture(_ShadowMap, 4);
+				InDevice.SetUniformInt(shader, "uShadowMap", 4);
+				InDevice.SetUniformMat4(shader, "uLightSpaceMatrix", _LightSpaceMatrix);
 			}
 			else
 			{
@@ -411,6 +422,10 @@ void SoftRenderer::RenderWorldGPU()
 				InDevice.BindCubemapTexture(_Skybox.GetGPUHandle(), 3);
 				InDevice.SetUniformInt(shader, "uSkybox", 3);
 				InDevice.SetUniformInt(shader, "uUseEnvReflection", 0);
+
+				InDevice.BindShadowMapTexture(_ShadowMap, 4);
+				InDevice.SetUniformInt(shader, "uShadowMap", 4);
+				InDevice.SetUniformMat4(shader, "uLightSpaceMatrix", _LightSpaceMatrix);
 			}
 
 			InDevice.BindMesh(mesh.GetGPUHandle());
@@ -693,6 +708,10 @@ void SoftRenderer::DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, D
 	InDevice.SetUniformInt(InShader, "uSkybox", 3);
 	InDevice.SetUniformInt(InShader, "uUseEnvReflection", 0);
 
+	InDevice.BindShadowMapTexture(_ShadowMap, 4);
+	InDevice.SetUniformInt(InShader, "uShadowMap", 4);
+	InDevice.SetUniformMat4(InShader, "uLightSpaceMatrix", _LightSpaceMatrix);
+
 	// 화살표는 Normal이 없어서 기본값으로 채움
 	InDevice.SetUniformColor(InShader, "uMaterialDiffuse", LinearColor::White);
 	InDevice.SetUniformColor(InShader, "uMaterialSpecular", LinearColor(0.5f, 0.5f, 0.5f, 1.f));
@@ -743,6 +762,78 @@ void SoftRenderer::DrawSkybox(OpenGLDevice& InDevice)
 	InDevice.SetDepthFunc(false);
 }
 
+void SoftRenderer::RenderShadowPass(OpenGLDevice& InDevice)
+{
+	GameEngine& g = GetDirectGameEngine();
+	_LightSpaceMatrix = GetLightSpaceMatrix();
+
+	InDevice.BeginShadowPass(_ShadowMap);
+
+	for (auto it = g.SceneBegin(); it != g.SceneEnd(); ++it)
+	{
+		const GameObject& gameObject = *(*it);
+		if (!gameObject.HasMesh() || !gameObject.IsVisible())
+		{
+			continue;
+		}
+
+		Mesh& mesh = g.GetMesh(gameObject.GetMeshKey());
+		const TransformComponent& transform = gameObject.GetTransform();
+
+		if (mesh.IsSKMesh())
+		{
+			SKMesh& skm = static_cast<SKMesh&>(mesh);
+			if (!skm.IsUploadedToGPU())
+			{
+				skm.UploadToGPU(InDevice);
+			}
+
+			InDevice.UseShader(_ShadowDepthSkinnedShader);
+			InDevice.SetUniformMat4(_ShadowDepthSkinnedShader, "uLightSpaceMatrix", _LightSpaceMatrix);
+			InDevice.SetUniformMat4(_ShadowDepthSkinnedShader, "uModel", transform.GetWorldMatrix());
+			InDevice.SetUniformMat4Array(_ShadowDepthSkinnedShader, "uBoneMatrices", skm.GetSkinMatrices());
+
+			InDevice.BindMesh(skm.GetGPUHandle());
+			InDevice.DrawIndexed((UINT32)skm.GetIndices().size());
+		}
+		else
+		{
+			if (!mesh.IsUploadedToGPU())
+			{
+				mesh.UploadToGPU(InDevice);
+			}
+
+			InDevice.UseShader(_ShadowDepthStaticShader);
+			InDevice.SetUniformMat4(_ShadowDepthStaticShader, "uLightSpaceMatrix", _LightSpaceMatrix);
+			InDevice.SetUniformMat4(_ShadowDepthStaticShader, "uModel", transform.GetWorldMatrix());
+
+			InDevice.BindMesh(mesh.GetGPUHandle());
+			InDevice.DrawIndexed((UINT32)mesh.GetIndices().size());
+		}
+	}
+
+	InDevice.EndShadowPass((UINT32)_ScreenSize.X, (UINT32)_ScreenSize.Y);
+}
+
+Matrix4x4 SoftRenderer::GetLightSpaceMatrix() const
+{
+	// 광원 -> 표면
+	Vector3 lightDir = Vector3(_LightData.DirLight.Direction.X, _LightData.DirLight.Direction.Y, _LightData.DirLight.Direction.Z).GetNormalize();
+
+	const Vector3 sceneCenter = Vector3::Zero;
+	const float shadowDistance = 300.f;
+	const float shadowHalfSize = 250.f;
+
+	DDD::CameraObject lightCam;
+	lightCam.GetTransform().SetWorldPosition(sceneCenter - lightDir * shadowDistance);
+	lightCam.SetLookAtRotation(sceneCenter);
+
+	Matrix4x4 lightView = lightCam.GetViewMatrix();
+	Matrix4x4 lightProj = lightCam.GetOrthorgraphicMatrix(shadowHalfSize, shadowHalfSize, 1.f, shadowDistance * 2.f);
+
+	return lightProj * lightView;
+}
+
 void SoftRenderer::RenderUI()
 {
 	auto& r = GetRenderer();
@@ -756,7 +847,7 @@ void SoftRenderer::SetupDefaultLights()
 {
 	GameEngine& g = GetDirectGameEngine();
 	const CameraObject& mainCamera = g.GetMainCamera();
-	Vector3 camForward = mainCamera.GetTransform().GetLocalZ() * -1.f;
+	Vector3 camForward = mainCamera.GetTransform().GetLocalZ();
 	// 자연광
 	_LightData.DirLight.Direction = Vector4(camForward, 0.f);
 	_LightData.DirLight.Color = Vector4(1.0f, 0.95f, 0.9f, 0.6f);

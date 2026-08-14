@@ -209,6 +209,56 @@ GPUMeshHandle OpenGLDevice::CreateOverlayMesh(UINT32 InMaxQuads)
     return mesh;
 }
 
+ShadowMapHandle OpenGLDevice::CreateShadowMap(UINT32 InWidth, UINT32 InHeight)
+{
+    ShadowMapHandle handle;
+    handle.Width = InWidth;
+    handle.Height = InHeight;
+
+    // 깊이값 텍스처
+    glGenTextures(1, &handle.DepthTexture);
+    glBindTexture(GL_TEXTURE_2D, handle.DepthTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, InWidth, InHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+    float borderColor[] = { 1.f, 1.f, 1.f, 1.f };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glGenFramebuffers(1, &handle.FBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, handle.FBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, handle.DepthTexture, 0);
+
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    return handle;
+}
+
+void OpenGLDevice::BeginShadowPass(const ShadowMapHandle& InShadowMap)
+{
+    glViewport(0, 0, InShadowMap.Width, InShadowMap.Height);
+    glBindFramebuffer(GL_FRAMEBUFFER, InShadowMap.FBO);
+    glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+void OpenGLDevice::EndShadowPass(UINT32 InScreenWidth, UINT32 InScreenHeight)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, InScreenWidth, InScreenHeight);
+}
+
+void OpenGLDevice::BindShadowMapTexture(const ShadowMapHandle& InShadowMap, UINT32 InSlot)
+{
+    glActiveTexture(GL_TEXTURE0 + InSlot);
+    glBindTexture(GL_TEXTURE_2D, InShadowMap.DepthTexture);
+}
+
 GPUMeshHandle OpenGLDevice::CreateSkyboxMesh()
 {
     static const float vertices[] = {

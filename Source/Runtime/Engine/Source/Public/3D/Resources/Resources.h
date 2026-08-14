@@ -40,6 +40,15 @@ constexpr static std::array<Vector2, 24> cubeMeshUVs = {
 /// <summary>
 /// 화살표 메시 정보
 /// </summary>
+/// 
+constexpr static std::array<Vector3, 24> cubeMeshNormals = {
+      Vector3(-1.f, 0.f, 0.f), Vector3(-1.f, 0.f, 0.f), Vector3(-1.f, 0.f, 0.f), Vector3(-1.f, 0.f, 0.f), // X = -1 면
+      Vector3(0.f, 0.f, 1.f),  Vector3(0.f, 0.f, 1.f),  Vector3(0.f, 0.f, 1.f),  Vector3(0.f, 0.f, 1.f),  // Z = +1 면
+      Vector3(0.f, 0.f, -1.f), Vector3(0.f, 0.f, -1.f), Vector3(0.f, 0.f, -1.f), Vector3(0.f, 0.f, -1.f), // Z = -1 면
+      Vector3(1.f, 0.f, 0.f),  Vector3(1.f, 0.f, 0.f),  Vector3(1.f, 0.f, 0.f),  Vector3(1.f, 0.f, 0.f),  // X = +1 면
+      Vector3(0.f, 1.f, 0.f),  Vector3(0.f, 1.f, 0.f),  Vector3(0.f, 1.f, 0.f),  Vector3(0.f, 1.f, 0.f),  // Y = +1 면(윗면)
+      Vector3(0.f, -1.f, 0.f), Vector3(0.f, -1.f, 0.f), Vector3(0.f, -1.f, 0.f), Vector3(0.f, -1.f, 0.f), // Y = -1 면(아랫면)
+};
 
 constexpr static std::array<Vector3, 29> arrowPositions = {
 	// Shaft
