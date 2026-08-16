@@ -160,7 +160,7 @@ void Texture::UploadToGPU(OpenGLDevice& InDevice)
 		return;
 	}
 
-	_GPUHandle = InDevice.CreateTexture(_BaseColor.data(), _Width, _Height);
+	_GPUHandle = InDevice.CreateTexture(_BaseColor.data(), _Width, _Height, true);
 
 	if (HasNormalMap())
 	{

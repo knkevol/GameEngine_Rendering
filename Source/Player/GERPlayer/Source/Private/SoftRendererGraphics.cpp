@@ -236,6 +236,7 @@ void SoftRenderer::RenderWorldGPU()
 	OpenGLDevice& InDevice = static_cast<OpenGLRSI&>(GetRenderer()).GetDevice();
 
 	RenderShadowPass(InDevice);
+	InDevice.BeginScenePass(_SceneFrameBuffer);
 
 	ShaderHandle InStaticShader = _StaticShader;
 	ShaderHandle InSkinnedShader = _SkinnedShader;
@@ -446,6 +447,9 @@ void SoftRenderer::RenderWorldGPU()
 
 	r.PushStatisticText("Camera Position : " + mainCamera.GetTransform().GetWorldTransform().GetPosition().ToString());
 	r.PushStatisticText("Camera Rotation : " + mainCamera.GetTransform().GetLocalRotation().ToString());
+
+	InDevice.EndScenePass((UINT32)_ScreenSize.X, (UINT32)_ScreenSize.Y);
+	DrawFullScreenQuad(InDevice);
 }
 
 void SoftRenderer::DrawMesh3D(const DDD::Mesh& InMesh, const Matrix4x4& InMatrix, const LinearColor& InColor)
@@ -760,6 +764,23 @@ void SoftRenderer::DrawSkybox(OpenGLDevice& InDevice)
 	InDevice.DrawIndexed(_SkyboxMesh.IndexCount);
 
 	InDevice.SetDepthFunc(false);
+}
+
+void SoftRenderer::DrawFullScreenQuad(OpenGLDevice& InDevice)
+{
+	InDevice.UseShader(_PostProcessShader);
+
+	// 씬 텍스처 바인딩
+	InDevice.BindSceneColorTexture(_SceneFrameBuffer, 0);
+	InDevice.SetUniformInt(_PostProcessShader, "uSceneColor", 0);
+
+	InDevice.SetUniformFloat(_PostProcessShader, "uExposure", _Exposure);
+	InDevice.SetUniformFloat(_PostProcessShader, "uGamma", _Gamma);
+
+	InDevice.SetDepthTest(false);
+	InDevice.BindMesh(_FullScreenQuadMesh);
+	InDevice.DrawIndexed(_FullScreenQuadMesh.IndexCount);
+	InDevice.SetDepthTest(true);
 }
 
 void SoftRenderer::RenderShadowPass(OpenGLDevice& InDevice)

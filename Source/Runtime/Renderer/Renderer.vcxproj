@@ -182,6 +182,8 @@
     <None Include="Shaders\depth.frag" />
     <None Include="Shaders\overlay.frag" />
     <None Include="Shaders\overlay.vert" />
+    <None Include="Shaders\postprocess.frag" />
+    <None Include="Shaders\postprocess.vert" />
     <None Include="Shaders\shadow_depth.frag" />
     <None Include="Shaders\shadow_depth.vert" />
     <None Include="Shaders\shadow_depth_skinned.vert" />

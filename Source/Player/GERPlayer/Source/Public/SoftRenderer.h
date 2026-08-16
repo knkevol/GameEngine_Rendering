@@ -86,17 +86,20 @@ private:
 	void DrawMesh3D(const class DDD::Mesh& InMesh, const Matrix4x4& InMatrix, const LinearColor& InColor);
 	void DrawTriangle3D(std::vector<DDD::Vertex3D>& InVertices, const LinearColor& InColor, FillMode InFillMode);
 
+	// gpu
 	void DrawBonesGPU(OpenGLDevice& InDevice, ShaderHandle InShader, DDD::SKMesh& InSKMesh, const DDD::TransformComponent& InTransform);
 	void DrawSkybox(OpenGLDevice& InDevice);
+	void DrawFullScreenQuad(OpenGLDevice& InDevice);
 
 	void RenderShadowPass(OpenGLDevice& InDevice);
 	Matrix4x4 GetLightSpaceMatrix() const;
 
-	void RenderWorld();
-	void RenderUI();
-
 	void RenderWorldGPU();
 
+
+	void RenderWorld();
+	void RenderUI();
+	
 	// Drawing Modes
 	bool IsDepthBufferDrawing() const { return _CurrentDrawMode == DrawMode::DepthBuffer; }
 	bool IsWireframeDrawing() const { return _CurrentDrawMode == DrawMode::Wireframe; }
@@ -105,7 +108,7 @@ private:
 	void SetDrawMode(DrawMode InDrawMode) { _CurrentDrawMode = InDrawMode; }
 	DrawMode _CurrentDrawMode = DrawMode::Normal;
 
-	// 환경맵 토글
+	// Env Map 토글
 	bool IsEnvReflectionEnabled() const { return _bEnableEnvReflection; }
 	void SetEnvReflectionEnabled(bool IsEnabled) { _bEnableEnvReflection = IsEnabled; }
 	bool _bEnableEnvReflection = true;
@@ -179,6 +182,13 @@ private:
 	ShadowMapHandle _ShadowMap;
 	Matrix4x4 _LightSpaceMatrix;
 	static constexpr UINT32 ShadowMapResolution = 2048;
+
+	// Postprocess
+	ShaderHandle _PostProcessShader;
+	GPUMeshHandle _FullScreenQuadMesh;
+	SceneFrameBufferHandle _SceneFrameBuffer;
+	float _Exposure = 1.0f;
+	float _Gamma = 2.2;
 
 	// UBO
 	GPUBufferHandle _CameraUBO;

@@ -24,6 +24,16 @@ namespace GER
 		UINT32 Height = 0;
 	};
 
+	// Postprocess 오프스크린 프레임버퍼
+	struct SceneFrameBufferHandle
+	{
+		FramebufferHandle FBO = 0;
+		TextureHandle ColorTexture = 0;
+		UINT32 DepthRenderBuffer = 0;
+		UINT32 Width = 0;
+		UINT32 Height = 0;
+	};
+
 	class OpenGLDevice
 	{
 	public:
@@ -40,7 +50,7 @@ namespace GER
 		// VBO, EBO, VAO를 한번에 처리하는 함수
 		GPUMeshHandle CreateMesh(const void* InVertexData, size_t InVertexBytes, const UINT32* InIndices, UINT32 InIndexCount);
 		// Texture
-		TextureHandle CreateTexture(const void* InPixelData, UINT32 InWidth, UINT32 InHeight);
+		TextureHandle CreateTexture(const void* InPixelData, UINT32 InWidth, UINT32 InHeight, bool InSRGB = false);
 		// Skybox
 		TextureHandle CreateCubemapTexture(const std::vector<const void*>& InFacePixelData, UINT32 InWidth, UINT32 InHeight);
 		GPUMeshHandle CreateSkyboxMesh();
@@ -54,6 +64,13 @@ namespace GER
 		void BeginShadowPass(const ShadowMapHandle& InShadowMap);
 		void EndShadowPass(UINT32 InScreenWidth, UINT32 InScreenHeight);
 		void BindShadowMapTexture(const ShadowMapHandle& InShadowMap, UINT32 InSlot);
+
+		// Postprocess
+		SceneFrameBufferHandle CreateSceneFrameBuffer(UINT32 InWidth, UINT32 InHeight);
+		void BeginScenePass(const SceneFrameBufferHandle& InFrameBuffer);
+		void EndScenePass(UINT32 InScreenWidth, UINT32 InScreenHeight);
+		void BindSceneColorTexture(const SceneFrameBufferHandle& InFrameBuffer, UINT32 InSlot);
+		GPUMeshHandle CreateFullScreenQuadMesh();
 
 		void SetDepthTest(bool InEnable);
 		// Skybox용

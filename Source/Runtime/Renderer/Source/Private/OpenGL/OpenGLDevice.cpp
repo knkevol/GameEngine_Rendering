@@ -90,12 +90,13 @@ GPUMeshHandle OpenGLDevice::CreateMesh(const void* InVertexData, size_t InVertex
     return mesh;
 }
 
-TextureHandle OpenGLDevice::CreateTexture(const void* InPixelData, UINT32 InWidth, UINT32 InHeight)
+TextureHandle OpenGLDevice::CreateTexture(const void* InPixelData, UINT32 InWidth, UINT32 InHeight, bool InSRGB)
 {
     UINT32 texture = 0;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 
+    GLenum internalFormat = InSRGB ? GL_SRGB8_ALPHA8 : GL_RGBA32F;
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, InWidth, InHeight, 0, GL_RGBA, GL_FLOAT, InPixelData);
     glGenerateMipmap(GL_TEXTURE_2D);
     
@@ -257,6 +258,87 @@ void OpenGLDevice::BindShadowMapTexture(const ShadowMapHandle& InShadowMap, UINT
 {
     glActiveTexture(GL_TEXTURE0 + InSlot);
     glBindTexture(GL_TEXTURE_2D, InShadowMap.DepthTexture);
+}
+
+SceneFrameBufferHandle OpenGLDevice::CreateSceneFrameBuffer(UINT32 InWidth, UINT32 InHeight)
+{
+    SceneFrameBufferHandle handle;
+    handle.Width = InWidth;
+    handle.Height = InHeight;
+
+    // 컬러텍스처 : 씬이 그려질 캔버스
+    // [HDR] 내부 포맷을 GL_RGBA8(8비트 정수, 0~1 clamp) -> GL_RGBA16F(16비트 float)로 변경.
+    glGenTextures(1, &handle.ColorTexture);
+    glBindTexture(GL_TEXTURE_2D, handle.ColorTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, InWidth, InHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    // 깊이 렌더버퍼
+    glGenRenderbuffers(1, &handle.DepthRenderBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, handle.DepthRenderBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, InWidth, InHeight);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+    // FBO에 붙임
+    glGenFramebuffers(1, &handle.FBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, handle.FBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, handle.ColorTexture, 0);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, handle.DepthRenderBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    return handle;
+}
+
+void OpenGLDevice::BeginScenePass(const SceneFrameBufferHandle& InFrameBuffer)
+{
+    // 렌더타겟을 화면에서 씬 프레임버퍼로 전환
+    glBindFramebuffer(GL_FRAMEBUFFER, InFrameBuffer.FBO);
+    glViewport(0, 0, InFrameBuffer.Width, InFrameBuffer.Height);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void OpenGLDevice::EndScenePass(UINT32 InScreenWidth, UINT32 InScreenHeight)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, InScreenWidth, InScreenHeight);
+}
+
+void OpenGLDevice::BindSceneColorTexture(const SceneFrameBufferHandle& InFrameBuffer, UINT32 InSlot)
+{
+    glActiveTexture(GL_TEXTURE0 + InSlot);
+    glBindTexture(GL_TEXTURE_2D, InFrameBuffer.ColorTexture);
+}
+
+GPUMeshHandle OpenGLDevice::CreateFullScreenQuadMesh()
+{
+    static const float vertices[] = {
+        // position       // uv
+        -1.f, -1.f,       0.f, 0.f,
+         1.f, -1.f,       1.f, 0.f,
+         1.f,  1.f,       1.f, 1.f,
+        -1.f,  1.f,       0.f, 1.f,
+    };
+    static const UINT32 indices[] = { 0, 1, 2, 2, 3, 0 };
+
+    GPUMeshHandle mesh;
+    glGenVertexArrays(1, &mesh.VAO);
+    glBindVertexArray(mesh.VAO);
+
+    mesh.VBO = CreateVertexBuffer(vertices, sizeof(vertices));
+    mesh.EBO = CreateIndexBuffer(indices, 6);
+    mesh.IndexCount = 6;
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(0);
+    return mesh;
 }
 
 GPUMeshHandle OpenGLDevice::CreateSkyboxMesh()

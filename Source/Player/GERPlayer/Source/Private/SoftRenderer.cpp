@@ -34,6 +34,7 @@ void SoftRenderer::OnInit()
 	device.BindUniformBlock(_StaticShader, "LightBlock", 1);
 	device.BindUniformBlock(_SkinnedShader, "LightBlock", 1);
 
+	// Skybox
 	std::string skyboxVsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/skybox.vert");
 	std::string skyboxFsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/skybox.frag");
 	_SkyboxShader = device.CreateShaderProgram(skyboxVsSrc.c_str(), skyboxFsSrc.c_str());
@@ -44,6 +45,7 @@ void SoftRenderer::OnInit()
 	_Skybox.LoadFromFolder("Asset/Skybox/Sky");
 	_Skybox.UploadToGPU(device);
 
+	// ShadowMap
 	std::string shadowVsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/shadow_depth.vert");
 	std::string shadowSkinnedVsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/shadow_depth_skinned.vert");
 	std::string shadowFsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/shadow_depth.frag");
@@ -53,6 +55,15 @@ void SoftRenderer::OnInit()
 
 	_ShadowMap = device.CreateShadowMap(ShadowMapResolution, ShadowMapResolution);
 
+	// Postprcess
+	std::string postVsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/postprocess.vert");
+	std::string postFsSrc = LoadShaderSource("Source/Runtime/Renderer/Shaders/postprocess.frag");
+	_PostProcessShader = device.CreateShaderProgram(postVsSrc.c_str(), postFsSrc.c_str());
+
+	_FullScreenQuadMesh = device.CreateFullScreenQuadMesh();
+	_SceneFrameBuffer = device.CreateSceneFrameBuffer((UINT32)_ScreenSize.X, (UINT32)_ScreenSize.Y);
+
+	//
 	SetupDefaultLights();
 
 	SetBackgroundColor(LinearColor(0.15f, 0.15f, 0.2f, 1.0f));
